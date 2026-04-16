@@ -1,0 +1,68 @@
+<div class="layout-topbar">
+
+    <div class="layout-topbar-left">
+        <h2 class="page-title">{{ pageTitle }}</h2>
+        <small class="page-date">{{ todayDate }}</small>
+    </div>
+
+    <div class="layout-topbar-right">
+        <div class="layout-topbar-search-container">
+            <i class="pi pi-search"></i>
+            <input type="text" placeholder="Search medicines, patients..." />
+        </div>
+
+        <button class="layout-topbar-action-button">
+            <i class="pi pi-bell"></i>
+            <span class="notification-badge">2</span>
+        </button>
+
+        <div class="layout-topbar-profile-wrap">
+            <button
+                type="button"
+                class="layout-topbar-profile"
+                (click)="toggleProfileMenu($event)"
+                [attr.aria-expanded]="isProfileMenuOpen"
+                aria-haspopup="menu"
+            >
+                <div class="layout-topbar-avatar">PH</div>
+                <div class="profile-details">
+                    <span class="profile-name">Dr. Pharmacist</span>
+                    <span class="profile-role">Admin</span>
+                </div>
+                <i class="pi ml-2 text-sm" [ngClass]="isProfileMenuOpen ? 'pi-angle-up' : 'pi-angle-down'"></i>
+            </button>
+
+            <div *ngIf="isProfileMenuOpen" class="layout-topbar-profile-menu" role="menu">
+                <div class="layout-topbar-profile-menu__header">
+                    <span class="layout-topbar-profile-menu__name">Dr. Pharmacist</span>
+                    <span class="layout-topbar-profile-menu__email">admin@pharmacy.com</span>
+                </div>
+
+                <div class="layout-topbar-profile-menu__section">
+                    <a
+                        class="layout-topbar-profile-menu__item"
+                        [routerLink]="profilePageLink"
+                        (click)="closeProfileMenu()"
+                        role="menuitem"
+                    >
+                        <i class="pi pi-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+
+                <div class="layout-topbar-profile-menu__section">
+                    <a
+                        class="layout-topbar-profile-menu__item layout-topbar-profile-menu__item--danger"
+                        [routerLink]="logoutPageLink"
+                        (click)="closeProfileMenu()"
+                        role="menuitem"
+                    >
+                        <i class="pi pi-sign-out"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

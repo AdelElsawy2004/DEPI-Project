@@ -1,0 +1,38 @@
+@media (max-width: 991px) {
+    .reservations-card__header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reservations-card__footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-tabs {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .filter-tabs__button {
+        white-space: nowrap;
+    }
+
+    .inventory-card__header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .inventory-card__action {
+        justify-content: center;
+    }
+
+    .inventory-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .inventory-row__stats {
+        justify-content: space-between;
+    }
+}
