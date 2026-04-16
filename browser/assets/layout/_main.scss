@@ -1,0 +1,18 @@
+.layout-main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding: calc(var(--topbar-height) + 1.15rem) 1.75rem 0 1.75rem;
+    background: #f5f7fb;
+    transition: margin-left var(--layout-section-transition-duration);
+}
+
+.layout-main {
+    flex: 1 1 auto;
+    padding-bottom: 2rem;
+}
+
+img {
+    max-width: none !important;
+}
