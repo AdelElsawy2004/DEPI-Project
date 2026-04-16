@@ -3,17 +3,13 @@ import { Component, computed, inject, PLATFORM_ID, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { $t, updatePreset, updateSurfacePalette } from '@primeuix/themes';
-import Aura from '@primeuix/themes/aura';
 import Lara from '@primeuix/themes/lara';
-import Nora from '@primeuix/themes/nora';
 import { PrimeNG } from 'primeng/config';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LayoutService } from '../service/layout.service';
 
 const presets = {
-    Aura,
     Lara,
-    Nora
 } as const;
 
 declare type KeyOfType<T> = keyof T extends infer U ? U : never;
@@ -96,6 +92,7 @@ declare type SurfacesType = {
     }
 })
 export class AppConfigurator {
+    
     router = inject(Router);
 
     config: PrimeNG = inject(PrimeNG);
@@ -271,18 +268,14 @@ export class AppConfigurator {
     menuMode = computed(() => this.layoutService.layoutConfig().menuMode);
 
     primaryColors = computed<SurfacesType[]>(() => {
-        const presetPalette = presets[this.layoutService.layoutConfig().preset as KeyOfType<typeof presets>].primitive;
-        const colors = ['emerald', 'green', 'lime', 'orange', 'amber', 'yellow', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose'];
-        const palettes: SurfacesType[] = [{ name: 'noir', palette: {} }];
+        const presetKey = this.layoutService.layoutConfig().preset as keyof typeof presets;
 
-        colors.forEach((color) => {
-            palettes.push({
-                name: color,
-                palette: presetPalette?.[color as KeyOfType<typeof presetPalette>] as SurfacesType['palette']
-            });
-        });
+        const presetPalette = presets[presetKey]?.primitive;
 
-        return palettes;
+        return [{
+            name: 'blue',
+            palette: presetPalette?.['blue']
+        }];
     });
 
     getPresetExt() {

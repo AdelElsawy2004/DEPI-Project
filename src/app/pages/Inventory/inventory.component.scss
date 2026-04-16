@@ -1,0 +1,299 @@
+.inventory-card {
+    box-shadow: 0 18px 45px -38px rgba(33, 56, 115, 0.35);
+}
+
+.inventory-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.1rem 1.1rem 0.75rem 1.1rem;
+}
+
+.inventory-card__title {
+    color: #16325c;
+    font-size: 1.28rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.inventory-card__subtitle {
+    margin-top: 0.28rem;
+    color: #97a4be;
+    font-size: 0.96rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.inventory-card__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.8rem 1.1rem;
+    border-radius: 0.8rem;
+    background: #4c88ff;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1;
+    box-shadow: 0 16px 28px -22px rgba(76, 136, 255, 0.95);
+    transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.inventory-card__action:hover {
+    background: #3d7cf8;
+    transform: translateY(-1px);
+}
+
+.inventory-card__action-icon {
+    font-size: 0.78rem;
+}
+
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.78rem 1.1rem;
+    border-top: 1px solid #eff3fb;
+    transition: background-color 160ms ease;
+}
+
+.inventory-row:hover {
+    background: #fbfcff;
+}
+
+.inventory-row__main {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    min-width: 0;
+}
+
+.inventory-row__icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.6rem;
+    background: #edf4ff;
+    color: #3c78f6;
+    flex-shrink: 0;
+}
+
+.inventory-row__icon {
+    font-size: 0.8rem;
+}
+
+.inventory-row__content {
+    min-width: 0;
+}
+
+.inventory-row__name {
+    color: #233a63;
+    font-size: 0.94rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.inventory-row__meta {
+    margin-top: 0.16rem;
+    color: #9aa7bf;
+    font-size: 0.76rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.inventory-row__stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.inventory-row__stock {
+    min-width: 2rem;
+    color: #233a63;
+    font-size: 0.96rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.inventory-level-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1;
+    background: #eef6ff;
+    color: #2f6df6;
+}
+
+.inventory-level-pill--high {
+    background: #edf4ff;
+    color: #2f6df6;
+}
+
+.inventory-level-pill--normal {
+    background: #eef8ff;
+    color: #1f8ed8;
+}
+
+.inventory-level-pill--low {
+    background: #fff7e8;
+    color: #de8a11;
+}
+
+.inventory-card__footer {
+    padding: 0.78rem 1.1rem 0.9rem;
+    border-top: 1px solid #eff3fb;
+}
+
+.inventory-card__footer-count {
+    color: #9aa7bf;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+.full-width-input,
+.full-width-input .p-inputtext,
+.full-width-input .p-dropdown,
+.full-width-input .p-inputnumber,
+.full-width-input .p-datepicker {
+    width: 100% !important;
+}
+
+/* Container rounding */
+::v-deep .custom-add-dialog .p-dialog {
+    border-radius: 20px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+::v-deep .custom-add-dialog .p-dialog-header {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 24px;
+   padding: 24px;
+}
+
+/* Inputs styling */
+::v-deep .full-width-input,
+::v-deep .full-width-input .p-inputtext,
+::v-deep .full-width-input.p-dropdown {
+    width: 100% !important;
+    height: 48px !important;
+    /* طول الانبوت */
+    background: #f8fafc !important;
+    /* اللون الرمادي الفاتح اللي في الصورة */
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    display: flex;
+    align-items: center;
+}
+
+/* خاص بالـ Calendar عشان يظهر الأيقونة صح */
+::v-deep .p-calendar.full-width-input .p-inputtext {
+    border: none !important;
+    /* عشان ميبقاش فيه border جوا border */
+}
+
+/* Adjust labels */
+.form-group label {
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* Buttons style */
+.btn-cancel {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 30px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: 0.3s;
+    min-width: 120px;
+}
+
+.btn-add {
+    background: #3b82f6;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 30px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    min-width: 160px;
+}
+
+.btn-add:hover {
+    background: #2563eb;
+}
+
+.btn-cancel:hover {
+    background: #e2e8f0;
+}
+/* GRID SYSTEM */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* full width items */
+.form-group.full {
+    grid-column: span 2;
+}
+.form-group {
+    width: 100%;
+}
+
+/* spacing عام */
+.dialog-body {
+    display: grid;
+    gap: 18px;
+}
+.dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dialog-header__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #e8f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-header__icon i {
+    color: #3b82f6;
+    font-size: 18px;
+}
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    /* 👈 ده المهم */
+    gap: 12px;
+}

@@ -1,11 +1,34 @@
 import { Routes } from '@angular/router';
-import { Documentation } from './documentation/documentation';
-import { Crud } from './crud/crud';
-import { Empty } from './empty/empty';
+import { AppLayout } from '@/layout/component/layout.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { InventoryComponent } from './Inventory/inventory.component';
+import { ReservationsComponent } from './Reservations/reservations.component';
 
 export default [
-    { path: 'documentation', component: Documentation },
-    { path: 'crud', component: Crud },
-    { path: 'empty', component: Empty },
-    { path: '**', redirectTo: '/notfound' }
+    {
+        path: '',
+        component: AppLayout,
+        children: [
+            {
+                path: '',
+                redirectTo: 'dashboard',
+                pathMatch: 'full'
+            },
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                data: { title: 'Pharmacy Dashboard' }
+            },
+            {
+                path: 'inventory',
+                component: InventoryComponent,
+                data: { title: 'Inventory' }
+            },
+            {
+                path: 'reservations',
+                component: ReservationsComponent,
+                data: { title: 'Reservations' }
+            }
+        ]
+    }
 ] as Routes;

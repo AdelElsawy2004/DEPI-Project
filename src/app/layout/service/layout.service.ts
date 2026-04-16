@@ -1,5 +1,6 @@
 import { Injectable, effect, signal, computed } from '@angular/core';
 import { Subject } from 'rxjs';
+import { APP_PRIMARY_COLOR, APP_THEME_NAME } from '../../theme/app-theme';
 
 export interface layoutConfig {
     preset?: string;
@@ -26,9 +27,15 @@ interface MenuChangeEvent {
     providedIn: 'root'
 })
 export class LayoutService {
+    isCollapsed = false;
+
+    toggleSidebar() {
+        this.isCollapsed = !this.isCollapsed;
+    }
+    
     _config: layoutConfig = {
-        preset: 'Aura',
-        primary: 'emerald',
+        preset: APP_THEME_NAME,
+        primary: APP_PRIMARY_COLOR,
         surface: null,
         darkTheme: false,
         menuMode: 'static'

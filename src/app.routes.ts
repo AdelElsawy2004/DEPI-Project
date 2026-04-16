@@ -1,23 +1,30 @@
 import { Routes } from '@angular/router';
-import { AppLayout } from './app/layout/component/app.layout';
-import { Dashboard } from './app/pages/dashboard/dashboard';
-import { Documentation } from './app/pages/documentation/documentation';
-import { Landing } from './app/pages/landing/landing';
-import { Notfound } from './app/pages/notfound/notfound';
+import { AppLayout } from './app/layout/component/layout.component';
+import { DashboardComponent } from './app/pages/dashboard/dashboard.component';
+import { InventoryComponent } from '@/pages/Inventory/inventory.component';
+import { ReservationsComponent } from '@/pages/Reservations/reservations.component';
 
 export const appRoutes: Routes = [
     {
         path: '',
         component: AppLayout,
         children: [
-            { path: '', component: Dashboard },
-            { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
-            { path: 'documentation', component: Documentation },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+            {
+                path: '',
+                component: DashboardComponent,
+                data: { title: 'Pharmacy Dashboard' }
+            },
+            {
+                path: 'inventory',
+                component: InventoryComponent,
+                data: { title: 'Inventory' }
+            },
+            {
+                path: 'reservations',
+                component: ReservationsComponent,
+                data: { title: 'Reservations' }
+            },
         ]
     },
-    { path: 'landing', component: Landing },
-    { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
-    { path: '**', redirectTo: '/notfound' }
 ];

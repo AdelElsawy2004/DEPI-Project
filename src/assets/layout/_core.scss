@@ -6,7 +6,7 @@ html {
 body {
     font-family: 'Lato', sans-serif;
     color: var(--text-color);
-    background-color: var(--surface-ground);
+    background-color: #f5f7fb;
     margin: 0;
     padding: 0;
     min-height: 100%;
@@ -21,4 +21,12 @@ a {
 
 .layout-wrapper {
     min-height: 100vh;
+    --sidebar-width: 18rem;
+    --topbar-height: 5.25rem;
+    background: #f5f7fb;
+}
+
+.layout-wrapper > app-topbar,
+.layout-wrapper > app-sidebar {
+    display: block;
 }

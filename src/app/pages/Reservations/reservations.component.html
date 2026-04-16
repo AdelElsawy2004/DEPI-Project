@@ -1,0 +1,76 @@
+<div class="card reservations-card mt-6 shadow-sm rounded-[1.75rem] border border-[#eef2fb] bg-white overflow-hidden">
+    <div class="reservations-card__header">
+        <div>
+            <h3 class="reservations-card__title m-0">{{ cardTitle }}</h3>
+            <p class="reservations-card__subtitle m-0">{{ cardSubtitle }}</p>
+        </div>
+
+        <div class="filter-tabs" role="tablist" aria-label="Reservation status filters">
+            <button *ngFor="let option of filterOptions" type="button" class="filter-tabs__button"
+                [class.filter-tabs__button--active]="activeFilter === option" (click)="activeFilter = option">
+                {{ option }}
+            </button>
+        </div>
+    </div>
+
+    <p-table [value]="filteredReservations" [rows]="8" class="p-datatable-sm reservations-table">
+        <ng-template pTemplate="header">
+            <tr class="reservations-table__head-row">
+                <th class="reservations-table__head-cell">#</th>
+                <th class="reservations-table__head-cell">Patient Name</th>
+                <th class="reservations-table__head-cell">Medicine</th>
+                <th class="reservations-table__head-cell">Qty</th>
+                <th class="reservations-table__head-cell">Status</th>
+                <th class="reservations-table__head-cell">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-res let-rowIndex="rowIndex">
+            <tr class="reservations-table__row">
+                <td class="reservations-table__cell reservations-table__index">{{ rowIndex + 1 }}</td>
+                <td class="reservations-table__cell">
+                    <div class="patient-cell">
+                        <div class="patient-cell__avatar">
+                            {{res.initials}}
+                        </div>
+                        <span class="patient-cell__name">{{ res.patientName }}</span>
+                    </div>
+                </td>
+                <td class="reservations-table__cell reservations-table__medicine">{{ res.medicine }}</td>
+                <td class="reservations-table__cell reservations-table__qty">{{ res.qty }}</td>
+                <td class="reservations-table__cell">
+                    <span class="status-pill" [ngClass]="'status-pill--' + res.status.toLowerCase()">
+                        <span class="status-pill__dot"></span>
+                        {{ res.status }}
+                    </span>
+                </td>
+                <td class="reservations-table__cell">
+                    <div class="action-group" *ngIf="res.status === 'Pending'; else noAction">
+                        <button type="button" class="action-btn action-btn--confirm" (click)="updateStatus(res, 'Confirmed')">
+                            <i class="pi pi-check action-btn__icon"></i>
+                            <span>Confirm</span>
+                        </button>
+                        
+                        <button type="button" class="action-btn action-btn--reject" (click)="updateStatus(res, 'Rejected')">
+                            <i class="pi pi-times action-btn__icon"></i>
+                            <span>Reject</span>
+                        </button>
+                    </div>
+                    <ng-template #noAction>
+                        <span class="action-placeholder">No action</span>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-confirmDialog styleClass="custom-confirm-dialog"></p-confirmDialog>
+
+    <div class="reservations-card__footer">
+        <span class="reservations-card__footer-count">
+            Showing {{ displayedReservationsCount }} of {{ totalReservationsCount }} reservations
+        </span>
+
+        <a *ngIf="!isReservationsPage" class="reservations-card__footer-link" [routerLink]="reservationsPageLink">
+            View all reservations
+        </a>
+    </div>
+</div>

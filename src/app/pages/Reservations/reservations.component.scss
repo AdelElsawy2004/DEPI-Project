@@ -1,0 +1,313 @@
+:host {
+    display: block;
+}
+
+.reservations-card {
+    box-shadow: 0 18px 45px -38px rgba(33, 56, 115, 0.35);
+}
+
+.reservations-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.55rem 1.75rem;
+    border-bottom: 1px solid #eff3fb;
+}
+
+.reservations-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.55rem 1.25rem;
+    border-top: 1px solid #eff3fb;
+}
+
+.reservations-card__footer-count {
+    color: #9aa7bf;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.reservations-card__footer-link {
+    color: #326bff;
+    font-size: 0.96rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 160ms ease;
+}
+
+.reservations-card__footer-link:hover {
+    color: #1f56e6;
+}
+
+.reservations-card__title {
+    color: #16325c;
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.reservations-card__subtitle {
+    margin-top: 0.35rem;
+    color: #97a4be;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.filter-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem;
+    border-radius: 1rem;
+    background: #f8fafe;
+}
+
+.filter-tabs__button {
+    border: 0;
+    border-radius: 0.8rem;
+    background: transparent;
+    color: #5f718f;
+    padding: 0.82rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.filter-tabs__button:hover {
+    color: #21477d;
+}
+
+.filter-tabs__button--active {
+    background: #ffffff;
+    color: #16325c;
+    box-shadow: 0 6px 16px -14px rgba(35, 56, 104, 0.55), inset 0 0 0 1px #e4eaf6;
+}
+
+.reservations-table__head-row {
+    background: #fcfdff;
+}
+
+.reservations-table__head-cell {
+    padding: 1.1rem 1.6rem;
+
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+
+    border-bottom: 1px solid #eef2fb;
+    background: #f9fbff;
+}
+
+.reservations-table__row {
+    transition: background-color 160ms ease;
+}
+
+.reservations-table__row:hover {
+    background: #fbfcff;
+}
+
+.reservations-table__cell {
+    padding: 1.2rem 1.6rem;
+    border-bottom: 1px solid #f3f6fc;
+
+    color: #344767;
+    font-size: 0.95rem;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.reservations-table__row:last-child .reservations-table__cell {
+    border-bottom: 0;
+}
+
+.reservations-table__index {
+    width: 4.5rem;
+    color: #9ba7bd;
+    font-size: 1rem;
+}
+
+.reservations-table__medicine {
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+.reservations-table__qty {
+    color: #233a63;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.patient-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.patient-cell__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #d6eaff 0%, #cfe4fb 100%);
+    color: #2563eb;
+    font-size: 0.84rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.patient-cell__name {
+    color: #1e293b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.status-pill {
+    --pill-bg: #fff7e8;
+    --pill-text: #de7a00;
+    --pill-dot: #ffc532;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 999px;
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.82);
+}
+
+.status-pill__dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: var(--pill-dot);
+    flex-shrink: 0;
+}
+
+.status-pill--confirmed {
+    --pill-bg: #edf4ff;
+    --pill-text: #2b69f7;
+    --pill-dot: #4683ff;
+}
+
+.status-pill--rejected {
+    --pill-bg: #fff0f2;
+    --pill-text: #ff4d5e;
+    --pill-dot: #ff7f8c;
+}
+
+.action-group {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.72rem 1rem;
+    border: 0;
+    border-radius: 0.82rem;
+    background: #f3f6ff;
+    color: #2f6df6;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    box-shadow: 0 14px 25px -24px rgba(47, 109, 246, 0.9);
+}
+
+.action-btn:hover {
+    transform: translateY(-1px);
+}
+
+.action-btn:focus-visible {
+    outline: 2px solid rgba(47, 109, 246, 0.28);
+    outline-offset: 2px;
+}
+
+.action-btn--confirm {
+    background: #eef4ff;
+    color: #2f6df6;
+}
+
+.action-btn--confirm:hover {
+    background: #e5edff;
+}
+
+.action-btn--reject {
+    background: #fff0f2;
+    color: #f15967;
+    box-shadow: 0 10px 25px -24px rgba(241, 89, 103, 0.9);
+}
+
+.action-btn--reject:hover {
+    background: #ffe5e8;
+}
+
+.action-btn--reject:focus-visible {
+    outline-color: rgba(241, 89, 103, 0.25);
+}
+
+.action-btn__icon {
+    font-size: 0.8rem;
+}
+
+.action-placeholder {
+    color: #9ca8c0;
+    font-size: 0.96rem;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+.custom-confirm-dialog .p-confirm-dialog {
+    text-align: center;
+}
+
+/* نخفي الأيقونة الافتراضية */
+.custom-confirm-dialog .p-confirm-dialog-icon {
+    display: none !important;
+}
+
+/* نخلي layout عمودي */
+.custom-confirm-dialog .p-confirm-dialog-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* نضيف الأيقونة فوق */
+.custom-confirm-dialog .p-confirm-dialog-message::before {
+    content: "\e90b";
+    font-family: "PrimeIcons";
+    font-size: 2.5rem;
+    color: #ef4444;
+    margin-bottom: 12px;
+}
+
+/* النص */
+.custom-confirm-dialog .p-confirm-dialog-message span {
+    font-size: 1rem;
+    color: #374151;
+}

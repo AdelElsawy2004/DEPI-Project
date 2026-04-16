@@ -1,0 +1,108 @@
+<div class="card inventory-card mt-6 shadow-sm rounded-[1.75rem] border border-[#eef2fb] bg-white overflow-hidden">
+    <div class="inventory-card__header">
+        <div>
+            <h3 class="inventory-card__title m-0">{{ cardTitle }}</h3>
+            <p class="inventory-card__subtitle m-0">{{ cardSubtitle }}</p>
+        </div>
+
+    <!-- Dashboard -->
+    <a *ngIf="!isInventoryPage" class="inventory-card__action" [routerLink]="inventoryPageLink">
+        <i class="pi pi-box inventory-card__action-icon"></i>
+        <span>Manage Inventory</span>
+    </a>
+    
+    <!-- Inventory Page -->
+    <button *ngIf="isInventoryPage" class="inventory-card__action" (click)="openAddDialog()">
+        <i class="pi pi-plus inventory-card__action-icon"></i>
+        <span>Add Medicine</span>
+    </button>    
+    </div>
+
+    <div class="inventory-list">
+        <div class="inventory-row" *ngFor="let item of visibleInventory">
+            <div class="inventory-row__main">
+                <div class="inventory-row__icon-wrap">
+                    <i class="pi pi-link inventory-row__icon"></i>
+                </div>
+
+                <div class="inventory-row__content">
+                    <div class="inventory-row__name">{{ item.name }}</div>
+                    <div class="inventory-row__meta">{{ item.category }} - Exp: {{ item.expiry }}</div>
+                </div>
+            </div>
+
+            <div class="inventory-row__stats">
+                <span class="inventory-row__stock">{{ item.stock }}</span>
+                <span class="inventory-level-pill" [ngClass]="'inventory-level-pill--' + item.level.toLowerCase()">
+                    {{ item.level }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="inventory-card__footer">
+        <span class="inventory-card__footer-count">
+            Showing {{ displayedInventoryCount }} of {{ totalInventoryCount }} medicines
+        </span>
+    </div>
+</div>
+<p-dialog [(visible)]="showAddDialog" [modal]="true" [closable]="true" [style]="{width: '520px'}"
+    [contentStyle]="{'overflow': 'visible'}" styleClass="custom-add-dialog">
+
+    <ng-template pTemplate="header">
+        <div class="dialog-header">
+            <div class="dialog-header__icon">
+                <i class="pi pi-plus"></i>
+            </div>
+            <div>
+                <div class="dialog-header__title">Add New Medicine</div>
+                <div class="dialog-header__subtitle">Fill in the medicine details below</div>
+            </div>
+        </div>
+    </ng-template>
+
+    <div class="dialog-body">
+    
+        <!-- Medicine Name -->
+        <div class="form-group full">
+            <label>Medicine Name</label>
+            <input type="text" pInputText placeholder="e.g. Amoxicillin 500mg" class="full-width-input" />
+        </div>
+    
+        <!-- Row: Quantity + Category -->
+        <div class="form-grid">
+        
+            <div class="form-group">
+                <label>Quantity</label>
+                <p-inputNumber [(ngModel)]="quantity" styleClass="full-width-input" [style]="{ width: '100%' }">
+                </p-inputNumber>
+            </div>
+        
+            <div class="form-group">
+                <label>Category</label>
+                <p-select [options]="categories" placeholder="Select..." styleClass="full-width-input"
+                    [style]="{ width: '100%' }">
+                </p-select>
+            </div>
+        
+        </div>
+        
+        <div class="form-group full">
+            <label>Expiry Date</label>
+            <p-datepicker [(ngModel)]="expiryDate" [showIcon]="true" iconDisplay="input" styleClass="full-width-input"
+                [style]="{ width: '100%' }">
+            </p-datepicker>
+        </div>
+    
+    </div>
+
+    <ng-template pTemplate="footer">
+        <div class="dialog-footer">
+            <button class="btn-cancel" (click)="closeAddDialog()">Cancel</button>
+            <button class="btn-add">
+                <i class="pi pi-plus"></i>
+                Add Medicine
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>
