@@ -1,0 +1,245 @@
+
+<style>
+#erd { width: 100%; }
+#erd svg { width: 100% !important; height: auto !important; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; }
+.leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+.leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+</style>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#3B8BD4"></div>Level 1 — Core</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#7F77DD"></div>Level 2 — Auth</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1D9E75"></div>Level 3 — Search</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#E85D24"></div>Level 4 — Reservations</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#BA7517"></div>Level 5 — Reviews</div>
+</div>
+
+<div id="erd"></div>
+
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#1e2a38' : '#E6F1FB',
+    primaryBorderColor: dark ? '#378ADD' : '#185FA5',
+    primaryTextColor: dark ? '#c2c0b6' : '#0C447C',
+    secondaryColor: dark ? '#1a1f2e' : '#EEEDFE',
+    tertiaryColor: dark ? '#1c2a1f' : '#EAF3DE',
+  },
+});
+
+const diagram = `erDiagram
+  Medicine {
+    int Id PK
+    string TradeName
+    string ActiveIngredient
+    int CategoryId FK
+    string Form
+    string Strength
+    bool RequiresPrescription
+    string BarcodeNumber
+  }
+
+  MedicineCategory {
+    int Id PK
+    string Name
+  }
+
+  MedicineAlternative {
+    int Id PK
+    int MedicineId FK
+    int AlternativeMedicineId FK
+    string Notes
+  }
+
+  Pharmacy {
+    int Id PK
+    string Name
+    string Address
+    string City
+    float Latitude
+    float Longitude
+    string Phone
+    bool IsVerified
+    float AverageRating
+  }
+
+  MedicineStock {
+    int Id PK
+    int PharmacyId FK
+    int MedicineId FK
+    int QuantityAvailable
+    decimal Price
+    datetime ExpiryDate
+    bool IsAvailable
+  }
+
+  ApplicationUser {
+    guid Id PK
+    string FullName
+    string Email
+    string City
+    bool IsActive
+    datetime CreatedAt
+  }
+
+  PharmacyAdminProfile {
+    int Id PK
+    guid UserId FK
+    int PharmacyId FK
+  }
+
+  RefreshToken {
+    int Id PK
+    guid UserId FK
+    string Token
+    datetime ExpiresAt
+    bool IsRevoked
+  }
+
+  Reservation {
+    int Id PK
+    guid PatientId FK
+    int PharmacyId FK
+    int MedicineId FK
+    int Quantity
+    string Status
+    datetime ExpiresAt
+    string Notes
+  }
+
+  Notification {
+    int Id PK
+    guid UserId FK
+    string Title
+    string Body
+    string Type
+    bool IsRead
+    int RelatedEntityId
+  }
+
+  StockWatcher {
+    int Id PK
+    guid PatientId FK
+    int MedicineId FK
+    int PharmacyId FK
+  }
+
+  Review {
+    int Id PK
+    guid PatientId FK
+    int PharmacyId FK
+    int ReservationId FK
+    int Rating
+    string Comment
+    datetime CreatedAt
+  }
+
+  MedicineCategory ||--o{ Medicine : "categorises"
+  Medicine ||--o{ MedicineAlternative : "has alternatives"
+  Medicine ||--o{ MedicineAlternative : "is alternative for"
+  Medicine ||--o{ MedicineStock : "stocked as"
+  Pharmacy ||--o{ MedicineStock : "holds"
+  ApplicationUser ||--o| PharmacyAdminProfile : "manages"
+  Pharmacy ||--o| PharmacyAdminProfile : "managed by"
+  ApplicationUser ||--o{ RefreshToken : "owns"
+  ApplicationUser ||--o{ Reservation : "places"
+  Pharmacy ||--o{ Reservation : "receives"
+  Medicine ||--o{ Reservation : "reserved as"
+  ApplicationUser ||--o{ Notification : "receives"
+  ApplicationUser ||--o{ StockWatcher : "watches"
+  Medicine ||--o{ StockWatcher : "watched via"
+  Pharmacy ||--o{ StockWatcher : "watched at"
+  ApplicationUser ||--o{ Review : "writes"
+  Pharmacy ||--o{ Review : "receives"
+  Reservation ||--o| Review : "results in"
+`;
+
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+// Round entity box corners
+document.querySelectorAll('#erd svg .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+
+// Strip row borders
+document.querySelectorAll('#erd svg .row-rect-odd path, #erd svg .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+
+// Color entity headers by level
+const levelColors = {
+  'Medicine':             { light: '#E6F1FB', border: '#185FA5', text: '#0C447C' },
+  'MedicineCategory':     { light: '#E6F1FB', border: '#185FA5', text: '#0C447C' },
+  'MedicineStock':        { light: '#E6F1FB', border: '#185FA5', text: '#0C447C' },
+  'ApplicationUser':      { light: '#EEEDFE', border: '#534AB7', text: '#3C3489' },
+  'PharmacyAdminProfile': { light: '#EEEDFE', border: '#534AB7', text: '#3C3489' },
+  'RefreshToken':         { light: '#EEEDFE', border: '#534AB7', text: '#3C3489' },
+  'Pharmacy':             { light: '#E6F1FB', border: '#185FA5', text: '#0C447C' },
+  'MedicineAlternative':  { light: '#E1F5EE', border: '#0F6E56', text: '#085041' },
+  'Reservation':          { light: '#FAECE7', border: '#993C1D', text: '#4A1B0C' },
+  'Notification':         { light: '#FAECE7', border: '#993C1D', text: '#4A1B0C' },
+  'StockWatcher':         { light: '#FAECE7', border: '#993C1D', text: '#4A1B0C' },
+  'Review':               { light: '#FAEEDA', border: '#854F0B', text: '#412402' },
+};
+
+const darkLevelColors = {
+  'Medicine':             { bg: '#0c2236', border: '#378ADD', text: '#B5D4F4' },
+  'MedicineCategory':     { bg: '#0c2236', border: '#378ADD', text: '#B5D4F4' },
+  'MedicineStock':        { bg: '#0c2236', border: '#378ADD', text: '#B5D4F4' },
+  'ApplicationUser':      { bg: '#1a1630', border: '#7F77DD', text: '#CECBF6' },
+  'PharmacyAdminProfile': { bg: '#1a1630', border: '#7F77DD', text: '#CECBF6' },
+  'RefreshToken':         { bg: '#1a1630', border: '#7F77DD', text: '#CECBF6' },
+  'Pharmacy':             { bg: '#0c2236', border: '#378ADD', text: '#B5D4F4' },
+  'MedicineAlternative':  { bg: '#0b2018', border: '#1D9E75', text: '#9FE1CB' },
+  'Reservation':          { bg: '#2a1208', border: '#D85A30', text: '#F5C4B3' },
+  'Notification':         { bg: '#2a1208', border: '#D85A30', text: '#F5C4B3' },
+  'StockWatcher':         { bg: '#2a1208', border: '#D85A30', text: '#F5C4B3' },
+  'Review':               { bg: '#231500', border: '#BA7517', text: '#FAC775' },
+};
+
+const svgEl = document.querySelector('#erd svg');
+if (svgEl) {
+  svgEl.querySelectorAll('.label').forEach(label => {
+    const title = label.querySelector('span, .nodeLabel, text, tspan');
+    const name = (title?.textContent || '').trim().replace(/\s+/g, '');
+    const colors = dark ? darkLevelColors[name] : levelColors[name];
+    if (!colors) return;
+    const headerRect = label.closest('.node')?.querySelector('rect, path');
+    if (headerRect) {
+      headerRect.setAttribute('fill', colors.light || colors.bg);
+      headerRect.setAttribute('stroke', colors.border);
+    }
+    if (title) title.style.color = colors.text;
+  });
+}
+</script>
