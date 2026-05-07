@@ -31,7 +31,7 @@
 }
 
 .reservations-card__footer-link {
-    color: #326bff;
+    color: var(--primary-color);
     font-size: 0.96rem;
     font-weight: 600;
     text-decoration: none;
@@ -39,7 +39,7 @@
 }
 
 .reservations-card__footer-link:hover {
-    color: #1f56e6;
+    color: color-mix(in srgb, var(--primary-color) 80%, #1d4ed8);
 }
 
 .reservations-card__title {
@@ -160,8 +160,8 @@
     width: 2.35rem;
     height: 2.35rem;
     border-radius: 999px;
-    background: linear-gradient(180deg, #d6eaff 0%, #cfe4fb 100%);
-    color: #2563eb;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--primary-color) 18%, white) 0%, color-mix(in srgb, var(--primary-color) 12%, white) 100%);
+    color: var(--primary-color);
     font-size: 0.84rem;
     font-weight: 700;
     flex-shrink: 0;
@@ -202,9 +202,9 @@
 }
 
 .status-pill--confirmed {
-    --pill-bg: #edf4ff;
-    --pill-text: #2b69f7;
-    --pill-dot: #4683ff;
+    --pill-bg: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    --pill-text: var(--primary-color);
+    --pill-dot: var(--primary-color);
 }
 
 .status-pill--rejected {
@@ -247,12 +247,12 @@
 }
 
 .action-btn--confirm {
-    background: #eef4ff;
-    color: #2f6df6;
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    color: var(--primary-color);
 }
 
 .action-btn--confirm:hover {
-    background: #e5edff;
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
 }
 
 .action-btn--reject {
@@ -310,4 +310,120 @@
 .custom-confirm-dialog .p-confirm-dialog-message span {
     font-size: 1rem;
     color: #374151;
+}
+
+:host-context(.app-dark) .reservations-card {
+    background: var(--surface-card);
+    border-color: var(--surface-border);
+    box-shadow: 0 18px 45px -42px rgba(6, 16, 32, 0.68);
+}
+
+:host-context(.app-dark) .reservations-card__header,
+:host-context(.app-dark) .reservations-card__footer {
+    border-color: var(--surface-border);
+}
+
+:host-context(.app-dark) .reservations-card__title,
+:host-context(.app-dark) .reservations-table__qty,
+:host-context(.app-dark) .patient-cell__name {
+    color: var(--text-color);
+}
+
+:host-context(.app-dark) .reservations-card__subtitle,
+:host-context(.app-dark) .reservations-card__footer-count,
+:host-context(.app-dark) .reservations-table__index,
+:host-context(.app-dark) .reservations-table__medicine,
+:host-context(.app-dark) .action-placeholder {
+    color: var(--text-color-secondary);
+}
+
+:host-context(.app-dark) .filter-tabs {
+    background: var(--surface-overlay);
+}
+
+:host-context(.app-dark) .filter-tabs__button {
+    color: var(--text-color-secondary);
+}
+
+:host-context(.app-dark) .filter-tabs__button:hover {
+    color: var(--text-color);
+}
+
+:host-context(.app-dark) .filter-tabs__button--active {
+    background: var(--surface-card);
+    color: var(--text-color);
+    box-shadow: inset 0 0 0 1px var(--surface-border);
+}
+
+:host-context(.app-dark) .reservations-table__head-row,
+:host-context(.app-dark) .reservations-table__head-cell {
+    background: var(--surface-overlay);
+    border-bottom-color: var(--surface-border);
+}
+
+:host-context(.app-dark) .reservations-table__head-cell {
+    color: var(--text-color-secondary);
+}
+
+:host-context(.app-dark) .reservations-table__row:hover {
+    background: var(--surface-hover);
+}
+
+:host-context(.app-dark) .reservations-table__cell {
+    color: var(--text-color);
+    border-bottom-color: var(--surface-border);
+}
+
+:host-context(.app-dark) .patient-cell__avatar {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--primary-color) 20%, transparent) 0%, color-mix(in srgb, var(--primary-color) 26%, transparent) 100%);
+    color: color-mix(in srgb, var(--primary-color) 58%, white);
+}
+
+:host-context(.app-dark) .status-pill {
+    box-shadow: none;
+    border: 1px solid color-mix(in srgb, var(--surface-border) 80%, transparent);
+}
+
+:host-context(.app-dark) .status-pill:not(.status-pill--confirmed):not(.status-pill--rejected) {
+    --pill-bg: color-mix(in srgb, #f59e0b 12%, transparent);
+    --pill-text: #fbbf24;
+    --pill-dot: #fbbf24;
+}
+
+:host-context(.app-dark) .status-pill--confirmed {
+    --pill-bg: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    --pill-text: color-mix(in srgb, var(--primary-color) 58%, white);
+    --pill-dot: color-mix(in srgb, var(--primary-color) 58%, white);
+}
+
+:host-context(.app-dark) .status-pill--rejected {
+    --pill-bg: color-mix(in srgb, #ef4444 12%, transparent);
+    --pill-text: #ff8a92;
+    --pill-dot: #ff8a92;
+}
+
+:host-context(.app-dark) .action-btn--confirm {
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    color: color-mix(in srgb, var(--primary-color) 58%, white);
+}
+
+:host-context(.app-dark) .action-btn--confirm:hover {
+    background: color-mix(in srgb, var(--primary-color) 18%, transparent);
+}
+
+:host-context(.app-dark) .action-btn--reject {
+    background: color-mix(in srgb, #ef4444 12%, transparent);
+    color: #ff8a92;
+}
+
+:host-context(.app-dark) .action-btn--reject:hover {
+    background: color-mix(in srgb, #ef4444 18%, transparent);
+}
+
+:host-context(.app-dark) .custom-confirm-dialog .p-confirm-dialog-message span {
+    color: var(--text-color);
+}
+
+:host-context(.app-dark) .custom-confirm-dialog .p-confirm-dialog-message::before {
+    color: #ff8a92;
 }

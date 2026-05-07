@@ -1,5 +1,13 @@
 :root[class*='app-dark'] {
-    --surface-ground: var(--p-surface-950);
-    --code-background: var(--p-surface-800);
-    --code-color: var(--p-surface-100);
+    --surface-ground: #09111f;
+    --surface-card: #111c30;
+    --surface-border: #253754;
+    --surface-hover: #13233d;
+    --layout-hover-surface: #0e263e;
+    --surface-overlay: #15253f;
+    --text-color: rgba(255, 255, 255, 0.96);
+    --text-color-secondary: #8ea1c3;
+    --code-background: #0f1729;
+    --code-color: rgba(255, 255, 255, 0.94);
+    color-scheme: dark;
 }

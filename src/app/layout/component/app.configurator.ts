@@ -7,6 +7,7 @@ import Lara from '@primeuix/themes/lara';
 import { PrimeNG } from 'primeng/config';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { LayoutService } from '../service/layout.service';
+import { NAVY_SURFACE_PALETTE } from '@/theme/app-theme';
 
 const presets = {
     Lara,
@@ -119,6 +120,10 @@ export class AppConfigurator {
     }
 
     surfaces: SurfacesType[] = [
+        {
+            name: 'navy',
+            palette: NAVY_SURFACE_PALETTE
+        },
         {
             name: 'slate',
             palette: {

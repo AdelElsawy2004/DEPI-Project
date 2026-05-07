@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { LayoutService } from '@/layout/service/layout.service';
 import { filter } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { PharmacyStateService } from '@/state/pharmacy-state.service';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: './topbar.component.html',
     styleUrls: ['../../../layout/layout.component.scss']
 })
@@ -15,14 +17,15 @@ export class AppTopbar implements OnInit {
     pageTitle: string = '';
     todayDate: string = '';
     isProfileMenuOpen = false;
-    readonly profilePageLink = ['/pages/empty'];
+    readonly profilePageLink = ['/profile'];
     readonly logoutPageLink = ['/auth/login'];
 
     constructor(
         public layoutService: LayoutService,
+        public appState: PharmacyStateService,
         private router: Router,
         private elementRef: ElementRef<HTMLElement>
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.setDate();
@@ -78,5 +81,36 @@ export class AppTopbar implements OnInit {
 
     closeProfileMenu(): void {
         this.isProfileMenuOpen = false;
+    }
+
+    onSearchChange(query: string): void {
+        this.appState.setSearchQuery(query);
+    }
+
+    get searchQuery(): string {
+        return this.appState.searchQuery();
+    }
+
+    get profileInitials(): string {
+        return this.appState.profile().initials;
+    }
+
+    get profileName(): string {
+        return this.appState.profile().fullName;
+    }
+
+    get profileRole(): string {
+        return this.appState.profile().role;
+    }
+
+    get profileEmail(): string {
+        return this.appState.profile().email;
+    }
+
+    toggleTheme(): void {
+        this.layoutService.layoutConfig.update((state) => ({
+            ...state,
+            darkTheme: !state.darkTheme
+        }));
     }
 }

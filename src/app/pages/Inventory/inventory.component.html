@@ -5,39 +5,46 @@
             <p class="inventory-card__subtitle m-0">{{ cardSubtitle }}</p>
         </div>
 
-    <!-- Dashboard -->
-    <a *ngIf="!isInventoryPage" class="inventory-card__action" [routerLink]="inventoryPageLink">
-        <i class="pi pi-box inventory-card__action-icon"></i>
-        <span>Manage Inventory</span>
-    </a>
-    
-    <!-- Inventory Page -->
-    <button *ngIf="isInventoryPage" class="inventory-card__action" (click)="openAddDialog()">
-        <i class="pi pi-plus inventory-card__action-icon"></i>
-        <span>Add Medicine</span>
-    </button>    
+        @if (!isInventoryPage) {
+            <a class="inventory-card__action" [routerLink]="inventoryPageLink">
+                <i class="pi pi-box inventory-card__action-icon"></i>
+                <span>Manage Inventory</span>
+            </a>
+        }
+
+        @if (isInventoryPage) {
+            <button class="inventory-card__action" (click)="openAddDialog()">
+                <i class="pi pi-plus inventory-card__action-icon"></i>
+                <span>Add Medicine</span>
+            </button>
+        }
     </div>
 
     <div class="inventory-list">
-        <div class="inventory-row" *ngFor="let item of visibleInventory">
-            <div class="inventory-row__main">
-                <div class="inventory-row__icon-wrap">
-                    <i class="pi pi-link inventory-row__icon"></i>
+        @for (item of visibleInventory; track item.id) {
+            <div class="inventory-row inventory-row--clickable" role="button" tabindex="0"
+                (click)="openEditDialog(item)"
+                (keydown.enter)="openEditDialog(item)"
+                (keydown.space)="$event.preventDefault(); openEditDialog(item)">
+                <div class="inventory-row__main">
+                    <div class="inventory-row__icon-wrap">
+                        <i class="pi pi-link inventory-row__icon"></i>
+                    </div>
+
+                    <div class="inventory-row__content">
+                        <div class="inventory-row__name">{{ item.name }}</div>
+                        <div class="inventory-row__meta">{{ item.category }} - Exp: {{ item.expiry }}</div>
+                    </div>
                 </div>
 
-                <div class="inventory-row__content">
-                    <div class="inventory-row__name">{{ item.name }}</div>
-                    <div class="inventory-row__meta">{{ item.category }} - Exp: {{ item.expiry }}</div>
+                <div class="inventory-row__stats">
+                    <span class="inventory-row__stock">{{ item.stock }}</span>
+                    <span class="inventory-level-pill" [ngClass]="'inventory-level-pill--' + item.level.toLowerCase()">
+                        {{ item.level }}
+                    </span>
                 </div>
             </div>
-
-            <div class="inventory-row__stats">
-                <span class="inventory-row__stock">{{ item.stock }}</span>
-                <span class="inventory-level-pill" [ngClass]="'inventory-level-pill--' + item.level.toLowerCase()">
-                    {{ item.level }}
-                </span>
-            </div>
-        </div>
+        }
     </div>
 
     <div class="inventory-card__footer">
@@ -46,63 +53,106 @@
         </span>
     </div>
 </div>
+
 <p-dialog [(visible)]="showAddDialog" [modal]="true" [closable]="true" [style]="{width: '520px'}"
     [contentStyle]="{'overflow': 'visible'}" styleClass="custom-add-dialog">
 
     <ng-template pTemplate="header">
         <div class="dialog-header">
-            <div class="dialog-header__icon">
-                <i class="pi pi-plus"></i>
+            <div class="dialog-header__icon" [class.dialog-header__icon--edit]="isEditMode">
+                <i class="pi" [class.pi-plus]="!isEditMode" [class.pi-pencil]="isEditMode"></i>
             </div>
             <div>
-                <div class="dialog-header__title">Add New Medicine</div>
-                <div class="dialog-header__subtitle">Fill in the medicine details below</div>
+                <div class="dialog-header__title">{{ isEditMode ? 'Edit Medicine' : 'Add New Medicine' }}</div>
+                <div class="dialog-header__subtitle">
+                    {{ isEditMode ? 'Update the medicine details below' : 'Fill in the medicine details below' }}
+                </div>
             </div>
         </div>
     </ng-template>
 
     <div class="dialog-body">
-    
+
         <!-- Medicine Name -->
         <div class="form-group full">
-            <label>Medicine Name</label>
-            <input type="text" pInputText placeholder="e.g. Amoxicillin 500mg" class="full-width-input" />
+            <label class="form-label" [class.form-label--error]="errors['name']">
+                Medicine Name
+                <span class="form-label__required">*</span>
+            </label>
+            <input type="text" pInputText placeholder="e.g. Amoxicillin 500mg" class="full-width-input"
+                [(ngModel)]="medicineName" (ngModelChange)="validateField('name')"
+                [class.input-error]="errors['name']" />
+            @if (errors['name']) {
+                <span class="form-error">{{ errors['name'] }}</span>
+            }
         </div>
-    
+
         <!-- Row: Quantity + Category -->
         <div class="form-grid">
-        
+
             <div class="form-group">
-                <label>Quantity</label>
-                <p-inputNumber [(ngModel)]="quantity" styleClass="full-width-input" [style]="{ width: '100%' }">
+                <label class="form-label" [class.form-label--error]="errors['quantity']">
+                    Quantity
+                    <span class="form-label__required">*</span>
+                </label>
+                <p-inputNumber [(ngModel)]="quantity" styleClass="full-width-input" [style]="{ width: '100%' }"
+                    (ngModelChange)="validateField('quantity')"
+                    [class.input-error]="errors['quantity']">
                 </p-inputNumber>
+                @if (errors['quantity']) {
+                    <span class="form-error">{{ errors['quantity'] }}</span>
+                }
             </div>
-        
+
             <div class="form-group">
-                <label>Category</label>
-                <p-select [options]="categories" placeholder="Select..." styleClass="full-width-input"
-                    [style]="{ width: '100%' }">
+                <label class="form-label" [class.form-label--error]="errors['category']">
+                    Category
+                    <span class="form-label__required">*</span>
+                </label>
+                <p-select [options]="categories" optionLabel="label" optionValue="value"
+                    [(ngModel)]="selectedCategory" placeholder="Select..."
+                    (ngModelChange)="validateField('category')"
+                    styleClass="full-width-input" [style]="{ width: '100%' }"
+                    [class.input-error]="errors['category']">
                 </p-select>
+                @if (errors['category']) {
+                    <span class="form-error">{{ errors['category'] }}</span>
+                }
             </div>
-        
+
         </div>
-        
+
         <div class="form-group full">
-            <label>Expiry Date</label>
-            <p-datepicker [(ngModel)]="expiryDate" [showIcon]="true" iconDisplay="input" styleClass="full-width-input"
-                [style]="{ width: '100%' }">
+            <label class="form-label" [class.form-label--error]="errors['expiry']">
+                Expiry Date
+                <span class="form-label__required">*</span>
+            </label>
+            <p-datepicker [(ngModel)]="expiryDate" [showIcon]="true" iconDisplay="input" view="month"
+                dateFormat="mm/yy" styleClass="full-width-input" (ngModelChange)="validateField('expiry')"
+                [style]="{ width: '100%' }" [class.input-error]="errors['expiry']">
             </p-datepicker>
+            @if (errors['expiry']) {
+                <span class="form-error">{{ errors['expiry'] }}</span>
+            }
         </div>
-    
+
     </div>
 
     <ng-template pTemplate="footer">
         <div class="dialog-footer">
-            <button class="btn-cancel" (click)="closeAddDialog()">Cancel</button>
-            <button class="btn-add">
-                <i class="pi pi-plus"></i>
-                Add Medicine
-            </button>
+            @if (isEditMode) {
+                <button type="button" class="btn-delete" (click)="deleteMedicine()">
+                    <i class="pi pi-trash"></i>
+                    Delete
+                </button>
+            }
+            <div class="dialog-footer__actions">
+                <button type="button" class="btn-cancel" (click)="closeAddDialog()">Cancel</button>
+                <button type="button" class="btn-add" (click)="saveMedicine()">
+                    <i class="pi" [class.pi-plus]="!isEditMode" [class.pi-check]="isEditMode"></i>
+                    {{ isEditMode ? 'Save Changes' : 'Add Medicine' }}
+                </button>
+            </div>
         </div>
     </ng-template>
 </p-dialog>

@@ -1,38 +1,134 @@
-@media (max-width: 991px) {
-    .reservations-card__header {
-        flex-direction: column;
-        align-items: stretch;
-    }
+.dashboard-metric-card {
+    height: 100%;
+    padding: 1rem;
+    border-radius: 16px;
+    border: 1px solid var(--surface-border);
+    background: var(--surface-card);
+    box-shadow: 0 18px 45px -38px rgba(33, 56, 115, 0.35);
+    transition:
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
 
-    .reservations-card__footer {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.dashboard-metric-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 22px 48px -40px rgba(33, 56, 115, 0.42);
+}
 
-    .filter-tabs {
-        width: 100%;
-        overflow-x: auto;
-    }
+.dashboard-metric-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
 
-    .filter-tabs__button {
-        white-space: nowrap;
-    }
+.dashboard-metric-card__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.8rem;
+}
 
-    .inventory-card__header {
-        flex-direction: column;
-        align-items: stretch;
-    }
+.dashboard-metric-card__icon i {
+    font-size: 1rem;
+}
 
-    .inventory-card__action {
-        justify-content: center;
-    }
+.dashboard-metric-card__icon--blue {
+    background: #e8f1ff;
+    color: #2166f3;
+}
 
-    .inventory-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
+.dashboard-metric-card__icon--indigo {
+    background: #eff0ff;
+    color: #3f4bd8;
+}
 
-    .inventory-row__stats {
-        justify-content: space-between;
+.dashboard-metric-card__icon--green {
+    background: #ecfdf5;
+    color: #16a34a;
+}
+
+.dashboard-metric-card__icon--red {
+    background: #fff1f2;
+    color: #dc2626;
+}
+
+.dashboard-metric-card__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.dashboard-metric-card__delta--green {
+    color: #16a34a;
+}
+
+.dashboard-metric-card__delta--red {
+    color: #dc2626;
+}
+
+.dashboard-metric-card__body {
+    margin-top: 1rem;
+}
+
+.dashboard-metric-card__label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--text-color-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.dashboard-metric-card__value {
+    color: var(--text-color);
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+:host-context(.app-dark) .dashboard-metric-card {
+    background: var(--surface-card);
+    border-color: var(--surface-border);
+    box-shadow: 0 18px 45px -42px rgba(6, 16, 32, 0.65);
+}
+
+:host-context(.app-dark) .dashboard-metric-card__icon--blue {
+    background: color-mix(in srgb, var(--primary-color) 14%, transparent);
+    color: color-mix(in srgb, var(--primary-color) 58%, white);
+}
+
+:host-context(.app-dark) .dashboard-metric-card__icon--indigo {
+    background: color-mix(in srgb, #4f46e5 14%, transparent);
+    color: color-mix(in srgb, #4f46e5 58%, white);
+}
+
+:host-context(.app-dark) .dashboard-metric-card__icon--green {
+    background: color-mix(in srgb, #22c55e 14%, transparent);
+    color: color-mix(in srgb, #22c55e 58%, white);
+}
+
+:host-context(.app-dark) .dashboard-metric-card__icon--red {
+    background: color-mix(in srgb, #ef4444 14%, transparent);
+    color: color-mix(in srgb, #ef4444 58%, white);
+}
+
+:host-context(.app-dark) .dashboard-metric-card__label {
+    color: var(--text-color-secondary);
+}
+
+:host-context(.app-dark) .dashboard-metric-card__value {
+    color: var(--text-color);
+}
+
+@media (max-width: 767px) {
+    .dashboard-metric-card__header {
+        align-items: center;
     }
 }
