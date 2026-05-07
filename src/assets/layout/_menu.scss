@@ -37,7 +37,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 0.95rem;
-    background: linear-gradient(145deg, #2563eb, #1746c8);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--primary-color) 86%, white), var(--primary-color));
     color: #ffffff;
     box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
 
@@ -209,8 +209,8 @@
 
             &:hover,
             &.active-route {
-                background: #f4f8ff;
-                color: #1d4ed8;
+                background: var(--layout-hover-surface);
+                color: var(--primary-color);
                 transform: translateX(2px);
             }
 
@@ -226,16 +226,16 @@
                     height: 1.85rem;
                     border-radius: 999px;
                     transform: translateY(-50%);
-                    background: #2563eb;
+                    background: var(--primary-color);
                 }
             }
 
             &:hover,
             &.active-route {
                 .layout-menuitem-icon {
-                    background: #2563eb;
+                    background: var(--primary-color);
                     color: #ffffff;
-                    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16);
+                    box-shadow: 0 10px 24px color-mix(in srgb, var(--primary-color) 16%, transparent);
                 }
             }
 
@@ -285,4 +285,69 @@
 .layout-submenu-enter-active {
     overflow: hidden;
     transition: max-height 1s ease-in-out;
+}
+
+:root[class*='app-dark'] .layout-sidebar {
+    background: var(--surface-ground);
+    border-right-color: var(--surface-border);
+    box-shadow: 18px 0 36px rgba(3, 9, 20, 0.35);
+}
+
+:root[class*='app-dark'] .layout-sidebar-brand {
+    color: var(--text-color);
+}
+
+:root[class*='app-dark'] .layout-sidebar-brand-copy small,
+:root[class*='app-dark'] .layout-sidebar-footer-link {
+    color: var(--text-color-secondary);
+}
+
+:root[class*='app-dark'] .layout-sidebar-divider,
+:root[class*='app-dark'] .layout-sidebar-footer,
+:root[class*='app-dark'] .menu-separator {
+    background: var(--surface-border);
+}
+
+:root[class*='app-dark'] .layout-sidebar-footer {
+    border-top-color: var(--surface-border);
+}
+
+:root[class*='app-dark'] .layout-sidebar-footer-link i,
+:root[class*='app-dark'] .layout-menu ul a .layout-menuitem-icon {
+    background: var(--surface-overlay);
+    color: inherit;
+}
+
+:root[class*='app-dark'] .layout-menu ul a {
+    color: var(--text-color-secondary);
+    
+}
+
+:root[class*='app-dark'] .layout-sidebar-footer-link:hover {
+    background: var(--layout-hover-surface);
+    color: var(--text-color);
+}
+
+:root[class*='app-dark'] .layout-menu ul a:hover,
+:root[class*='app-dark'] .layout-menu ul a.active-route {
+    background: #0e263e !important;
+    color: var(--primary-color) !important;
+}
+
+:root[class*='app-dark'] .layout-menu ul a .layout-submenu-toggler {
+    color: var(--text-color-secondary);
+}
+
+:root[class*='app-dark'] .layout-menu ul ul {
+    border-left-color: var(--surface-border);
+}
+
+:root[class*='app-dark'] .layout-menu ul a.active-route::after {
+    background: var(--primary-color);
+}
+
+:root[class*='app-dark'] .layout-menu ul a:hover .layout-menuitem-icon,
+:root[class*='app-dark'] .layout-menu ul a.active-route .layout-menuitem-icon {
+    background: var(--primary-color) !important;
+    color: #ffffff;
 }

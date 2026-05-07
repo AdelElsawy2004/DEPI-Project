@@ -3,6 +3,7 @@ import { AppLayout } from './app/layout/component/layout.component';
 import { DashboardComponent } from './app/pages/dashboard/dashboard.component';
 import { InventoryComponent } from '@/pages/Inventory/inventory.component';
 import { ReservationsComponent } from '@/pages/Reservations/reservations.component';
+import { ProfileComponent } from '@/pages/profile/profile.component';
 
 export const appRoutes: Routes = [
     {
@@ -24,6 +25,11 @@ export const appRoutes: Routes = [
                 component: ReservationsComponent,
                 data: { title: 'Reservations' }
             },
+            {
+                path: 'profile',
+                component: ProfileComponent,
+                data: { title: 'Profile' }
+            }
         ]
     },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },

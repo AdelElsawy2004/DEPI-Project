@@ -1,6 +1,6 @@
 import { Injectable, effect, signal, computed } from '@angular/core';
 import { Subject } from 'rxjs';
-import { APP_PRIMARY_COLOR, APP_THEME_NAME } from '../../theme/app-theme';
+import { APP_PRIMARY_COLOR, APP_SURFACE_COLOR, APP_THEME_NAME } from '../../theme/app-theme';
 
 export interface layoutConfig {
     preset?: string;
@@ -36,7 +36,7 @@ export class LayoutService {
     _config: layoutConfig = {
         preset: APP_THEME_NAME,
         primary: APP_PRIMARY_COLOR,
-        surface: null,
+        surface: APP_SURFACE_COLOR,
         darkTheme: false,
         menuMode: 'static'
     };

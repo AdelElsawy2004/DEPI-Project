@@ -5,41 +5,47 @@ import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from "primeng/dialog";
 import { InputNumberModule } from "primeng/inputnumber";
 import { SelectModule } from "primeng/select";
-import { DatePicker } from 'primeng/datepicker'; 
+import { DatePicker } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
+import { InventoryService, MedicineItem } from './inventory.service';
+import { PharmacyStateService } from '@/state/pharmacy-state.service';
 
 @Component({
     selector: 'app-inventory',
     standalone: true,
     imports: [CommonModule, FormsModule, RouterLink, DialogModule, InputNumberModule, SelectModule, DatePicker,
-        InputTextModule,],
+        InputTextModule],
     templateUrl: './inventory.component.html',
     styleUrl: './inventory.component.scss'
 })
 export class InventoryComponent {
-    showAddDialog: boolean = false;
-    quantity: number = 0;
+    showAddDialog = false;
+    isEditMode = false;
+    editingMedicineId: string | null = null;
+
+    medicineName = '';
+    quantity: number | null = null;
     expiryDate: Date | null = null;
-    selectedCategory: any = null;
+    selectedCategory: string | null = null;
+    errors: Record<string, string> = {};
+
     readonly inventoryPageLink = ['/inventory'];
 
-    inventoryItems = [
-        { name: 'Amoxicillin 500mg', category: 'Antibiotic', expiry: '2027-03', stock: 120, level: 'High' },
-        { name: 'Metformin 850mg', category: 'Diabetes', expiry: '2026-11', stock: 85, level: 'Normal' },
-        { name: 'Lisinopril 10mg', category: 'Hypertension', expiry: '2027-06', stock: 60, level: 'Normal' },
-        { name: 'Atorvastatin 20mg', category: 'Cholesterol', expiry: '2026-09', stock: 200, level: 'High' },
-        { name: 'Omeprazole 20mg', category: 'Gastric', expiry: '2026-12', stock: 45, level: 'Normal' },
-        { name: 'Amlodipine 5mg', category: 'Hypertension', expiry: '2027-01', stock: 30, level: 'Low' },
-        { name: 'Cetirizine 10mg', category: 'Allergy', expiry: '2027-05', stock: 75, level: 'Normal' },
-        { name: 'Ibuprofen 400mg', category: 'Pain Relief', expiry: '2026-08', stock: 52, level: 'Normal' }
-    ];
     categories = [
-        { label: 'Antibiotic', value: 'antibiotic' },
-        { label: 'Pain Relief', value: 'pain' },
-        { label: 'Diabetes', value: 'diabetes' }
+        { label: 'Antibiotic', value: 'Antibiotic' },
+        { label: 'Pain Relief', value: 'Pain Relief' },
+        { label: 'Diabetes', value: 'Diabetes' },
+        { label: 'Hypertension', value: 'Hypertension' },
+        { label: 'Cholesterol', value: 'Cholesterol' },
+        { label: 'Gastric', value: 'Gastric' },
+        { label: 'Allergy', value: 'Allergy' }
     ];
 
-    constructor(private router: Router) {}
+    constructor(
+        private router: Router,
+        private inventoryService: InventoryService,
+        private appState: PharmacyStateService
+    ) {}
 
     get isInventoryPage(): boolean {
         return this.router.url.startsWith('/inventory');
@@ -53,8 +59,30 @@ export class InventoryComponent {
         return this.isInventoryPage ? 'Manage current medicine stock' : 'Current stock overview';
     }
 
-    get visibleInventory(): typeof this.inventoryItems {
-        return this.isInventoryPage ? this.inventoryItems : this.inventoryItems.slice(0, 6);
+    get inventoryItems(): MedicineItem[] {
+        return this.inventoryService.inventoryItems();
+    }
+
+    get filteredInventoryItems(): MedicineItem[] {
+        const normalizedQuery = this.appState.searchQuery().trim().toLowerCase();
+
+        if (!normalizedQuery) {
+            return this.inventoryItems;
+        }
+
+        return this.inventoryItems.filter((item) =>
+            [
+                item.name,
+                item.category,
+                item.expiry,
+                item.level,
+                item.stock.toString()
+            ].some((value) => value.toLowerCase().includes(normalizedQuery))
+        );
+    }
+
+    get visibleInventory(): MedicineItem[] {
+        return this.isInventoryPage ? this.filteredInventoryItems : this.filteredInventoryItems.slice(0, 6);
     }
 
     get displayedInventoryCount(): number {
@@ -62,13 +90,140 @@ export class InventoryComponent {
     }
 
     get totalInventoryCount(): number {
-        return this.inventoryItems.length;
+        return this.filteredInventoryItems.length;
     }
+
+    private getLevel(stock: number): string {
+        if (stock >= 100) return 'High';
+        if (stock >= 40) return 'Normal';
+        return 'Low';
+    }
+
+    private formatExpiry(date: Date): string {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+    }
+
+    private validate(): boolean {
+        this.errors = {};
+        if (!this.medicineName.trim()) this.errors['name'] = 'Medicine name is required';
+        if (!this.quantity || this.quantity <= 0) this.errors['quantity'] = 'Quantity must be greater than 0';
+        if (!this.selectedCategory) this.errors['category'] = 'Category is required';
+        if (!this.expiryDate) this.errors['expiry'] = 'Expiry date is required';
+        return Object.keys(this.errors).length === 0;
+    }
+
+    validateField(field: 'name' | 'quantity' | 'category' | 'expiry') {
+        switch (field) {
+            case 'name':
+                if (this.medicineName.trim()) {
+                    this.removeFieldError('name');
+                } else {
+                    this.setFieldError('name', 'Medicine name is required');
+                }
+                break;
+            case 'quantity':
+                if (this.quantity !== null && this.quantity > 0) {
+                    this.removeFieldError('quantity');
+                } else {
+                    this.setFieldError('quantity', 'Quantity must be greater than 0');
+                }
+                break;
+            case 'category':
+                if (this.selectedCategory) {
+                    this.removeFieldError('category');
+                } else {
+                    this.setFieldError('category', 'Category is required');
+                }
+                break;
+            case 'expiry':
+                if (this.expiryDate) {
+                    this.removeFieldError('expiry');
+                } else {
+                    this.setFieldError('expiry', 'Expiry date is required');
+                }
+                break;
+        }
+    }
+
+    private setFieldError(field: string, message: string) {
+        this.errors = {
+            ...this.errors,
+            [field]: message
+        };
+    }
+
+    private removeFieldError(field: string) {
+        if (!this.errors[field]) {
+            return;
+        }
+
+        const { [field]: _removed, ...remainingErrors } = this.errors;
+        this.errors = remainingErrors;
+    }
+
     openAddDialog() {
+        this.isEditMode = false;
+        this.resetForm();
         this.showAddDialog = true;
+    }
+
+    openEditDialog(item: MedicineItem) {
+        this.isEditMode = true;
+        this.editingMedicineId = item.id;
+        this.medicineName = item.name;
+        this.quantity = item.stock;
+        this.selectedCategory = item.category;
+        const [year, month] = item.expiry.split('-').map(Number);
+        this.expiryDate = new Date(year, month - 1, 1);
+        this.errors = {};
+        this.showAddDialog = true;
+    }
+
+    saveMedicine() {
+        if (!this.validate()) return;
+
+        const stock = this.quantity ?? 0;
+
+        const item: MedicineItem = {
+            id: this.editingMedicineId ?? '',
+            name: this.medicineName.trim(),
+            category: this.selectedCategory!,
+            expiry: this.formatExpiry(this.expiryDate!),
+            stock,
+            level: this.getLevel(stock)
+        };
+
+        if (this.isEditMode && this.editingMedicineId) {
+            this.inventoryService.updateMedicine(this.editingMedicineId, item);
+        } else {
+            this.inventoryService.addMedicine(item);
+        }
+
+        this.closeAddDialog();
+    }
+
+    deleteMedicine() {
+        if (this.editingMedicineId) {
+            this.inventoryService.deleteMedicine(this.editingMedicineId);
+            this.closeAddDialog();
+        }
     }
 
     closeAddDialog() {
         this.showAddDialog = false;
+        this.isEditMode = false;
+        this.editingMedicineId = null;
+        this.resetForm();
+    }
+
+    private resetForm() {
+        this.medicineName = '';
+        this.quantity = null;
+        this.expiryDate = null;
+        this.selectedCategory = null;
+        this.errors = {};
+        this.editingMedicineId = null;
     }
 }

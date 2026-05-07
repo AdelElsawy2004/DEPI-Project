@@ -20,7 +20,7 @@ export class AppMenu {
                     { label: 'Dashboard', icon: 'pi pi-home', routerLink: ['/'] },
                     { label: 'Reservations', icon: 'pi pi-calendar', routerLink: ['/reservations'] },
                     { label: 'Inventory', icon: 'pi pi-box', routerLink: ['/inventory'] },
-                    
+                    { label: 'Profile', icon: 'pi pi-user', routerLink: ['/profile'] }
                 ]
             }
         ];
