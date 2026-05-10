@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/pages/patient/patient.routes.ts"],
-  "sourcesContent": ["import { Routes } from '@angular/router';\n\nexport default [\n    {\n        path: '',\n        pathMatch: 'full',\n        redirectTo: 'home'\n    },\n    {\n        path: 'home',\n        loadComponent: () => import('./home/home.component').then((m) => m.HomeComponent)\n    }\n] as Routes;\n"],
-  "mappings": ";;;AAEA,IAAA,yBAAe;EACX;IACI,MAAM;IACN,WAAW;IACX,YAAY;;EAEhB;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAuB,EAAE,KAAK,CAAC,MAAM,EAAE,aAAa;;;",
-  "names": []
-}

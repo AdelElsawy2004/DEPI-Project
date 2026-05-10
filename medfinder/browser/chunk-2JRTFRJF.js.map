@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/pages/admin/admin.routes.ts"],
-  "sourcesContent": ["import { Routes } from '@angular/router';\n\nexport default [\n    {\n        path: '',\n        redirectTo: 'dashboard',\n        pathMatch: 'full'\n    },\n    {\n        path: 'dashboard',\n        loadComponent: () => import('./dashboard/dashboard.component').then((m) => m.DashboardComponent),\n        data: { title: 'Pharmacy Dashboard' }\n    },\n    {\n        path: 'inventory',\n        loadComponent: () => import('./Inventory/inventory.component').then((m) => m.InventoryComponent),\n        data: { title: 'Inventory' }\n    },\n    {\n        path: 'reservations',\n        loadComponent: () => import('./Reservations/reservations.component').then((m) => m.ReservationsComponent),\n        data: { title: 'Reservations' }\n    },\n    {\n        path: 'profile',\n        loadComponent: () => import('./profile/profile.component').then((m) => m.ProfileComponent),\n        data: { title: 'Profile' }\n    }\n] as Routes;\n"],
-  "mappings": ";;;AAEA,IAAA,uBAAe;EACX;IACI,MAAM;IACN,YAAY;IACZ,WAAW;;EAEf;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAiC,EAAE,KAAK,CAAC,MAAM,EAAE,kBAAkB;IAC/F,MAAM,EAAE,OAAO,qBAAoB;;EAEvC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAiC,EAAE,KAAK,CAAC,MAAM,EAAE,kBAAkB;IAC/F,MAAM,EAAE,OAAO,YAAW;;EAE9B;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAAuC,EAAE,KAAK,CAAC,MAAM,EAAE,qBAAqB;IACxG,MAAM,EAAE,OAAO,eAAc;;EAEjC;IACI,MAAM;IACN,eAAe,MAAM,OAAO,qBAA6B,EAAE,KAAK,CAAC,MAAM,EAAE,gBAAgB;IACzF,MAAM,EAAE,OAAO,UAAS;;;",
-  "names": []
-}
