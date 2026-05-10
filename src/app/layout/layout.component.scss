@@ -77,34 +77,15 @@
 .layout-sidebar-brand {
     display: flex;
     align-items: center;
-    padding: 1.5rem;
+    padding: 1.75rem 1.5rem 1.5rem;
     overflow: hidden;
     transition: all 0.3s;
-
-    img {
-        max-width: 150px;
-        height: auto;
-        transition: all 0.3s;
-    }
 }
 
 .layout-sidebar.sidebar-collapsed {
     .layout-sidebar-brand {
         justify-content: center;
         padding: 1rem 0;
-
-        img {
-            max-width: 50px !important;
-            margin: 0 auto;
-            height: auto;
-        }
-    }
-
-    .layout-sidebar-brand-copy {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        overflow: visible;
     }
 }
 
@@ -371,7 +352,6 @@
         color: var(--text-color);
     }
 
-    .layout-sidebar-brand-copy small,
     .layout-sidebar-footer-link {
         color: var(--text-color-secondary);
     }

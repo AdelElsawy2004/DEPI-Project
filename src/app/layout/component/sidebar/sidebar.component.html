@@ -1,8 +1,10 @@
 <div class="layout-sidebar" [class.sidebar-collapsed]="isCollapsed">
-    <a class="layout-sidebar-brand" routerLink="/">
-        <span class="layout-sidebar-brand-copy">
-            <img [src]="isCollapsed ? collapsedLogo : fullLogo" alt="MedFinder-logo">
-            <small class="ml-14 hide-on-collapse">Pharmacy Admin</small>
+    <a class="layout-sidebar-brand flex items-center gap-4 transition-opacity hover:opacity-90" routerLink="/" aria-label="MedFinder dashboard">
+        <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-500 text-white shadow-sm shadow-primary-500/30">
+            <i class="pi pi-link text-base"></i>
+        </span>
+        <span class="text-xl font-semibold tracking-tight text-surface-900 dark:text-surface-0 hide-on-collapse">
+            Med<span class="text-primary-500">Finder</span>
         </span>
     </a>
 

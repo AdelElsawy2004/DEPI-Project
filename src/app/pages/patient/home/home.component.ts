@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
@@ -13,24 +13,45 @@ import { LayoutService } from '@/layout/service/layout.service';
 })
 export class HomeComponent {
     searchTerm = '';
+    isProfileMenuOpen = false;
 
     readonly popularMedicines = ['Amoxicillin', 'Metformin', 'Paracetamol', 'Cetirizine', 'Ibuprofen', 'Omeprazole'];
+    readonly defaultProfileName = 'Dr. Pharmacist';
 
     constructor(
         public readonly appState: PharmacyStateService,
-        public readonly layoutService: LayoutService
+        public readonly layoutService: LayoutService,
+        private readonly elementRef: ElementRef<HTMLElement>
     ) {}
 
     get profileAvatar(): string {
-        return this.appState.profile().initials?.trim().charAt(0) || 'P';
+        return this.buildInitials(this.profileName);
     }
 
     get profileName(): string {
-        return this.appState.profile().fullName;
+        const fullName = this.appState.profile().fullName.trim();
+
+        if (!fullName || fullName === this.defaultProfileName) {
+            return 'Patient';
+        }
+
+        return fullName;
     }
 
     get profileRole(): string {
-        return this.appState.profile().role;
+        if (this.isPlaceholderProfile()) {
+            return 'Patient';
+        }
+
+        return this.appState.profile().role.trim() || 'Patient';
+    }
+
+    get profileEmail(): string {
+        if (this.isPlaceholderProfile()) {
+            return 'patient@medfinder.com';
+        }
+
+        return this.appState.profile().email.trim() || 'patient@medfinder.com';
     }
 
     toggleTheme(): void {
@@ -40,11 +61,47 @@ export class HomeComponent {
         }));
     }
 
+    toggleProfileMenu(event: MouseEvent): void {
+        event.stopPropagation();
+        this.isProfileMenuOpen = !this.isProfileMenuOpen;
+    }
+
+    closeProfileMenu(): void {
+        this.isProfileMenuOpen = false;
+    }
+
     submitSearch(): void {
         this.searchTerm = this.searchTerm.trim();
     }
 
     selectMedicine(medicine: string): void {
         this.searchTerm = medicine;
+    }
+
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent): void {
+        if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+            this.closeProfileMenu();
+        }
+    }
+
+    @HostListener('document:keydown.escape')
+    onEscapeKey(): void {
+        this.closeProfileMenu();
+    }
+
+    private isPlaceholderProfile(): boolean {
+        return this.appState.profile().fullName.trim() === this.defaultProfileName;
+    }
+
+    private buildInitials(name: string): string {
+        const initials = name
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part.charAt(0).toUpperCase())
+            .join('');
+
+        return initials || 'P';
     }
 }
