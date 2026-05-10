@@ -1,0 +1,23 @@
+@use '../assets/tailwind.css';
+@use '../assets/layout/layout.scss';
+@use 'primeicons/primeicons.css';
+
+.custom-confirm-dialog .p-confirm-dialog-icon {
+    display: none !important;
+}
+
+.custom-confirm-dialog .p-confirm-dialog-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.custom-confirm-dialog .p-confirm-dialog-message::before {
+    content: "\e90c";
+    font-family: "PrimeIcons";
+    font-size: 2.5rem;
+    color: #ef4444;
+    margin-bottom: 12px;
+    display: block;
+}
