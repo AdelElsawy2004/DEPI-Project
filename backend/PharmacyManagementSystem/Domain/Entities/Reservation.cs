@@ -1,4 +1,4 @@
-﻿namespace PharmacyManagementSystem.Domain.Entities
+namespace PharmacyManagementSystem.Domain.Entities
 {
     public class Reservation
     {
@@ -10,7 +10,7 @@
         public ReservationStatus Status { get ; set ;} = ReservationStatus.Pending ; // Enum
         public DateTime CreatedAt { get ; set ;}
         public DateTime ExpiresAt { get ; set ;}
-        public string Notes { get ; set ;} = String.Empty ;
+        public string Notes { get ; set ;} = string.Empty ;
 
         // Navigation
         // Patient
