@@ -39,6 +39,12 @@ builder.Services.AddScoped<IMedicineService,MedicineService>();
 builder.Services.AddScoped<IMedicineStockRepository,MedicineStockRepository>();
 builder.Services.AddScoped<IMedicineStockService, MedicineStockService>() ;
 
+builder.Services.AddScoped<IMedicineCategoryRepository,MedicineCategoryRepository>();
+builder.Services.AddScoped<IMedicineCategoryService,MedicineCategoryService>();
+
+builder.Services.AddScoped<IPharmacyRepository,PharmacyRepository>();
+builder.Services.AddScoped<IPharmacyService,PharmacyService>();
+
 
 var app = builder.Build();
 

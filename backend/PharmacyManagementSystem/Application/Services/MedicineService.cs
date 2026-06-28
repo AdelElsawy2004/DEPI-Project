@@ -31,7 +31,7 @@ namespace PharmacyManagementSystem.Application.Services
             var medicine = dto.ToEntity();
 
             await _medicineRepo.AddAsync(medicine);
-            _medicineRepo.SaveAsync();
+            await _medicineRepo.SaveAsync();
 
             return medicine.ToResponseDto();
         }
@@ -43,7 +43,7 @@ namespace PharmacyManagementSystem.Application.Services
 
             dto.UpdateEntity(medicine);
             _medicineRepo.Update(medicine);
-            _medicineRepo.SaveAsync();
+            await _medicineRepo.SaveAsync();
 
             return true;
         }
@@ -54,7 +54,7 @@ namespace PharmacyManagementSystem.Application.Services
             if(medicine == null) return false;
 
             _medicineRepo.Delete(medicine);
-            _medicineRepo.SaveAsync();
+            await _medicineRepo.SaveAsync();
 
             return true;
         }

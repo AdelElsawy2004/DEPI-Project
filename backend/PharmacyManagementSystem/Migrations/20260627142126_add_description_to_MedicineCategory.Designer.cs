@@ -4,6 +4,7 @@ using LibrarySystemAPIs.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PharmacyManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260627142126_add_description_to_MedicineCategory")]
+    partial class add_description_to_MedicineCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,108 +283,6 @@ namespace PharmacyManagementSystem.Migrations
                     b.HasIndex("TradeName");
 
                     b.ToTable("Medicines");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ActiveIngredient = "Amoxicillin",
-                            CategoryId = 1,
-                            Form = "Tablet",
-                            RequiresPrescription = true,
-                            Strength = "1g",
-                            TradeName = "Augmentin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ActiveIngredient = "Paracetamol",
-                            CategoryId = 2,
-                            Form = "Tablet",
-                            RequiresPrescription = false,
-                            Strength = "500mg",
-                            TradeName = "Panadol Extra"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ActiveIngredient = "Cetirizine",
-                            CategoryId = 3,
-                            Form = "Tablet",
-                            RequiresPrescription = false,
-                            Strength = "10mg",
-                            TradeName = "Zyrtec"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ActiveIngredient = "Acyclovir",
-                            CategoryId = 4,
-                            Form = "Cream",
-                            RequiresPrescription = false,
-                            Strength = "5%",
-                            TradeName = "Zovirax"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ActiveIngredient = "Bisoprolol",
-                            CategoryId = 5,
-                            Form = "Tablet",
-                            RequiresPrescription = true,
-                            Strength = "5mg",
-                            TradeName = "Concor"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ActiveIngredient = "Glimepiride",
-                            CategoryId = 6,
-                            Form = "Tablet",
-                            RequiresPrescription = true,
-                            Strength = "2mg",
-                            TradeName = "Amaryl"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ActiveIngredient = "Nifuroxazide",
-                            CategoryId = 7,
-                            Form = "Capsule",
-                            RequiresPrescription = false,
-                            Strength = "200mg",
-                            TradeName = "Antinal"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ActiveIngredient = "Betamethasone",
-                            CategoryId = 8,
-                            Form = "Ointment",
-                            RequiresPrescription = true,
-                            Strength = "0.1%",
-                            TradeName = "Betnovate"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ActiveIngredient = "Salbutamol",
-                            CategoryId = 9,
-                            Form = "Inhaler",
-                            RequiresPrescription = true,
-                            Strength = "100mcg",
-                            TradeName = "Ventolin"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ActiveIngredient = "Multivitamins",
-                            CategoryId = 10,
-                            Form = "Tablet",
-                            RequiresPrescription = false,
-                            Strength = "Adult Formula",
-                            TradeName = "Centrum"
-                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.MedicineAlternative", b =>
@@ -430,68 +331,6 @@ namespace PharmacyManagementSystem.Migrations
                         .IsUnique();
 
                     b.ToTable("MedicineCategory");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Treatments for bacterial infections",
-                            Name = "Antibiotics"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Pain relief and fever reducers",
-                            Name = "Analgesics"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Allergy treatments",
-                            Name = "Antihistamines"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Medications treating viral infections",
-                            Name = "Antivirals"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Heart and blood pressure medications",
-                            Name = "Cardiovascular"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "Blood sugar management treatments",
-                            Name = "Antidiabetics"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "Stomach and digestion symptom relief",
-                            Name = "Gastrointestinal"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Description = "Skin condition creams and treatments",
-                            Name = "Dermatologicals"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Description = "Asthma and cough treatment solutions",
-                            Name = "Respiratory"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Description = "Nutritional support and immune system boosters",
-                            Name = "Vitamins & Supplements"
-                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.MedicineStock", b =>
@@ -528,108 +367,6 @@ namespace PharmacyManagementSystem.Migrations
                         .IsUnique();
 
                     b.ToTable("MedicineStocks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ExpiryDate = new DateTime(2027, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7659),
-                            MedicineId = 1,
-                            PharmacyId = 1,
-                            Price = 95.00m,
-                            QuantityAvailable = 45
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ExpiryDate = new DateTime(2028, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7664),
-                            MedicineId = 2,
-                            PharmacyId = 2,
-                            Price = 30.50m,
-                            QuantityAvailable = 120
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ExpiryDate = new DateTime(2027, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7667),
-                            MedicineId = 3,
-                            PharmacyId = 3,
-                            Price = 45.00m,
-                            QuantityAvailable = 80
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ExpiryDate = new DateTime(2027, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7745),
-                            MedicineId = 4,
-                            PharmacyId = 4,
-                            Price = 60.25m,
-                            QuantityAvailable = 35
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ExpiryDate = new DateTime(2028, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7748),
-                            MedicineId = 5,
-                            PharmacyId = 5,
-                            Price = 115.00m,
-                            QuantityAvailable = 150
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ExpiryDate = new DateTime(2027, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7750),
-                            MedicineId = 6,
-                            PharmacyId = 6,
-                            Price = 85.50m,
-                            QuantityAvailable = 60
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ExpiryDate = new DateTime(2028, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7752),
-                            MedicineId = 7,
-                            PharmacyId = 7,
-                            Price = 25.00m,
-                            QuantityAvailable = 200
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ExpiryDate = new DateTime(2027, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7754),
-                            MedicineId = 8,
-                            PharmacyId = 8,
-                            Price = 70.00m,
-                            QuantityAvailable = 25
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ExpiryDate = new DateTime(2028, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7756),
-                            MedicineId = 9,
-                            PharmacyId = 9,
-                            Price = 140.00m,
-                            QuantityAvailable = 90
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ExpiryDate = new DateTime(2029, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            LastUpdated = new DateTime(2026, 6, 27, 23, 6, 48, 689, DateTimeKind.Utc).AddTicks(7758),
-                            MedicineId = 10,
-                            PharmacyId = 10,
-                            Price = 18.75m,
-                            QuantityAvailable = 300
-                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.Notification", b =>
@@ -711,108 +448,6 @@ namespace PharmacyManagementSystem.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("Pharmacies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "90 El-Tahrir St",
-                            City = "Cairo",
-                            IsVerified = true,
-                            Longitude = 31.235700000000001,
-                            Name = "El-Ezaby Pharmacy",
-                            latitude = 30.0444
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "Abbassiya Square",
-                            City = "Cairo",
-                            IsVerified = true,
-                            Longitude = 31.275099999999998,
-                            Name = "Care Pharmacy",
-                            latitude = 30.062100000000001
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Address = "15 Nasr City St",
-                            City = "Cairo",
-                            IsVerified = true,
-                            Longitude = 31.330200000000001,
-                            Name = "Seif Pharmacy",
-                            latitude = 30.056100000000001
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Address = "Horreya Avenue",
-                            City = "Alexandria",
-                            IsVerified = true,
-                            Longitude = 29.918700000000001,
-                            Name = "Rushdy Pharmacy",
-                            latitude = 31.200099999999999
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Address = "El-Geish St",
-                            City = "Tanta",
-                            IsVerified = true,
-                            Longitude = 30.9998,
-                            Name = "Misr Pharmacy",
-                            latitude = 30.7865
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Address = "Al-Galaa St",
-                            City = "Mansoura",
-                            IsVerified = false,
-                            Longitude = 31.378499999999999,
-                            Name = "Vezeeta Pharmacy",
-                            latitude = 31.041399999999999
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Address = "Maadi Road 9",
-                            City = "Cairo",
-                            IsVerified = true,
-                            Longitude = 31.256599999999999,
-                            Name = "Delmar & Attalla",
-                            latitude = 29.9602
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Address = "Corniche El-Nil",
-                            City = "Aswan",
-                            IsVerified = false,
-                            Longitude = 32.899799999999999,
-                            Name = "19011 Pharmacy",
-                            latitude = 24.088899999999999
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Address = "El-Bahr St",
-                            City = "Al-Minya",
-                            IsVerified = true,
-                            Longitude = 30.7501,
-                            Name = "El-Alfy Pharmacy",
-                            latitude = 28.1099
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Address = "Shebin El-Kom Main St",
-                            City = "Menofia",
-                            IsVerified = true,
-                            Longitude = 31.008400000000002,
-                            Name = "Nile Pharmacy",
-                            latitude = 30.558
-                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.Reservation", b =>
