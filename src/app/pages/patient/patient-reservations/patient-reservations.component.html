@@ -1,0 +1,123 @@
+<div class="reservations-page">
+    <div class="page-header">
+
+        <div>
+            <h2 class="page-title">My Reservations</h2>
+            <p class="page-subtitle">
+                {{ filteredReservations.length }} reservations total
+            </p>
+        </div>
+
+        <div class="filter-tabs">
+
+            <button *ngFor="let tab of tabs" type="button" class="tab-btn" [class.active]="selectedStatus == tab"
+                (click)="changeFilter(tab)">
+
+                {{ tab }}
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="reservations-list">
+
+        <div class="card" *ngFor="let reservation of filteredReservations">
+
+            <div class="card-info">
+
+                <div class="card-name">
+                    {{ reservation.medication }}
+                    {{ reservation.dosage }}
+                </div>
+
+                <div class="card-meta">
+
+                    <div class="meta-item">
+
+                        <i class="pi pi-shop"></i>
+
+                        <span>
+
+                            {{ reservation.pharmacy }}
+
+                        </span>
+
+                    </div>
+
+                    <div class="meta-item">
+
+                        <i class="pi pi-inbox"></i>
+
+                        <span>
+
+                            {{ reservation.quantity }}
+                            unit{{reservation.quantity > 1 ? 's' : ''}}
+
+                        </span>
+
+                    </div>
+
+                    <div class="meta-item">
+
+                        <i class="pi pi-calendar"></i>
+
+                        <span>
+
+                            {{ reservation.date }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-actions">
+
+                <span *ngIf="reservation.status == 'Confirmed'" class="badge confirmed">
+
+                    <i class="pi pi-check"></i>
+
+                    Confirmed
+
+                </span>
+
+                <span *ngIf="reservation.status == 'Pending'" class="badge pending">
+
+                    <i class="pi pi-clock"></i>
+
+                    Pending
+
+                </span>
+
+                <span *ngIf="reservation.status == 'Rejected'" class="badge rejected">
+
+                    <i class="pi pi-times"></i>
+
+                    Rejected
+
+                </span>
+
+                <button *ngIf="reservation.status == 'Pending'" type="button" class="cancel-btn"
+                    (click)="cancelReservation(reservation)">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="empty-state" *ngIf="filteredReservations.length == 0">
+
+            No Reservations Found
+
+        </div>
+
+    </div>
+
+</div>

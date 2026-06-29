@@ -15,7 +15,6 @@ namespace PharmacyManagementSystem.Controllers
             _reservationService = reservationService ;
         }
 
-        // GET: api/reservations/pharmacy/5
         [HttpGet("pharmacy/{pharmacyId}")]
         public async Task<ActionResult<List<ReservationResponseDto>>> GetPharmacyReservations(int pharmacyId)
         {

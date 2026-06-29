@@ -1,29 +1,80 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
 import { LayoutService } from '@/layout/service/layout.service';
-
+import { inject } from '@angular/core';
+import { MedicineService } from '@/core/services/medicine.service';
+import { MedicineStockService } from '@/core/services/medicine-stock.service';
 @Component({
     selector: 'app-patient-home',
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule],
     templateUrl: './home.component.html'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     searchTerm = '';
     isProfileMenuOpen = false;
 
-    readonly popularMedicines = ['Amoxicillin', 'Metformin', 'Paracetamol', 'Cetirizine', 'Ibuprofen', 'Omeprazole'];
+    private readonly medicineService = inject(MedicineService);
+    private readonly medicineStockService = inject(MedicineStockService);
+    popularMedicines: string[] = [];
+
     readonly defaultProfileName = 'Dr. Pharmacist';
+
+    isLoading = false;
+    hasLoadingError = false;
 
     constructor(
         public readonly appState: PharmacyStateService,
         public readonly layoutService: LayoutService,
         private readonly elementRef: ElementRef<HTMLElement>
-    ) {}
+    ) { }
 
+    ngOnInit(): void {
+        this.loadPopularMedicines();
+        this.testMedicineStock();
+    }
+
+    private loadPopularMedicines(): void {
+
+        this.isLoading = true;
+
+        this.medicineService.getAllMedicines().subscribe({
+
+            next: (response) => {
+                this.popularMedicines = response.map(medicine => medicine.tradeName);
+            },
+
+            error: () => {
+                this.hasLoadingError = true;
+                this.popularMedicines = [];
+            },
+
+            complete: () => {
+                this.isLoading = false;
+            }
+
+        });
+    }
+
+    private testMedicineStock(): void {
+
+        this.medicineStockService.getAllStock().subscribe({
+
+            next: (response) => {
+                console.log('Medicine Stock:', response);
+            },
+
+            error: (error) => {
+                console.error('Medicine Stock Error:', error);
+            }
+
+        });
+
+    }
+    
     get profileAvatar(): string {
         return this.buildInitials(this.profileName);
     }

@@ -1,0 +1,270 @@
+:host {
+    display: block;
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+.reservations-page {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+/* ==========================
+        Header
+========================== */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    gap: 20px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.page-subtitle {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+/* ==========================
+        Tabs
+========================== */
+
+.filter-tabs {
+    display: flex;
+    background: #f3f4f6;
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+}
+
+.tab-btn {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+    transition: .2s;
+}
+
+.tab-btn:hover {
+    color: #374151;
+}
+
+.tab-btn.active {
+    background: #fff;
+    color: #111827;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+}
+
+/* ==========================
+      Cards
+========================== */
+
+.reservations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 22px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1px solid #edf1f5;
+
+    transition: .25s;
+}
+
+.card:hover {
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
+}
+
+/* ==========================
+        Left Side
+========================== */
+
+.card-info {
+    flex: 1;
+}
+
+.card-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 12px;
+}
+
+.card-meta {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.meta-item i {
+    color: #9ca3af;
+    font-size: 14px;
+}
+
+/* ==========================
+      Right Side
+========================== */
+
+.card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    margin-left: 24px;
+}
+
+/* ==========================
+      Status Badge
+========================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 13px;
+
+    border-radius: 50px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    border: 1px solid;
+}
+
+.badge i {
+    font-size: 12px;
+}
+
+/* Confirmed */
+
+.confirmed {
+    color: #16a34a;
+    background: #ecfdf3;
+    border-color: #bbf7d0;
+}
+
+/* Pending */
+
+.pending {
+    color: #d97706;
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+/* Rejected */
+
+.rejected {
+    color: #dc2626;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+/* ==========================
+      Cancel
+========================== */
+
+.cancel-btn {
+    border: none;
+    background: transparent;
+
+    color: #ef4444;
+
+    cursor: pointer;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: .2s;
+}
+
+.cancel-btn:hover {
+    opacity: .7;
+}
+
+/* ==========================
+      Empty State
+========================== */
+
+.empty-state {
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 60px;
+
+    text-align: center;
+
+    color: #9ca3af;
+
+    font-size: 15px;
+
+    border: 1px solid #edf1f5;
+}
+
+/* ==========================
+      Responsive
+========================== */
+
+@media (max-width:768px) {
+
+    .page-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-tabs {
+        width: fit-content;
+    }
+
+    .card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+    }
+
+    .card-actions {
+        width: 100%;
+        margin-left: 0;
+
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-meta {
+        gap: 14px;
+    }
+
+}
