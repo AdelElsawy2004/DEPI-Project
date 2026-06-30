@@ -15,7 +15,7 @@ namespace PharmacyManagementSystem.Application.Services
 
         public async Task<List<MedicineStockResponseDto>> GetAllStockAsync()
         {
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllStocksWithDetailsAsync() ;
             return stocks.Select(s => s.ToResponseDto()).ToList();
         }
 
