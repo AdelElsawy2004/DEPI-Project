@@ -10,6 +10,8 @@ export interface MedicineFormValue {
     stock: number;
 }
 
+
+
 export interface MedicineItem extends MedicineFormValue {
     id: string;
     level: string;
@@ -46,10 +48,6 @@ export class InventoryService {
 
     constructor(private readonly medicineStockService: MedicineStockService) {}
 
-    /**
-     * Loads inventory from backend into inventoryState.
-     * On error sets an empty list.
-     */
     loadInventory(pharmacyId: number): void {
         this.isLoadingState.set(true);
 
@@ -71,7 +69,6 @@ export class InventoryService {
             });
     }
 
-    // CRUD (for now local only; will be wired to backend later)
     addMedicine(value: MedicineFormValue): MedicineItem {
         const item: MedicineItem = {
             id: `${Date.now()}`,

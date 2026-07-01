@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
 import { LayoutService } from '@/layout/service/layout.service';
 import { inject } from '@angular/core';
@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit {
 
     private readonly medicineService = inject(MedicineService);
     private readonly medicineStockService = inject(MedicineStockService);
+    private readonly router = inject(Router);
     popularMedicines: string[] = [];
 
     readonly defaultProfileName = 'Dr. Pharmacist';
@@ -122,7 +123,17 @@ export class HomeComponent implements OnInit {
     }
 
     submitSearch(): void {
-        this.searchTerm = this.searchTerm.trim();
+        const medicineName = this.searchTerm.trim();
+
+        if (!medicineName) {
+            return;
+        }
+
+        void this.router.navigate(['/patient/search-results'], {
+            queryParams: {
+                medicine: medicineName
+            }
+        });
     }
 
     selectMedicine(medicine: string): void {

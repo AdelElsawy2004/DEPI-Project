@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from "primeng/dialog";
@@ -9,6 +10,9 @@ import { DatePicker } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { InventoryService, MedicineItem } from './inventory.service';
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
+import { MedicineCategoryService } from '@/core/services/medicine-category.service';
+import { MedicineCategoryResponseDto } from '@/core/DTO/Medicines/medicine-category-response.interface';
+
 
 @Component({
     selector: 'app-inventory',
@@ -18,7 +22,9 @@ import { PharmacyStateService } from '@/state/pharmacy-state.service';
     templateUrl: './inventory.component.html',
     styleUrl: './inventory.component.scss'
 })
-export class InventoryComponent {
+export class InventoryComponent implements OnInit {
+
+
     showAddDialog = false;
     isEditMode = false;
     editingMedicineId: string | null = null;
@@ -31,21 +37,19 @@ export class InventoryComponent {
 
     readonly inventoryPageLink = ['/inventory'];
 
-    categories = [
-        { label: 'Antibiotic', value: 'Antibiotic' },
-        { label: 'Pain Relief', value: 'Pain Relief' },
-        { label: 'Diabetes', value: 'Diabetes' },
-        { label: 'Hypertension', value: 'Hypertension' },
-        { label: 'Cholesterol', value: 'Cholesterol' },
-        { label: 'Gastric', value: 'Gastric' },
-        { label: 'Allergy', value: 'Allergy' }
-    ];
+    categories: { label: string; value: number }[] = [];
+
+    // keep UI/validation unchanged: selectedCategory remains a string for now
+    // (inventory items currently store category as a string)
+
 
     constructor(
         private router: Router,
         private inventoryService: InventoryService,
-        private appState: PharmacyStateService
+        private appState: PharmacyStateService,
+        private medicineCategoryService: MedicineCategoryService
     ) {}
+
 
     get isInventoryPage(): boolean {
         return this.router.url.startsWith('/inventory');
@@ -226,4 +230,21 @@ export class InventoryComponent {
         this.errors = {};
         this.editingMedicineId = null;
     }
+
+    ngOnInit() {
+        this.inventoryService.loadInventory(1);
+
+        this.medicineCategoryService.getAllCategories().subscribe({
+            next: (dtos: MedicineCategoryResponseDto[] = []) => {
+                this.categories = (dtos ?? []).map((c) => ({
+                    label: c.name,
+                    value: c.id,
+                }));
+            },
+            error: () => {
+                this.categories = [];
+            }
+        });
+    }
 }
+

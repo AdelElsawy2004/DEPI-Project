@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PatientReservationsComponent } from './patient-reservations/patient-reservations.component';
 import { PatientLayoutComponent } from '../shared/patient-layout/patient-layout.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
 export default [
     {
@@ -10,8 +11,17 @@ export default [
 
         children: [
             {
-                path: 'home',
+                path: 'search',
                 component: HomeComponent
+            },
+            {
+                path: 'home',
+                redirectTo: 'search',
+                pathMatch: 'full'
+            },
+            {
+                path: 'search-results',
+                component: SearchResultsComponent
             },
             {
                 path: 'patient-reservations',
@@ -19,7 +29,7 @@ export default [
             },
             {
                 path: '',
-                redirectTo: 'home',
+                redirectTo: 'search',
                 pathMatch: 'full'
             }
         ]

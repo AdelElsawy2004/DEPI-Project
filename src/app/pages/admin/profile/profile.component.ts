@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PharmacyStateService, PharmacistProfile } from '@/state/pharmacy-state.service';
 import { InventoryService } from '../Inventory/inventory.service';
-import { ReservationsService } from '../Reservations/reservations.service';
+import { ReservationService } from '@/core/services/reservation.service';
 
 interface ProfileContact {
     icon: string;
@@ -40,7 +40,7 @@ interface ActivityItem {
 export class ProfileComponent {
     private readonly appState = inject(PharmacyStateService);
     private readonly inventoryService = inject(InventoryService);
-    private readonly reservationsService = inject(ReservationsService);
+    private readonly reservationsService = inject(ReservationService);
     isEditMode = false;
 
     profileFields: ProfileField[] = this.buildProfileFields(this.appState.profile());
