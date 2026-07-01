@@ -11,6 +11,14 @@ namespace PharmacyManagementSystem.Application.Repositories
         public MedicineStockRepository(AppDbContext context) : base(context)
         {
         }
+
+        public async Task<List<MedicineStock>> GetAllStocksWithDetailsAsync()
+        {
+            return await _dbSet
+                .Include(ms => ms.Medicine)
+                .ToListAsync() ;
+        }
+
         public async Task<List<MedicineStock>> GetStockByPharmacyWithDetailsAsync(int pharmacyId)
         {
             return await _dbSet
