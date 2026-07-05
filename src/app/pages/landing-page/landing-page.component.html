@@ -40,14 +40,16 @@
                     label="Create Patient Account"
                     icon="pi pi-user-plus"
                     iconPos="left"
-                    routerLink="/auth/login"
+                    [routerLink]="['/auth/register']"
+                    [queryParams]="{ type: 'patient' }"
                     styleClass="landing-page__button landing-page__button--primary"
                 />
                 <p-button
                     label="Register Pharmacy"
                     icon="pi pi-building"
                     iconPos="left"
-                    routerLink="/auth/login"
+                    [routerLink]="['/auth/register']"
+                    [queryParams]="{ type: 'pharmacy' }"
                     styleClass="landing-page__button landing-page__button--secondary"
                 />
             </div>

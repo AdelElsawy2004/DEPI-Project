@@ -4,6 +4,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScrolling } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtAuthInterceptor } from '@/core/interceptors/jwt-auth.interceptor';
 
 import { AppThemePreset } from './app/theme/app-theme';
 import { appRoutes } from './app.routes';
@@ -15,8 +17,8 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(withFetch()),
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: AppThemePreset, options: { darkModeSelector: '.app-dark' } } }),
-        MessageService
-
+        MessageService,
+        { provide: HTTP_INTERCEPTORS, useClass: JwtAuthInterceptor, multi: true }
 
     ]
 };
