@@ -63,20 +63,20 @@
 }
 
 .register-header {
-    margin-bottom: 0.95rem;
+    margin-bottom: 0.9rem;
 }
 
 .register-logo {
     display: block;
     width: 2.8rem;
     height: 2.8rem;
-    margin: 0 auto 1rem;
+    margin: 0 auto 1.15rem;
     object-fit: contain;
     border-radius: 0.7rem;
 }
 
 .register-title {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.35rem;
     font-size: 1.85rem;
     font-weight: 500;
     line-height: 1.15;
@@ -84,14 +84,35 @@
 }
 
 .register-subtitle {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 500;
 }
 
 .register-form {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
+}
+
+.register-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem 1.2rem;
+}
+
+.register-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1.15rem;
+}
+
+@media (max-width: 640px) {
+    .register-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .register-field {
@@ -103,7 +124,7 @@
     display: block;
     margin-bottom: 0.38rem;
     color: var(--text-color);
-    font-size: 0.98rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1.3;
 }
@@ -118,13 +139,13 @@
 
 .register-input.p-inputtext {
     width: 100%;
-    height: 2.05rem;
+    height: 2.5rem;
     padding: 0 0.85rem;
     border-radius: 0.5rem;
     border: 1px solid var(--surface-border);
     background: var(--surface-card);
     color: var(--text-color);
-    font-size: 0.82rem;
+    font-size: 0.9rem;
     box-shadow: inset 0 1px 2px color-mix(in srgb, var(--surface-border) 30%, transparent);
 }
 
@@ -138,22 +159,40 @@
 
 .register-password :is(.p-password-input, .p-inputtext) {
     width: 100%;
+    height: 2.5rem;
+    padding: 0 0.85rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
 }
 
 .register-submit-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: 0.9rem;
 }
 
 .register-submit.p-button {
     width: 220px;
     height: 2.5rem;
-    margin-top: 0.1rem;
+    margin-top: 0;
     border: none;
     border-radius: 0.5rem;
     font-size: 0.95rem;
     font-weight: 700;
+}
+
+.register-footer {
+    text-align: center;
+}
+
+.register-login-link {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.register-login-link:hover {
+    text-decoration: underline;
 }
 
 @keyframes login-frame-draw {

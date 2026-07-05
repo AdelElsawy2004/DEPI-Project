@@ -73,21 +73,31 @@
 
     <div class="dialog-body">
 
-        <!-- Medicine Name -->
         <div class="form-group full">
             <label class="form-label" [class.form-label--error]="errors['name']">
                 Medicine Name
                 <span class="form-label__required">*</span>
             </label>
-            <input type="text" pInputText placeholder="e.g. Amoxicillin 500mg" class="full-width-input"
-                [(ngModel)]="medicineName" (ngModelChange)="validateField('name')"
-                [class.input-error]="errors['name']" />
+
+            <p-select [options]="medicines" 
+                optionLabel="displayName"
+                optionValue="id"
+                placeholder="Select..."
+
+                styleClass="full-width-input"
+                [style]="{ width: '100%' }"
+                [(ngModel)]="selectedMedicineId"
+                (ngModelChange)="validateField('name')"
+                [class.input-error]="errors['name']">
+            </p-select>
+
             @if (errors['name']) {
                 <span class="form-error">{{ errors['name'] }}</span>
             }
         </div>
 
-        <!-- Row: Quantity + Category -->
+
+        <!-- Row: Quantity -->
         <div class="form-grid">
 
             <div class="form-group">
@@ -104,25 +114,10 @@
                 }
             </div>
 
-            <div class="form-group">
-                <label class="form-label" [class.form-label--error]="errors['category']">
-                    Category
-                    <span class="form-label__required">*</span>
-                </label>
-                <p-select [options]="categories" optionLabel="label" optionValue="value"
-                    [(ngModel)]="selectedCategory" placeholder="Select..."
-                    (ngModelChange)="validateField('category')"
-                    styleClass="full-width-input" [style]="{ width: '100%' }"
-                    [class.input-error]="errors['category']">
-                </p-select>
-                @if (errors['category']) {
-                    <span class="form-error">{{ errors['category'] }}</span>
-                }
-            </div>
-
         </div>
 
         <div class="form-group full">
+
             <label class="form-label" [class.form-label--error]="errors['expiry']">
                 Expiry Date
                 <span class="form-label__required">*</span>
@@ -148,10 +143,10 @@
             }
             <div class="dialog-footer__actions">
                 <button type="button" class="btn-cancel" (click)="closeAddDialog()">Cancel</button>
-                <button type="button" class="btn-add" (click)="saveMedicine()">
-                    <i class="pi" [class.pi-plus]="!isEditMode" [class.pi-check]="isEditMode"></i>
-                    {{ isEditMode ? 'Save Changes' : 'Add Medicine' }}
-                </button>
+                <p-button [label]="isEditMode ? 'Save Changes' : 'Add Medicine'" [icon]="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
+                    [loading]="inventoryService.isLoading()" [disabled]="inventoryService.isLoading()" (onClick)="saveMedicine()"
+                    styleClass="btn-add" >
+                </p-button>
             </div>
         </div>
     </ng-template>

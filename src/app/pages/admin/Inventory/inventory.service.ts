@@ -1,5 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { finalize } from 'rxjs';
+import { MedicineStockRequestDto } from '@/core/DTO/Stock/medicine-stock-request.interface';
 import { MedicineStockService } from '@/core/services/medicine-stock.service';
 import { MedicineStockResponseDto } from '@/core/DTO/Stock/medicine-stock-response.interface';
 
@@ -10,12 +11,11 @@ export interface MedicineFormValue {
     stock: number;
 }
 
-
-
 export interface MedicineItem extends MedicineFormValue {
     id: string;
     level: string;
 }
+
 
 function getLevel(stock: number): string {
     if (stock >= 100) return 'High';
@@ -25,7 +25,7 @@ function getLevel(stock: number): string {
 
 function toMedicineItem(dto: MedicineStockResponseDto): MedicineItem {
     const expiry = dto.expiryDate?.split('T')[0] ?? '';
-    
+
     return {
         id: `${dto.pharmacyId}-${dto.medicineId}`,
         name: dto.medicineName,
@@ -43,10 +43,14 @@ export class InventoryService {
     private readonly inventoryState = signal<MedicineItem[]>([]);
     private readonly isLoadingState = signal<boolean>(false);
 
+    private readonly pharmacyId = 1;
+
+
     readonly inventoryItems = computed(() => this.inventoryState());
     readonly isLoading = computed(() => this.isLoadingState());
 
-    constructor(private readonly medicineStockService: MedicineStockService) {}
+    constructor(private readonly medicineStockService: MedicineStockService) { }
+
 
     loadInventory(pharmacyId: number): void {
         this.isLoadingState.set(true);
@@ -69,47 +73,33 @@ export class InventoryService {
             });
     }
 
-    addMedicine(value: MedicineFormValue): MedicineItem {
-        const item: MedicineItem = {
-            id: `${Date.now()}`,
-            name: value.name,
-            category: value.category,
-            expiry: value.expiry,
-            stock: value.stock,
-            level: getLevel(value.stock),
-        };
+    addMedicine(dto: MedicineStockRequestDto) {
+        this.isLoadingState.set(true);
 
-        this.inventoryState.update((items) => [...items, item]);
-        return item;
+        return this.medicineStockService
+            .addOrUpdateStock(dto)
+            .pipe(
+                finalize(() => this.isLoadingState.set(false))
+            );
     }
 
-    updateMedicine(id: string, value: MedicineFormValue): MedicineItem | null {
-        let updated: MedicineItem | null = null;
+    updateMedicine(_id: string, _value: MedicineFormValue): void {
+    }
 
-        this.inventoryState.update((items) => {
-            const next = items.map((existing) => {
-                if (existing.id !== id) return existing;
-
-                updated = {
-                    ...existing,
-                    name: value.name,
-                    category: value.category,
-                    expiry: value.expiry,
-                    stock: value.stock,
-                    level: getLevel(value.stock),
-                };
-
-                return updated!;
+    deleteMedicine(medicineId: number): void {
+        this.isLoadingState.set(true);
+        this.medicineStockService
+            .deleteStock(this.pharmacyId, medicineId)
+            .pipe(
+                finalize(() => this.isLoadingState.set(false))
+            )
+            .subscribe({
+                next: () => {
+                    this.loadInventory(this.pharmacyId);
+                },
+                error: () => {
+                },
             });
-
-            return next;
-        });
-
-        return updated;
-    }
-
-    deleteMedicine(id: string): void {
-        this.inventoryState.update((items) => items.filter((i) => i.id !== id));
     }
 }
 

@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { PatientReservationsComponent } from './patient-reservations/patient-reservations.component';
-import { PatientLayoutComponent } from '../shared/patient-layout/patient-layout.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { PatientLayoutComponent } from '@/layout/patient-layout/patient-layout.component';
 
 export default [
     {
