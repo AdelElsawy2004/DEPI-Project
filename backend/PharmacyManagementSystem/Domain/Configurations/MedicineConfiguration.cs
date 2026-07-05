@@ -33,6 +33,7 @@ namespace PharmacyManagementSystem.Domain.Configurations
                 .OnDelete(DeleteBehavior.SetNull) ;
 
             // ========== SEED DATA(50 RECORDS) ==========
+            
             builder.HasData(
                 // Antibiotics (Category 1)
                 new Medicine { Id = 1,TradeName = "Augmentin",ActiveIngredient = "Amoxicillin/Clavulanic Acid",Manufactrer = "GlaxoSmithKline",Form = "Tablet",Strength = "1g",RequiresPrescription = true,CategoryId = 1 },

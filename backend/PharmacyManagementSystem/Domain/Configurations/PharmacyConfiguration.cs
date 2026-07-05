@@ -29,6 +29,7 @@ namespace PharmacyManagementSystem.Domain.Configurations
             builder.HasIndex(ph => ph.City) ;
 
             // ========== SEED DATA (10 RECORDS) ==========
+
             builder.HasData(
                 new Pharmacy { Id = 1,Name = "El-Ezaby Pharmacy",Address = "90 El-Tahrir St",City = "Cairo",latitude = 30.0444,Longitude = 31.2357,Phone = "0225741234",IsVerified = true },
                 new Pharmacy { Id = 2,Name = "Care Pharmacy",Address = "Abbassiya Square",City = "Cairo",latitude = 30.0621,Longitude = 31.2751,Phone = "0224825678",IsVerified = true },

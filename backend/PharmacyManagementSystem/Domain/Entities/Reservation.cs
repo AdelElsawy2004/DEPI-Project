@@ -3,7 +3,7 @@ namespace PharmacyManagementSystem.Domain.Entities
     public class Reservation
     {
         public int Id { get ; set ;}
-        public int PatientId { get ; set ;}
+        public string PatientId { get ; set ;} = string.Empty ;
         public int MedicineId { get ; set ;}
         public int PharmacyId { get ; set ;}
         public int Quantity { get ; set ;}
@@ -13,7 +13,7 @@ namespace PharmacyManagementSystem.Domain.Entities
         public string Notes { get ; set ;} = string.Empty ;
 
         // Navigation
-        // Patient
+        public ApplicationUser? Patient { get; set; }
         public Medicine Medicine { get ; set ;}
         public Pharmacy Pharmacy { get ; set ;}
     }
@@ -21,7 +21,7 @@ namespace PharmacyManagementSystem.Domain.Entities
     public enum ReservationStatus
     {
         Pending,
-        Accepted,
+        Confirmed,
         Rejected,
         Cancelled,
         PickedUp

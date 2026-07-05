@@ -33,5 +33,17 @@ namespace PharmacyManagementSystem.Application.Repositories
                 .Include(ms => ms.Medicine)
                 .FirstOrDefaultAsync(ms => ms.PharmacyId == pharmacyId && ms.MedicineId == medicineId);
         }
+
+        public async Task<List<MedicineStock>> GetAvailableStocksByMedicineNameAsync(string tradeName)
+        {
+            return await _dbSet
+                .Include(ms => ms.Medicine)
+                .Include(ms => ms.Pharmacy)
+                .Where(ms => ms.Medicine != null &&
+                             ms.Medicine.TradeName.ToLower().Contains(tradeName.ToLower()) &&
+                             ms.QuantityAvailable > 0)
+                .OrderBy(ms => ms.Pharmacy.Name)
+                .ToListAsync();
+        }
     }
 }

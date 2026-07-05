@@ -14,6 +14,7 @@ namespace PharmacyManagementSystem.Application.Repositories
 
         }
 
+        #region PharmacyAdmin
         public async Task<List<Reservation>> GetReservationsByPharmacyIdAsync(int pharmacyId)
         {
             return await _dbSet
@@ -22,5 +23,26 @@ namespace PharmacyManagementSystem.Application.Repositories
                 .OrderByDescending(r => r.CreatedAt)
                 .ToListAsync();
         }
+        #endregion
+
+        #region Patient
+        public async Task<List<Reservation>> GetReservationsByPatientIdAsync(string patientId)
+        {
+            return await _dbSet
+                .Include(r => r.Medicine)
+                .Include(r => r.Pharmacy)
+                .Where(r => r.PatientId == patientId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<Reservation?> GetReservationByIdWithDetailsAsync(int id)
+        {
+            return await _dbSet
+                .Include(r => r.Medicine)
+                .Include(r => r.Pharmacy)
+                .FirstOrDefaultAsync(r => r.Id == id);
+        }
+        #endregion
     }
 }

@@ -8,5 +8,7 @@ namespace PharmacyManagementSystem.Application.Interfaces.Repostiories
         public Task<List<MedicineStock>> GetStockByPharmacyWithDetailsAsync(int pharmacyId);
         public Task<MedicineStock?> GetStockWithDetailsAsync(int pharmacyId,int medicineId);
         public Task<List<MedicineStock>> GetAllStocksWithDetailsAsync() ;
+
+        public Task<List<MedicineStock>> GetAvailableStocksByMedicineNameAsync(string tradeName);
     }
 }
