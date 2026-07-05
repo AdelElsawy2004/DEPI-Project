@@ -112,6 +112,7 @@ namespace PharmacyManagementSystem.Domain.Configurations
                 new MedicineStock { Id = 49,PharmacyId = 10,MedicineId = 49,QuantityAvailable = 20,Price = 245.00m,ExpiryDate = new DateTime(2028,8,30),LastUpdated = DateTime.UtcNow },
                 new MedicineStock { Id = 50,PharmacyId = 10,MedicineId = 50,QuantityAvailable = 25,Price = 285.00m,ExpiryDate = new DateTime(2028,10,15),LastUpdated = DateTime.UtcNow }
             );
+
         }
     }
 }

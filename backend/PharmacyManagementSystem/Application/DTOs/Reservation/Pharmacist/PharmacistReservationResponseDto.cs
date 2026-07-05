@@ -1,6 +1,6 @@
-namespace PharmacyManagementSystem.Application.DTOs
+namespace PharmacyManagementSystem.Application.DTOs.Reservation.Pharmacist
 {
-    public class ReservationResponseDto
+    public class PharmacistReservationResponseDto
     {
         public int Id { get; set; }
         public string PatientName { get; set; } = string.Empty;

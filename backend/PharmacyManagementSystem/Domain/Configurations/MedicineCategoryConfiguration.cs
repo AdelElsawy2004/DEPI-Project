@@ -19,6 +19,7 @@ namespace PharmacyManagementSystem.Domain.Configurations
                 .IsUnique() ;
 
             // ========== SEED DATA (10 RECORDS) ==========
+            
             builder.HasData(
                 new MedicineCategory { Id = 1,Name = "Antibiotics",Description = "Treatments for bacterial infections" },
                 new MedicineCategory { Id = 2,Name = "Analgesics & Pain Relief",Description = "Pain relievers and fever reducers" },
@@ -31,7 +32,6 @@ namespace PharmacyManagementSystem.Domain.Configurations
                 new MedicineCategory { Id = 9,Name = "Vitamins & Supplements",Description = "Nutritional and immune support" },
                 new MedicineCategory { Id = 10,Name = "Antivirals",Description = "Viral infection treatments" }
             );
-
         }
     }
 }
