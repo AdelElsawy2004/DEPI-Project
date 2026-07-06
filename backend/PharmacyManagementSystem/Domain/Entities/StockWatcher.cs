@@ -8,8 +8,6 @@
         public int? PharmacyId { get ; set ;} // null means "any pharmacy"
         public DateTime CreatedAt { get ; set ;}
 
-        // Navigation
-        // Patient
         public Medicine Medicine { get ; set ;}
         public Pharmacy? Pharmacy { get ; set ;}
     }

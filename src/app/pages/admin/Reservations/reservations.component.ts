@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { finalize } from 'rxjs';
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
-import { ReservationItem, ReservationsService } from './reservations.service';
+import { ReservationItem, ReservationService } from '@/core/services/reservation.service';
+import { NotificationService } from '@/core/services/notification.service';
 
 @Component({
     selector: 'app-reservations',
@@ -15,17 +17,22 @@ import { ReservationItem, ReservationsService } from './reservations.service';
     templateUrl: './reservations.component.html',
     styleUrl: './reservations.component.scss'
 })
-export class ReservationsComponent {
+export class ReservationsComponent implements OnInit {
     activeFilter: string = 'All';
     filterOptions: string[] = ['All', 'Pending', 'Confirmed', 'Rejected'];
     readonly reservationsPageLink = ['/reservations'];
+    private updatingReservationIds = new Set<number>();
     
     constructor(
         private router: Router,
-        private confirmationService: ConfirmationService,
-        private reservationsService: ReservationsService,
-        private appState: PharmacyStateService
+        private reservationsService: ReservationService,
+        private appState: PharmacyStateService,
+        private notificationService: NotificationService
     ) {}
+
+    ngOnInit(): void {
+        this.reservationsService.loadMyReservations();
+    }
 
     get isReservationsPage(): boolean {
         return this.router.url.startsWith('/reservations');
@@ -70,17 +77,37 @@ export class ReservationsComponent {
     get totalReservationsCount(): number {
         return this.reservations.length;
     }
-    updateStatus(reservation: ReservationItem, status: ReservationItem['status']) {
-        this.confirmationService.confirm({
-            message: `Are you sure you want to ${status} this reservation?`,
-            header: 'Confirmation',
-            icon: 'pi pi-exclamation-triangle',
-            rejectLabel: 'Cancel',
-            acceptLabel: 'Yes',
 
-            accept: () => {
-                this.reservationsService.updateStatus(reservation.id, status);
-            }
-        });
+    isUpdating(reservationId: number): boolean {
+        return this.updatingReservationIds.has(reservationId);
+    }
+
+    updateStatus(reservation: ReservationItem, status: ReservationItem['status']): void {
+        const reservationId = Number(reservation.id);
+        if (!Number.isFinite(reservationId) || this.isUpdating(reservationId)) {
+            return;
+        }
+
+        this.updatingReservationIds.add(reservationId);
+
+        const request$ = status === 'Confirmed'
+            ? this.reservationsService.confirmReservation(reservationId)
+            : this.reservationsService.rejectReservation(reservationId);
+
+        request$
+            .pipe(finalize(() => this.updatingReservationIds.delete(reservationId)))
+            .subscribe({
+                next: () => {
+                    this.reservationsService.loadMyReservations();
+                    this.notificationService.success(
+                        'Reservation updated',
+                        `Reservation ${status.toLowerCase()} successfully`
+                    );
+                },
+                error: (err) => {
+                    const message = err?.error?.Message || err?.message || 'Unable to update reservation status';
+                    this.notificationService.error('Reservation update failed', message);
+                }
+            });
     }
 }

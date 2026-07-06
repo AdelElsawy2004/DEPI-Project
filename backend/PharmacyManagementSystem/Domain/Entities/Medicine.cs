@@ -11,10 +11,8 @@ namespace PharmacyManagementSystem.Domain.Entities
         public string Form { get ; set ;} = string.Empty ;
         public string Strength { get ; set ;} = string.Empty ; // 500mg
         public bool RequiresPrescription { get ; set ;}
-        // foreignKey
         public int? CategoryId { get ; set ;}
 
-        // Navigation
         public MedicineCategory? Category { get ; set ;} 
         public List<MedicineStock> MedicineStocks { get ; set ;} = new List<MedicineStock>() ;
         public List<StockWatcher> StockWatchers { get ; set ;} = new List<StockWatcher>() ;

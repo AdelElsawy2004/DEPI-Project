@@ -45,12 +45,12 @@
                 </td>
                 <td class="reservations-table__cell">
                     <div class="action-group" *ngIf="res.status === 'Pending'; else noAction">
-                        <button type="button" class="action-btn action-btn--confirm" (click)="updateStatus(res, 'Confirmed')">
+                        <button type="button" class="action-btn action-btn--confirm" [disabled]="isUpdating(+res.id)" (click)="updateStatus(res, 'Confirmed')">
                             <i class="pi pi-check action-btn__icon"></i>
                             <span>Confirm</span>
                         </button>
                         
-                        <button type="button" class="action-btn action-btn--reject" (click)="updateStatus(res, 'Rejected')">
+                        <button type="button" class="action-btn action-btn--reject" [disabled]="isUpdating(+res.id)" (click)="updateStatus(res, 'Rejected')">
                             <i class="pi pi-times action-btn__icon"></i>
                             <span>Reject</span>
                         </button>

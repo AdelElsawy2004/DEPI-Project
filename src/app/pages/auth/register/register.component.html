@@ -1,0 +1,87 @@
+<p-toast></p-toast>
+<app-floating-configurator />
+<div class="login-page register-page flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
+    <div class="login-shell register-shell flex flex-col items-center justify-center">
+        <div class="login-frame">
+            <svg class="login-frame__border" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <rect class="login-frame__border-track" x="1.4" y="1.4" width="97.2" height="97.2" rx="12" ry="12">
+                </rect>
+                <rect class="login-frame__border-line" x="1.4" y="1.4" width="97.2" height="97.2" rx="12" ry="12"
+                    pathLength="100"></rect>
+            </svg>
+
+            <div
+                class="login-frame__content register-frame__content w-full bg-surface-0 dark:bg-surface-900 px-8 sm:px-20">
+                <div class="register-header text-center">
+                    <img src="assets/images/MedFinder-Logo-mini.png" alt="MedFinder logo" class="register-logo" />
+                    <div class="register-title text-surface-900 dark:text-surface-0">Create your account</div>
+                    <span class="register-subtitle text-muted-color">Start managing your pharmacy today.</span>
+                </div>
+
+                <form class="register-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <div class="register-grid">
+                        <div class="register-field" style="grid-column: 1 / -1;">
+                            <label for="fullName" class="register-label">Full Name</label>
+                            <input pInputText id="fullName" type="text" placeholder="Your full name"
+                                class="register-input" formControlName="fullName" />
+                        </div>
+
+                        <div class="register-field" style="grid-column: 1 / -1;">
+                            <label for="email" class="register-label">Email</label>
+                            <input pInputText id="email" type="email" placeholder="your@email.com"
+                                class="register-input" formControlName="email" />
+                        </div>
+
+                        <div class="register-field" style="grid-column: 1 / -1;">
+                            <label for="city" class="register-label">City</label>
+                            <input pInputText id="city" type="text" placeholder="Your city" class="register-input"
+                                formControlName="city" />
+                        </div>
+
+                        <div class="register-field" *ngIf="accountType() === 'pharmacy'" style="grid-column: 1 / -1;">
+                            <label for="pharmacyName" class="register-label">Pharmacy Name</label>
+                            <input pInputText id="pharmacyName" type="text" placeholder="Your pharmacy name"
+                                class="register-input" formControlName="pharmacyName" />
+                        </div>
+
+                        <div class="register-field">
+                            <label for="password" class="register-label">Password</label>
+                            <p-password inputId="password" placeholder="Min 6 characters" [toggleMask]="true"
+                                [feedback]="false" [fluid]="true" styleClass="register-password"
+                                inputStyleClass="register-input" formControlName="password" />
+                        </div>
+
+                        <div class="register-field">
+                            <label for="confirmPassword" class="register-label">Confirm Password</label>
+                            <input pInputText id="confirmPassword" type="password" placeholder="Confirm password"
+                                class="register-input" formControlName="confirmPassword" />
+                        </div>
+
+                        <div class="register-actions">
+                            <div class="register-submit-wrapper">
+                                <p-button type="submit" [disabled]="isSubmitting()" styleClass="register-submit">
+                                    <ng-container *ngIf="!isSubmitting(); else loadingTpl">
+                                        Create Account
+                                    </ng-container>
+
+                                    <ng-template #loadingTpl>
+                                        <span class="pi pi-spin pi-spinner" aria-hidden="true"
+                                            style="margin-right: .5rem"></span>
+                                        Loading...
+                                    </ng-template>
+                                </p-button>
+                            </div>
+
+                            <div class="register-footer">
+                                Already have an account?
+                                <a class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
+                                    routerLink="/auth/login">Sign-in</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

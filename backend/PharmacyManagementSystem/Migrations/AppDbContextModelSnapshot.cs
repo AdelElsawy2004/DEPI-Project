@@ -163,6 +163,9 @@ namespace PharmacyManagementSystem.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -188,6 +191,9 @@ namespace PharmacyManagementSystem.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LicenseNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -203,6 +209,12 @@ namespace PharmacyManagementSystem.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PharmacyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PharmacyName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -230,6 +242,8 @@ namespace PharmacyManagementSystem.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PharmacyId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -280,6 +294,558 @@ namespace PharmacyManagementSystem.Migrations
                     b.HasIndex("TradeName");
 
                     b.ToTable("Medicines");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActiveIngredient = "Amoxicillin/Clavulanic Acid",
+                            CategoryId = 1,
+                            Form = "Tablet",
+                            Manufactrer = "GlaxoSmithKline",
+                            RequiresPrescription = true,
+                            Strength = "1g",
+                            TradeName = "Augmentin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActiveIngredient = "Ciprofloxacin",
+                            CategoryId = 1,
+                            Form = "Tablet",
+                            Manufactrer = "Bayer",
+                            RequiresPrescription = true,
+                            Strength = "500mg",
+                            TradeName = "Ciprobay"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActiveIngredient = "Azithromycin",
+                            CategoryId = 1,
+                            Form = "Capsule",
+                            Manufactrer = "Pfizer",
+                            RequiresPrescription = true,
+                            Strength = "250mg",
+                            TradeName = "Azithromycin"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActiveIngredient = "Doxycycline Hyclate",
+                            CategoryId = 1,
+                            Form = "Capsule",
+                            Manufactrer = "Generic",
+                            RequiresPrescription = true,
+                            Strength = "100mg",
+                            TradeName = "Doxycycline"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ActiveIngredient = "Clarithromycin",
+                            CategoryId = 1,
+                            Form = "Tablet",
+                            Manufactrer = "Abbott",
+                            RequiresPrescription = true,
+                            Strength = "500mg",
+                            TradeName = "Klacid"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActiveIngredient = "Paracetamol",
+                            CategoryId = 2,
+                            Form = "Tablet",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = false,
+                            Strength = "500mg",
+                            TradeName = "Panadol Extra"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ActiveIngredient = "Diclofenac",
+                            CategoryId = 2,
+                            Form = "Tablet",
+                            Manufactrer = "Novartis",
+                            RequiresPrescription = true,
+                            Strength = "50mg",
+                            TradeName = "Voltaren"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ActiveIngredient = "Ibuprofen",
+                            CategoryId = 2,
+                            Form = "Tablet",
+                            Manufactrer = "Abbott",
+                            RequiresPrescription = false,
+                            Strength = "400mg",
+                            TradeName = "Brufen"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ActiveIngredient = "Mefenamic Acid",
+                            CategoryId = 2,
+                            Form = "Capsule",
+                            Manufactrer = "Generic",
+                            RequiresPrescription = true,
+                            Strength = "250mg",
+                            TradeName = "Mefenamic Acid"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ActiveIngredient = "Flurbiprofen",
+                            CategoryId = 2,
+                            Form = "Tablet",
+                            Manufactrer = "Bayer",
+                            RequiresPrescription = true,
+                            Strength = "100mg",
+                            TradeName = "Mobilat"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ActiveIngredient = "Cetirizine",
+                            CategoryId = 3,
+                            Form = "Tablet",
+                            Manufactrer = "UCB",
+                            RequiresPrescription = false,
+                            Strength = "10mg",
+                            TradeName = "Zyrtec"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ActiveIngredient = "Loratadine",
+                            CategoryId = 3,
+                            Form = "Tablet",
+                            Manufactrer = "Bayer",
+                            RequiresPrescription = false,
+                            Strength = "10mg",
+                            TradeName = "Claritin"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ActiveIngredient = "Fexofenadine",
+                            CategoryId = 3,
+                            Form = "Tablet",
+                            Manufactrer = "Sanofi",
+                            RequiresPrescription = true,
+                            Strength = "120mg",
+                            TradeName = "Telfast"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ActiveIngredient = "Fluticasone",
+                            CategoryId = 3,
+                            Form = "Nasal Spray",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = true,
+                            Strength = "50mcg",
+                            TradeName = "Avamys"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ActiveIngredient = "Budesonide",
+                            CategoryId = 3,
+                            Form = "Nasal Spray",
+                            Manufactrer = "AstraZeneca",
+                            RequiresPrescription = true,
+                            Strength = "100mcg",
+                            TradeName = "Rhinocort"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            ActiveIngredient = "Bisoprolol",
+                            CategoryId = 4,
+                            Form = "Tablet",
+                            Manufactrer = "Merck",
+                            RequiresPrescription = true,
+                            Strength = "5mg",
+                            TradeName = "Concor"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            ActiveIngredient = "Rosuvastatin",
+                            CategoryId = 4,
+                            Form = "Tablet",
+                            Manufactrer = "AstraZeneca",
+                            RequiresPrescription = true,
+                            Strength = "10mg",
+                            TradeName = "Crestor"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ActiveIngredient = "Amlodipine",
+                            CategoryId = 4,
+                            Form = "Tablet",
+                            Manufactrer = "Pfizer",
+                            RequiresPrescription = true,
+                            Strength = "5mg",
+                            TradeName = "Vasocardin"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            ActiveIngredient = "Losartan",
+                            CategoryId = 4,
+                            Form = "Tablet",
+                            Manufactrer = "Merck",
+                            RequiresPrescription = true,
+                            Strength = "50mg",
+                            TradeName = "Cozaar"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            ActiveIngredient = "Telmisartan",
+                            CategoryId = 4,
+                            Form = "Tablet",
+                            Manufactrer = "Boehringer",
+                            RequiresPrescription = true,
+                            Strength = "40mg",
+                            TradeName = "Micardis"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            ActiveIngredient = "Glimepiride",
+                            CategoryId = 5,
+                            Form = "Tablet",
+                            Manufactrer = "Sanofi",
+                            RequiresPrescription = true,
+                            Strength = "2mg",
+                            TradeName = "Amaryl"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            ActiveIngredient = "Metformin",
+                            CategoryId = 5,
+                            Form = "Tablet",
+                            Manufactrer = "Merck",
+                            RequiresPrescription = true,
+                            Strength = "500mg",
+                            TradeName = "Glucophage"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            ActiveIngredient = "Sitagliptin",
+                            CategoryId = 5,
+                            Form = "Tablet",
+                            Manufactrer = "Merck",
+                            RequiresPrescription = true,
+                            Strength = "100mg",
+                            TradeName = "Januvia"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            ActiveIngredient = "Insulin Degludec",
+                            CategoryId = 5,
+                            Form = "Injection",
+                            Manufactrer = "Novo Nordisk",
+                            RequiresPrescription = true,
+                            Strength = "100U",
+                            TradeName = "Tresiba"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            ActiveIngredient = "Insulin Aspart",
+                            CategoryId = 5,
+                            Form = "Injection",
+                            Manufactrer = "Novo Nordisk",
+                            RequiresPrescription = true,
+                            Strength = "100U",
+                            TradeName = "NovoRapid"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            ActiveIngredient = "Nifuroxazide",
+                            CategoryId = 6,
+                            Form = "Capsule",
+                            Manufactrer = "SEDICO",
+                            RequiresPrescription = false,
+                            Strength = "200mg",
+                            TradeName = "Antinal"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            ActiveIngredient = "Omeprazole",
+                            CategoryId = 6,
+                            Form = "Capsule",
+                            Manufactrer = "AstraZeneca",
+                            RequiresPrescription = true,
+                            Strength = "40mg",
+                            TradeName = "Nexium"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            ActiveIngredient = "Domperidone",
+                            CategoryId = 6,
+                            Form = "Tablet",
+                            Manufactrer = "Janssen",
+                            RequiresPrescription = true,
+                            Strength = "10mg",
+                            TradeName = "Motilium"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            ActiveIngredient = "Mebeverine",
+                            CategoryId = 6,
+                            Form = "Tablet",
+                            Manufactrer = "Mepha",
+                            RequiresPrescription = true,
+                            Strength = "135mg",
+                            TradeName = "Colospasmin"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            ActiveIngredient = "Sodium Alginate",
+                            CategoryId = 6,
+                            Form = "Suspension",
+                            Manufactrer = "Reckitt",
+                            RequiresPrescription = false,
+                            Strength = "500mg",
+                            TradeName = "Gaviscon"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            ActiveIngredient = "Salbutamol",
+                            CategoryId = 7,
+                            Form = "Inhaler",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = true,
+                            Strength = "100mcg",
+                            TradeName = "Ventolin"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            ActiveIngredient = "Fluticasone/Salmeterol",
+                            CategoryId = 7,
+                            Form = "Inhaler",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = true,
+                            Strength = "250mcg",
+                            TradeName = "Seretide"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            ActiveIngredient = "Ipratropium",
+                            CategoryId = 7,
+                            Form = "Inhaler",
+                            Manufactrer = "Boehringer",
+                            RequiresPrescription = true,
+                            Strength = "20mcg",
+                            TradeName = "Atrovent"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            ActiveIngredient = "Montelukast",
+                            CategoryId = 7,
+                            Form = "Tablet",
+                            Manufactrer = "Merck",
+                            RequiresPrescription = true,
+                            Strength = "10mg",
+                            TradeName = "Singulair"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            ActiveIngredient = "Nedocromil",
+                            CategoryId = 7,
+                            Form = "Inhaler",
+                            Manufactrer = "Aventis",
+                            RequiresPrescription = true,
+                            Strength = "2mg",
+                            TradeName = "Tilade"
+                        },
+                        new
+                        {
+                            Id = 36,
+                            ActiveIngredient = "Betamethasone",
+                            CategoryId = 8,
+                            Form = "Ointment",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = true,
+                            Strength = "0.1%",
+                            TradeName = "Betnovate"
+                        },
+                        new
+                        {
+                            Id = 37,
+                            ActiveIngredient = "Isoconazole",
+                            CategoryId = 8,
+                            Form = "Cream",
+                            Manufactrer = "Bayer",
+                            RequiresPrescription = true,
+                            Strength = "1%",
+                            TradeName = "Travocort"
+                        },
+                        new
+                        {
+                            Id = 38,
+                            ActiveIngredient = "Fusidic Acid",
+                            CategoryId = 8,
+                            Form = "Cream",
+                            Manufactrer = "Leo Pharma",
+                            RequiresPrescription = true,
+                            Strength = "2%",
+                            TradeName = "Fucidin"
+                        },
+                        new
+                        {
+                            Id = 39,
+                            ActiveIngredient = "Tacrolimus",
+                            CategoryId = 8,
+                            Form = "Ointment",
+                            Manufactrer = "Astellas",
+                            RequiresPrescription = true,
+                            Strength = "0.1%",
+                            TradeName = "Protopic"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            ActiveIngredient = "Pimecrolimus",
+                            CategoryId = 8,
+                            Form = "Cream",
+                            Manufactrer = "Meda",
+                            RequiresPrescription = true,
+                            Strength = "1%",
+                            TradeName = "Elidel"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            ActiveIngredient = "Multivitamins",
+                            CategoryId = 9,
+                            Form = "Tablet",
+                            Manufactrer = "Pfizer",
+                            RequiresPrescription = false,
+                            Strength = "Adult Formula",
+                            TradeName = "Centrum"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            ActiveIngredient = "Vitamin C",
+                            CategoryId = 9,
+                            Form = "Tablet",
+                            Manufactrer = "EVA Pharma",
+                            RequiresPrescription = false,
+                            Strength = "1000mg",
+                            TradeName = "Vitamax"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            ActiveIngredient = "B-Complex Vitamins",
+                            CategoryId = 9,
+                            Form = "Tablet",
+                            Manufactrer = "Merck",
+                            RequiresPrescription = false,
+                            Strength = "Strong",
+                            TradeName = "Neurobion"
+                        },
+                        new
+                        {
+                            Id = 44,
+                            ActiveIngredient = "Calcium/Vitamin D",
+                            CategoryId = 9,
+                            Form = "Tablet",
+                            Manufactrer = "Sanofi",
+                            RequiresPrescription = false,
+                            Strength = "600mg/400IU",
+                            TradeName = "Calcium-D"
+                        },
+                        new
+                        {
+                            Id = 45,
+                            ActiveIngredient = "Fish Oil",
+                            CategoryId = 9,
+                            Form = "Capsule",
+                            Manufactrer = "Nordic",
+                            RequiresPrescription = false,
+                            Strength = "1000mg",
+                            TradeName = "Omega-3"
+                        },
+                        new
+                        {
+                            Id = 46,
+                            ActiveIngredient = "Acyclovir",
+                            CategoryId = 10,
+                            Form = "Cream",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = false,
+                            Strength = "5%",
+                            TradeName = "Zovirax"
+                        },
+                        new
+                        {
+                            Id = 47,
+                            ActiveIngredient = "Valacyclovir",
+                            CategoryId = 10,
+                            Form = "Tablet",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = true,
+                            Strength = "500mg",
+                            TradeName = "Valtrex"
+                        },
+                        new
+                        {
+                            Id = 48,
+                            ActiveIngredient = "Famciclovir",
+                            CategoryId = 10,
+                            Form = "Tablet",
+                            Manufactrer = "Novartis",
+                            RequiresPrescription = true,
+                            Strength = "250mg",
+                            TradeName = "Famvir"
+                        },
+                        new
+                        {
+                            Id = 49,
+                            ActiveIngredient = "Abacavir/Lamivudine",
+                            CategoryId = 10,
+                            Form = "Tablet",
+                            Manufactrer = "GSK",
+                            RequiresPrescription = true,
+                            Strength = "600mg/300mg",
+                            TradeName = "Kivexa"
+                        },
+                        new
+                        {
+                            Id = 50,
+                            ActiveIngredient = "Atazanavir",
+                            CategoryId = 10,
+                            Form = "Capsule",
+                            Manufactrer = "BMS",
+                            RequiresPrescription = true,
+                            Strength = "300mg",
+                            TradeName = "Reyataz"
+                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.MedicineAlternative", b =>
@@ -314,6 +880,9 @@ namespace PharmacyManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -325,6 +894,68 @@ namespace PharmacyManagementSystem.Migrations
                         .IsUnique();
 
                     b.ToTable("MedicineCategory");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Treatments for bacterial infections",
+                            Name = "Antibiotics"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Pain relievers and fever reducers",
+                            Name = "Analgesics & Pain Relief"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Allergy and hay fever treatments",
+                            Name = "Antihistamines"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Heart and blood pressure medications",
+                            Name = "Cardiovascular"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Blood sugar management and diabetes treatments",
+                            Name = "Antidiabetics"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Digestive system and stomach treatments",
+                            Name = "Gastrointestinal"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "Asthma, cough, and breathing treatments",
+                            Name = "Respiratory"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Skin condition creams and ointments",
+                            Name = "Dermatologicals"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Nutritional and immune support",
+                            Name = "Vitamins & Supplements"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "Viral infection treatments",
+                            Name = "Antivirals"
+                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.MedicineStock", b =>
@@ -361,6 +992,508 @@ namespace PharmacyManagementSystem.Migrations
                         .IsUnique();
 
                     b.ToTable("MedicineStocks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ExpiryDate = new DateTime(2027, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 1,
+                            PharmacyId = 1,
+                            Price = 95.00m,
+                            QuantityAvailable = 45
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ExpiryDate = new DateTime(2027, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 2,
+                            PharmacyId = 1,
+                            Price = 85.50m,
+                            QuantityAvailable = 30
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ExpiryDate = new DateTime(2028, 3, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 3,
+                            PharmacyId = 1,
+                            Price = 75.00m,
+                            QuantityAvailable = 60
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ExpiryDate = new DateTime(2027, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 4,
+                            PharmacyId = 1,
+                            Price = 45.00m,
+                            QuantityAvailable = 25
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ExpiryDate = new DateTime(2028, 6, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 5,
+                            PharmacyId = 1,
+                            Price = 110.00m,
+                            QuantityAvailable = 55
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ExpiryDate = new DateTime(2028, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 6,
+                            PharmacyId = 2,
+                            Price = 30.50m,
+                            QuantityAvailable = 120
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ExpiryDate = new DateTime(2027, 8, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 7,
+                            PharmacyId = 2,
+                            Price = 65.00m,
+                            QuantityAvailable = 80
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ExpiryDate = new DateTime(2028, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 8,
+                            PharmacyId = 2,
+                            Price = 40.00m,
+                            QuantityAvailable = 100
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ExpiryDate = new DateTime(2027, 10, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 9,
+                            PharmacyId = 2,
+                            Price = 55.50m,
+                            QuantityAvailable = 35
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ExpiryDate = new DateTime(2028, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 10,
+                            PharmacyId = 2,
+                            Price = 70.00m,
+                            QuantityAvailable = 45
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ExpiryDate = new DateTime(2027, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 11,
+                            PharmacyId = 3,
+                            Price = 45.00m,
+                            QuantityAvailable = 80
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ExpiryDate = new DateTime(2028, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 12,
+                            PharmacyId = 3,
+                            Price = 50.00m,
+                            QuantityAvailable = 65
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ExpiryDate = new DateTime(2027, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 13,
+                            PharmacyId = 3,
+                            Price = 85.00m,
+                            QuantityAvailable = 40
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ExpiryDate = new DateTime(2028, 7, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 14,
+                            PharmacyId = 3,
+                            Price = 95.00m,
+                            QuantityAvailable = 55
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ExpiryDate = new DateTime(2027, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 15,
+                            PharmacyId = 3,
+                            Price = 75.00m,
+                            QuantityAvailable = 30
+                        },
+                        new
+                        {
+                            Id = 16,
+                            ExpiryDate = new DateTime(2028, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 16,
+                            PharmacyId = 4,
+                            Price = 115.00m,
+                            QuantityAvailable = 150
+                        },
+                        new
+                        {
+                            Id = 17,
+                            ExpiryDate = new DateTime(2027, 9, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 17,
+                            PharmacyId = 4,
+                            Price = 135.00m,
+                            QuantityAvailable = 90
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ExpiryDate = new DateTime(2028, 8, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 18,
+                            PharmacyId = 4,
+                            Price = 95.00m,
+                            QuantityAvailable = 70
+                        },
+                        new
+                        {
+                            Id = 19,
+                            ExpiryDate = new DateTime(2027, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 19,
+                            PharmacyId = 4,
+                            Price = 85.00m,
+                            QuantityAvailable = 60
+                        },
+                        new
+                        {
+                            Id = 20,
+                            ExpiryDate = new DateTime(2028, 1, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 20,
+                            PharmacyId = 4,
+                            Price = 105.00m,
+                            QuantityAvailable = 45
+                        },
+                        new
+                        {
+                            Id = 21,
+                            ExpiryDate = new DateTime(2027, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 21,
+                            PharmacyId = 5,
+                            Price = 85.50m,
+                            QuantityAvailable = 60
+                        },
+                        new
+                        {
+                            Id = 22,
+                            ExpiryDate = new DateTime(2028, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 22,
+                            PharmacyId = 5,
+                            Price = 40.00m,
+                            QuantityAvailable = 200
+                        },
+                        new
+                        {
+                            Id = 23,
+                            ExpiryDate = new DateTime(2027, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 23,
+                            PharmacyId = 5,
+                            Price = 145.00m,
+                            QuantityAvailable = 45
+                        },
+                        new
+                        {
+                            Id = 24,
+                            ExpiryDate = new DateTime(2028, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 24,
+                            PharmacyId = 5,
+                            Price = 220.00m,
+                            QuantityAvailable = 25
+                        },
+                        new
+                        {
+                            Id = 25,
+                            ExpiryDate = new DateTime(2028, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 25,
+                            PharmacyId = 5,
+                            Price = 195.00m,
+                            QuantityAvailable = 30
+                        },
+                        new
+                        {
+                            Id = 26,
+                            ExpiryDate = new DateTime(2028, 8, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 26,
+                            PharmacyId = 6,
+                            Price = 25.00m,
+                            QuantityAvailable = 200
+                        },
+                        new
+                        {
+                            Id = 27,
+                            ExpiryDate = new DateTime(2027, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 27,
+                            PharmacyId = 6,
+                            Price = 55.00m,
+                            QuantityAvailable = 85
+                        },
+                        new
+                        {
+                            Id = 28,
+                            ExpiryDate = new DateTime(2028, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 28,
+                            PharmacyId = 6,
+                            Price = 65.00m,
+                            QuantityAvailable = 50
+                        },
+                        new
+                        {
+                            Id = 29,
+                            ExpiryDate = new DateTime(2027, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 29,
+                            PharmacyId = 6,
+                            Price = 75.00m,
+                            QuantityAvailable = 35
+                        },
+                        new
+                        {
+                            Id = 30,
+                            ExpiryDate = new DateTime(2028, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 30,
+                            PharmacyId = 6,
+                            Price = 30.00m,
+                            QuantityAvailable = 150
+                        },
+                        new
+                        {
+                            Id = 31,
+                            ExpiryDate = new DateTime(2028, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 31,
+                            PharmacyId = 7,
+                            Price = 140.00m,
+                            QuantityAvailable = 90
+                        },
+                        new
+                        {
+                            Id = 32,
+                            ExpiryDate = new DateTime(2027, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 32,
+                            PharmacyId = 7,
+                            Price = 210.00m,
+                            QuantityAvailable = 40
+                        },
+                        new
+                        {
+                            Id = 33,
+                            ExpiryDate = new DateTime(2028, 3, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 33,
+                            PharmacyId = 7,
+                            Price = 120.00m,
+                            QuantityAvailable = 55
+                        },
+                        new
+                        {
+                            Id = 34,
+                            ExpiryDate = new DateTime(2027, 11, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 34,
+                            PharmacyId = 7,
+                            Price = 95.00m,
+                            QuantityAvailable = 65
+                        },
+                        new
+                        {
+                            Id = 35,
+                            ExpiryDate = new DateTime(2028, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 35,
+                            PharmacyId = 7,
+                            Price = 150.00m,
+                            QuantityAvailable = 25
+                        },
+                        new
+                        {
+                            Id = 36,
+                            ExpiryDate = new DateTime(2027, 4, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 36,
+                            PharmacyId = 8,
+                            Price = 70.00m,
+                            QuantityAvailable = 25
+                        },
+                        new
+                        {
+                            Id = 37,
+                            ExpiryDate = new DateTime(2028, 6, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 37,
+                            PharmacyId = 8,
+                            Price = 85.00m,
+                            QuantityAvailable = 35
+                        },
+                        new
+                        {
+                            Id = 38,
+                            ExpiryDate = new DateTime(2027, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 38,
+                            PharmacyId = 8,
+                            Price = 95.00m,
+                            QuantityAvailable = 20
+                        },
+                        new
+                        {
+                            Id = 39,
+                            ExpiryDate = new DateTime(2028, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 39,
+                            PharmacyId = 8,
+                            Price = 165.00m,
+                            QuantityAvailable = 15
+                        },
+                        new
+                        {
+                            Id = 40,
+                            ExpiryDate = new DateTime(2027, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 40,
+                            PharmacyId = 8,
+                            Price = 145.00m,
+                            QuantityAvailable = 30
+                        },
+                        new
+                        {
+                            Id = 41,
+                            ExpiryDate = new DateTime(2029, 5, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 41,
+                            PharmacyId = 9,
+                            Price = 18.75m,
+                            QuantityAvailable = 300
+                        },
+                        new
+                        {
+                            Id = 42,
+                            ExpiryDate = new DateTime(2029, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 42,
+                            PharmacyId = 9,
+                            Price = 15.00m,
+                            QuantityAvailable = 250
+                        },
+                        new
+                        {
+                            Id = 43,
+                            ExpiryDate = new DateTime(2028, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 43,
+                            PharmacyId = 9,
+                            Price = 25.00m,
+                            QuantityAvailable = 180
+                        },
+                        new
+                        {
+                            Id = 44,
+                            ExpiryDate = new DateTime(2029, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 44,
+                            PharmacyId = 9,
+                            Price = 35.00m,
+                            QuantityAvailable = 120
+                        },
+                        new
+                        {
+                            Id = 45,
+                            ExpiryDate = new DateTime(2028, 9, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 45,
+                            PharmacyId = 9,
+                            Price = 45.00m,
+                            QuantityAvailable = 90
+                        },
+                        new
+                        {
+                            Id = 46,
+                            ExpiryDate = new DateTime(2027, 5, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 46,
+                            PharmacyId = 10,
+                            Price = 60.25m,
+                            QuantityAvailable = 100
+                        },
+                        new
+                        {
+                            Id = 47,
+                            ExpiryDate = new DateTime(2028, 4, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 47,
+                            PharmacyId = 10,
+                            Price = 125.00m,
+                            QuantityAvailable = 40
+                        },
+                        new
+                        {
+                            Id = 48,
+                            ExpiryDate = new DateTime(2027, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 48,
+                            PharmacyId = 10,
+                            Price = 110.00m,
+                            QuantityAvailable = 35
+                        },
+                        new
+                        {
+                            Id = 49,
+                            ExpiryDate = new DateTime(2028, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 49,
+                            PharmacyId = 10,
+                            Price = 245.00m,
+                            QuantityAvailable = 20
+                        },
+                        new
+                        {
+                            Id = 50,
+                            ExpiryDate = new DateTime(2028, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LastUpdated = new DateTime(2026, 7, 5, 22, 26, 28, 0, DateTimeKind.Utc),
+                            MedicineId = 50,
+                            PharmacyId = 10,
+                            Price = 285.00m,
+                            QuantityAvailable = 25
+                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.Notification", b =>
@@ -408,7 +1541,6 @@ namespace PharmacyManagementSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -420,7 +1552,7 @@ namespace PharmacyManagementSystem.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
-                    b.Property<double>("Longitude")
+                    b.Property<double?>("Longitude")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -432,7 +1564,7 @@ namespace PharmacyManagementSystem.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<double>("latitude")
+                    b.Property<double?>("latitude")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -442,6 +1574,118 @@ namespace PharmacyManagementSystem.Migrations
                     b.HasIndex("Name");
 
                     b.ToTable("Pharmacies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "90 El-Tahrir St",
+                            City = "Cairo",
+                            IsVerified = true,
+                            Longitude = 31.235700000000001,
+                            Name = "El-Ezaby Pharmacy",
+                            Phone = "0225741234",
+                            latitude = 30.0444
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "Abbassiya Square",
+                            City = "Cairo",
+                            IsVerified = true,
+                            Longitude = 31.275099999999998,
+                            Name = "Care Pharmacy",
+                            Phone = "0224825678",
+                            latitude = 30.062100000000001
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "15 Nasr City St",
+                            City = "Cairo",
+                            IsVerified = true,
+                            Longitude = 31.330200000000001,
+                            Name = "Seif Pharmacy",
+                            Phone = "0224123456",
+                            latitude = 30.056100000000001
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "Horreya Avenue",
+                            City = "Alexandria",
+                            IsVerified = true,
+                            Longitude = 29.918700000000001,
+                            Name = "Rushdy Pharmacy",
+                            Phone = "034823456",
+                            latitude = 31.200099999999999
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "El-Geish St",
+                            City = "Tanta",
+                            IsVerified = true,
+                            Longitude = 30.9998,
+                            Name = "Misr Pharmacy",
+                            Phone = "043335678",
+                            latitude = 30.7865
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Address = "Al-Galaa St",
+                            City = "Mansoura",
+                            IsVerified = false,
+                            Longitude = 31.378499999999999,
+                            Name = "Vezeeta Pharmacy",
+                            Phone = "052234567",
+                            latitude = 31.041399999999999
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Address = "Maadi Road 9",
+                            City = "Cairo",
+                            IsVerified = true,
+                            Longitude = 31.256599999999999,
+                            Name = "Delmar Pharmacy",
+                            Phone = "0223567890",
+                            latitude = 29.9602
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Address = "Corniche El-Nil",
+                            City = "Aswan",
+                            IsVerified = false,
+                            Longitude = 32.899799999999999,
+                            Name = "Nile Pharmacy",
+                            Phone = "0972345678",
+                            latitude = 24.088899999999999
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Address = "El-Bahr St",
+                            City = "Al-Minya",
+                            IsVerified = true,
+                            Longitude = 30.7501,
+                            Name = "El-Alfy Pharmacy",
+                            Phone = "0863456789",
+                            latitude = 28.1099
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Address = "Shebin El-Kom Main St",
+                            City = "Menofia",
+                            IsVerified = true,
+                            Longitude = 31.008400000000002,
+                            Name = "Nile Valley Pharmacy",
+                            Phone = "0482345678",
+                            latitude = 30.558
+                        });
                 });
 
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.Reservation", b =>
@@ -466,8 +1710,9 @@ namespace PharmacyManagementSystem.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("PharmacyId")
                         .HasColumnType("int");
@@ -577,6 +1822,15 @@ namespace PharmacyManagementSystem.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("PharmacyManagementSystem.Domain.Entities.Pharmacy", "Pharmacy")
+                        .WithMany()
+                        .HasForeignKey("PharmacyId");
+
+                    b.Navigation("Pharmacy");
+                });
+
             modelBuilder.Entity("PharmacyManagementSystem.Domain.Entities.Medicine", b =>
                 {
                     b.HasOne("PharmacyManagementSystem.Domain.Entities.MedicineCategory", "Category")
@@ -625,6 +1879,12 @@ namespace PharmacyManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PharmacyManagementSystem.Domain.Entities.ApplicationUser", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PharmacyManagementSystem.Domain.Entities.Pharmacy", "Pharmacy")
                         .WithMany("Reservations")
                         .HasForeignKey("PharmacyId")
@@ -632,6 +1892,8 @@ namespace PharmacyManagementSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("Medicine");
+
+                    b.Navigation("Patient");
 
                     b.Navigation("Pharmacy");
                 });

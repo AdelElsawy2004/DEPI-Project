@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { PharmacyStateService, PharmacistProfile } from '@/state/pharmacy-state.service';
 import { InventoryService } from '../Inventory/inventory.service';
-import { ReservationsService } from '../Reservations/reservations.service';
+import { ReservationService } from '@/core/services/reservation.service';
+import { CurrentUserProfileService } from '@/core/services/current-user-profile.service';
 
 interface ProfileContact {
     icon: string;
@@ -16,12 +16,9 @@ interface QuickStat {
 }
 
 interface ProfileField {
-    key: ProfileFieldKey;
     label: string;
     value: string;
 }
-
-type ProfileFieldKey = 'fullName' | 'email' | 'phone' | 'pharmacyName' | 'licenseNumber' | 'address';
 
 interface ActivityItem {
     icon: string;
@@ -37,127 +34,182 @@ interface ActivityItem {
     templateUrl: './profile.component.html',
     styleUrl: './profile.component.scss'
 })
-export class ProfileComponent {
-    private readonly appState = inject(PharmacyStateService);
+export class ProfileComponent implements OnInit {
+    private readonly profileService = inject(CurrentUserProfileService);
     private readonly inventoryService = inject(InventoryService);
-    private readonly reservationsService = inject(ReservationsService);
-    isEditMode = false;
+    private readonly reservationsService = inject(ReservationService);
 
-    profileFields: ProfileField[] = this.buildProfileFields(this.appState.profile());
+    ngOnInit(): void {
+        const existingProfile = this.profileService.pharmacyAdminProfile();
 
-    readonly activities: ActivityItem[] = [
-        {
-            icon: 'pi pi-check',
-            time: '2 hours ago',
-            title: 'Confirmed reservation #204',
-            tone: 'green'
-        },
-        {
-            icon: 'pi pi-box',
-            time: '5 hours ago',
-            title: 'Updated stock for Ibuprofen',
-            tone: 'blue'
-        },
-        {
-            icon: 'pi pi-plus',
-            time: '1 day ago',
-            title: 'Added new medicine: Paracetamol',
-            tone: 'blue'
-        },
-        {
-            icon: 'pi pi-times',
-            time: '2 days ago',
-            title: 'Rejected reservation #198',
-            tone: 'red'
-        },
-        {
-            icon: 'pi pi-user',
-            time: '3 days ago',
-            title: 'Updated profile information',
-            tone: 'gray'
+        if (existingProfile) {
+            this.loadProfileData(existingProfile.pharmacyId);
+            return;
         }
-    ];
+
+        this.profileService.loadPharmacyAdminProfile().subscribe({
+            next: (profile) => {
+                this.loadProfileData(profile.pharmacyId);
+            },
+            error: (error) => {
+                console.error('Failed to load pharmacy admin profile', error);
+            }
+        });
+    }
+
+    private loadProfileData(pharmacyId: number | null): void {
+        this.reservationsService.loadMyReservations();
+
+        if (pharmacyId) {
+            this.inventoryService.loadInventory(pharmacyId);
+        }
+    }
 
     get initials(): string {
-        return this.appState.profile().initials;
+        const name = this.fullName;
+
+        return name
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0]?.toUpperCase() ?? '')
+            .join('') || 'PH';
     }
 
     get fullName(): string {
-        return this.appState.profile().fullName;
+        return this.profileService.pharmacyAdminProfile()?.fullName ?? 'Pharmacist';
     }
 
     get role(): string {
-        return this.appState.profile().role;
+        return 'Pharmacy Manager';
     }
 
     get contacts(): ProfileContact[] {
-        const profile = this.appState.profile();
+        const profile = this.profileService.pharmacyAdminProfile();
+
+        if (!profile) {
+            return [];
+        }
 
         return [
-            { icon: 'pi pi-envelope', label: 'Email', value: profile.email },
-            { icon: 'pi pi-phone', label: 'Phone', value: profile.phone },
-            { icon: 'pi pi-map-marker', label: 'Address', value: profile.address }
+            {
+                icon: 'pi pi-envelope',
+                label: 'Email',
+                value: profile.email
+            },
+            {
+                icon: 'pi pi-building',
+                label: 'Pharmacy',
+                value: profile.pharmacyName
+            },
+            {
+                icon: 'pi pi-map-marker',
+                label: 'Location',
+                value: profile.address?.trim() || profile.city || 'Not added yet'
+            }
+        ];
+    }
+
+    get profileFields(): ProfileField[] {
+        const profile = this.profileService.pharmacyAdminProfile();
+
+        if (!profile) {
+            return [];
+        }
+
+        return [
+            {
+                label: 'Full Name',
+                value: profile.fullName
+            },
+            {
+                label: 'Email Address',
+                value: profile.email
+            },
+            {
+                label: 'Address',
+                value: profile.address?.trim() || profile.city || 'Not added yet'
+            },
+            {
+                label: 'Pharmacy Name',
+                value: profile.pharmacyName
+            }
         ];
     }
 
     get quickStats(): QuickStat[] {
         const reservations = this.reservationsService.reservations();
         const medicines = this.inventoryService.inventoryItems();
-        const uniquePatients = new Set(reservations.map((reservation) => reservation.patientName.toLowerCase())).size;
+
+        const uniquePatients = new Set(
+            reservations
+                .map((reservation) => reservation.patientName.trim().toLowerCase())
+                .filter(Boolean)
+        ).size;
 
         return [
-            { value: reservations.length.toLocaleString('en-US'), label: 'Reservations' },
-            { value: medicines.length.toLocaleString('en-US'), label: 'Medicines' },
-            { value: uniquePatients.toLocaleString('en-US'), label: 'Patients' },
-            { value: '3', label: 'Years Active' }
+            {
+                value: reservations.length.toLocaleString('en-US'),
+                label: 'Reservations'
+            },
+            {
+                value: medicines.length.toLocaleString('en-US'),
+                label: 'Medicines'
+            },
+            {
+                value: uniquePatients.toLocaleString('en-US'),
+                label: 'Patients'
+            }
         ];
     }
 
-    toggleEditMode(): void {
-        if (this.isEditMode) {
-            this.saveProfile();
-            this.isEditMode = false;
-            return;
+    get activities(): ActivityItem[] {
+        return this.reservationsService
+            .reservations()
+            .filter((reservation) =>
+                reservation.status === 'Confirmed' ||
+                reservation.status === 'Rejected'
+            )
+            .map((reservation): ActivityItem => {
+                const isConfirmed = reservation.status === 'Confirmed';
+
+                return {
+                    icon: isConfirmed ? 'pi pi-check' : 'pi pi-times',
+                    time: this.formatRelativeTime(reservation.createdAt),
+                    title: `${reservation.status} reservation #${reservation.id} - ${reservation.medicine}`,
+                    tone: isConfirmed ? 'green' : 'red'
+                };
+            })
+            .slice(0, 5);
+    }
+
+    private formatRelativeTime(dateValue: string): string {
+        const date = new Date(dateValue);
+        const now = new Date();
+
+        const differenceInSeconds = Math.floor(
+            (now.getTime() - date.getTime()) / 1000
+        );
+
+        if (differenceInSeconds < 60) {
+            return 'Just now';
         }
 
-        this.profileFields = this.buildProfileFields(this.appState.profile());
-        this.isEditMode = true;
-    }
+        const minutes = Math.floor(differenceInSeconds / 60);
 
-    get editButtonLabel(): string {
-        return this.isEditMode ? 'Save Profile' : 'Edit Profile';
-    }
+        if (minutes < 60) {
+            return `${minutes} min${minutes === 1 ? '' : 's'} ago`;
+        }
 
-    get editButtonIcon(): string {
-        return this.isEditMode ? 'pi pi-check' : 'pi pi-pencil';
-    }
+        const hours = Math.floor(minutes / 60);
 
-    private saveProfile(): void {
-        const profilePatch = this.profileFields.reduce((accumulator, field) => {
-            accumulator[field.key] = field.value.trim();
-            return accumulator;
-        }, {} as Record<ProfileFieldKey, string>);
+        if (hours < 24) {
+            return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+        }
 
-        this.appState.updateProfile({
-            fullName: profilePatch.fullName,
-            email: profilePatch.email,
-            phone: profilePatch.phone,
-            pharmacyName: profilePatch.pharmacyName,
-            licenseNumber: profilePatch.licenseNumber,
-            address: profilePatch.address
-        });
+        const days = Math.floor(hours / 24);
 
-        this.profileFields = this.buildProfileFields(this.appState.profile());
-    }
-
-    private buildProfileFields(profile: PharmacistProfile): ProfileField[] {
-        return [
-            { key: 'fullName', label: 'Full Name', value: profile.fullName },
-            { key: 'email', label: 'Email Address', value: profile.email },
-            { key: 'phone', label: 'Phone Number', value: profile.phone },
-            { key: 'pharmacyName', label: 'Pharmacy Name', value: profile.pharmacyName },
-            { key: 'licenseNumber', label: 'License Number', value: profile.licenseNumber },
-            { key: 'address', label: 'Address', value: profile.address }
-        ];
+        return `${days} day${days === 1 ? '' : 's'} ago`;
     }
 }

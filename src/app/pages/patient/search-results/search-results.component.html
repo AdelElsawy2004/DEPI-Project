@@ -1,0 +1,78 @@
+<div class="search-results-page">
+    <section class="search-results-page__header">
+        <button
+            type="button"
+            class="search-results-page__back-button"
+            (click)="goBack()"
+            aria-label="Back to search"
+        >
+            <i class="pi pi-arrow-left"></i>
+        </button>
+
+        <div class="search-results-page__heading">
+            <h1 class="search-results-page__title">Search Results</h1>
+            <p class="search-results-page__subtitle">
+                {{ pharmacies.length }} pharmacies found for "{{ medicineName }}"
+            </p>
+        </div>
+    </section>
+
+    <section class="search-results-page__list" aria-label="Pharmacy search results">
+        <div *ngIf="isLoading" class="search-results__status">Loading results...</div>
+        <div *ngIf="hasLoadingError" class="search-results__status">An error occurred while loading results.</div>
+        <div *ngIf="!isLoading && !hasLoadingError && pharmacies.length === 0" class="search-results__status">No pharmacies found.</div>
+        <article class="pharmacy-card" *ngFor="let pharmacy of pharmacies">
+            <div class="pharmacy-card__content">
+                <div class="pharmacy-card__top">
+                    <span class="pharmacy-card__icon" aria-hidden="true">
+                        <i class="pi pi-building"></i>
+                    </span>
+
+                    <div class="pharmacy-card__identity">
+                        <h2 class="pharmacy-card__name">{{ pharmacy.pharmacyName }}</h2>
+
+                        <p class="pharmacy-card__address">
+                            <i class="pi pi-map-marker"></i>
+                            <span>{{ pharmacy.address }}</span>
+                            <span class="pharmacy-card__separator">&middot;</span>
+                            <span>{{ pharmacy.distance }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <dl class="pharmacy-card__stats">
+                    <div class="pharmacy-card__stat">
+                        <dt class="pharmacy-card__label">Medicine</dt>
+                        <dd class="pharmacy-card__value">{{ pharmacy.medicine }}</dd>
+                    </div>
+
+                    <div class="pharmacy-card__stat">
+                        <dt class="pharmacy-card__label">Available</dt>
+                        <dd class="pharmacy-card__value pharmacy-card__value--available">
+                            {{ pharmacy.availableUnits }} units
+                        </dd>
+                    </div>
+
+                    <div class="pharmacy-card__stat">
+                        <dt class="pharmacy-card__label">Price</dt>
+                        <dd class="pharmacy-card__value">{{ pharmacy.price }} EGP</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="pharmacy-card__actions">
+                <div class="pharmacy-card__rating">
+                    <i class="pi pi-star-fill"></i>
+                    <span>{{ pharmacy.rating }}</span>
+                </div>
+
+                <p-button
+                    label="Reserve"
+                    styleClass="search-results-page__reserve-button"
+                    (onClick)="reserve(pharmacy)"
+                    [disabled]="isReserving(pharmacy)"
+                />
+            </div>
+        </article>
+    </section>
+</div>

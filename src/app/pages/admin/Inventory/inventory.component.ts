@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from "primeng/dialog";
@@ -7,45 +8,50 @@ import { InputNumberModule } from "primeng/inputnumber";
 import { SelectModule } from "primeng/select";
 import { DatePicker } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
+import { MedicineResponseDto } from '@/core/DTO/Medicines/medicine-response.interface';
+import { MedicineService } from '@/core/services/medicine.service';
 import { InventoryService, MedicineItem } from './inventory.service';
+import { MedicineStockRequestDto } from '@/core/DTO/Stock/medicine-stock-request.interface';
+
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
+import { ButtonModule } from "primeng/button";
+import { NotificationService } from '@/core/services/notification.service';
+
+
+
+
+
+
 
 @Component({
     selector: 'app-inventory',
     standalone: true,
     imports: [CommonModule, FormsModule, RouterLink, DialogModule, InputNumberModule, SelectModule, DatePicker,
-        InputTextModule],
+    InputTextModule, ButtonModule],
     templateUrl: './inventory.component.html',
     styleUrl: './inventory.component.scss'
 })
-export class InventoryComponent {
+export class InventoryComponent implements OnInit {
     showAddDialog = false;
     isEditMode = false;
     editingMedicineId: string | null = null;
-
-    medicineName = '';
+    selectedMedicineId: number | null = null;
     quantity: number | null = null;
     expiryDate: Date | null = null;
-    selectedCategory: string | null = null;
     errors: Record<string, string> = {};
-
     readonly inventoryPageLink = ['/inventory'];
+    medicines: Array<MedicineResponseDto & { displayName: string }> = [];
 
-    categories = [
-        { label: 'Antibiotic', value: 'Antibiotic' },
-        { label: 'Pain Relief', value: 'Pain Relief' },
-        { label: 'Diabetes', value: 'Diabetes' },
-        { label: 'Hypertension', value: 'Hypertension' },
-        { label: 'Cholesterol', value: 'Cholesterol' },
-        { label: 'Gastric', value: 'Gastric' },
-        { label: 'Allergy', value: 'Allergy' }
-    ];
+    private isSaving = false;
 
     constructor(
         private router: Router,
-        private inventoryService: InventoryService,
-        private appState: PharmacyStateService
-    ) {}
+        public inventoryService: InventoryService,
+        private appState: PharmacyStateService,
+        private medicineService: MedicineService,
+        private notificationService: NotificationService
+    ) { }
+
 
     get isInventoryPage(): boolean {
         return this.router.url.startsWith('/inventory');
@@ -99,25 +105,20 @@ export class InventoryComponent {
         return 'Low';
     }
 
-    private formatExpiry(date: Date): string {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        return `${year}-${month}`;
-    }
-
     private validate(): boolean {
         this.errors = {};
-        if (!this.medicineName.trim()) this.errors['name'] = 'Medicine name is required';
+        if (this.selectedMedicineId === null) this.errors['name'] = 'Medicine name is required';
         if (!this.quantity || this.quantity <= 0) this.errors['quantity'] = 'Quantity must be greater than 0';
-        if (!this.selectedCategory) this.errors['category'] = 'Category is required';
+
         if (!this.expiryDate) this.errors['expiry'] = 'Expiry date is required';
+
         return Object.keys(this.errors).length === 0;
     }
 
-    validateField(field: 'name' | 'quantity' | 'category' | 'expiry') {
+    validateField(field: 'name' | 'quantity' | 'expiry') {
         switch (field) {
             case 'name':
-                if (this.medicineName.trim()) {
+                if (this.selectedMedicineId !== null) {
                     this.removeFieldError('name');
                 } else {
                     this.setFieldError('name', 'Medicine name is required');
@@ -130,13 +131,7 @@ export class InventoryComponent {
                     this.setFieldError('quantity', 'Quantity must be greater than 0');
                 }
                 break;
-            case 'category':
-                if (this.selectedCategory) {
-                    this.removeFieldError('category');
-                } else {
-                    this.setFieldError('category', 'Category is required');
-                }
-                break;
+
             case 'expiry':
                 if (this.expiryDate) {
                     this.removeFieldError('expiry');
@@ -172,44 +167,63 @@ export class InventoryComponent {
     openEditDialog(item: MedicineItem) {
         this.isEditMode = true;
         this.editingMedicineId = item.id;
-        this.medicineName = item.name;
+        this.selectedMedicineId = Number(item.id.split('-')[1]);
         this.quantity = item.stock;
-        this.selectedCategory = item.category;
+
         const [year, month] = item.expiry.split('-').map(Number);
         this.expiryDate = new Date(year, month - 1, 1);
         this.errors = {};
         this.showAddDialog = true;
     }
 
+
+
     saveMedicine() {
         if (!this.validate()) return;
 
-        const stock = this.quantity ?? 0;
-
-        const item: MedicineItem = {
-            id: this.editingMedicineId ?? '',
-            name: this.medicineName.trim(),
-            category: this.selectedCategory!,
-            expiry: this.formatExpiry(this.expiryDate!),
-            stock,
-            level: this.getLevel(stock)
+        const dto: MedicineStockRequestDto = {
+            pharmacyId: 1,
+            medicineId: this.selectedMedicineId!,
+            quantityAvailable: this.quantity!,
+            expiryDate: this.expiryDate!.toISOString(),
         };
 
-        if (this.isEditMode && this.editingMedicineId) {
-            this.inventoryService.updateMedicine(this.editingMedicineId, item);
-        } else {
-            this.inventoryService.addMedicine(item);
-        }
+        this.isSaving = true;
 
+        this.inventoryService.addMedicine(dto).subscribe({
+            next: () => {
+                this.inventoryService.loadInventory(1);
+                this.notificationService.success(
+                    'Success',
+                    this.isEditMode ? 'Medicine updated successfully.' : 'Medicine added successfully.'
+                );
+                this.closeAddDialog();
+                this.isSaving = false;
+            },
+            error: () => {
+                this.notificationService.error(
+                    'Error',
+                    this.isEditMode ? 'Unable to update medicine.' : 'Unable to add medicine.'
+                );
+                this.isSaving = false;
+            },
+        });
+    }
+
+
+
+    deleteMedicine() {
+        if (!this.editingMedicineId) return;
+
+        const medicineId = Number(this.editingMedicineId.split('-')[1]);
+        this.inventoryService.deleteMedicine(medicineId);
+
+        // keep existing behavior (dialog closes immediately) - out of current scope
         this.closeAddDialog();
     }
 
-    deleteMedicine() {
-        if (this.editingMedicineId) {
-            this.inventoryService.deleteMedicine(this.editingMedicineId);
-            this.closeAddDialog();
-        }
-    }
+
+
 
     closeAddDialog() {
         this.showAddDialog = false;
@@ -219,11 +233,31 @@ export class InventoryComponent {
     }
 
     private resetForm() {
-        this.medicineName = '';
+        this.selectedMedicineId = null;
         this.quantity = null;
         this.expiryDate = null;
-        this.selectedCategory = null;
         this.errors = {};
         this.editingMedicineId = null;
     }
+
+
+    ngOnInit() {
+        this.inventoryService.loadInventory(1);
+
+        this.medicineService.getAllMedicines().subscribe({
+            next: (res: MedicineResponseDto[] = []) => {
+                this.medicines = (res ?? []).map((m) => ({
+                    ...m,
+                    displayName: m.strength ? `${m.tradeName} (${m.strength})` : m.tradeName,
+                }));
+            },
+            error: () => {
+                this.medicines = [];
+            },
+        });
+
+
+    }
+
 }
+

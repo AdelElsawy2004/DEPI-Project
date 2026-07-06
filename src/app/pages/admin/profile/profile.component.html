@@ -11,12 +11,12 @@
 
                 <ul class="profile-contact-list">
                     @for (contact of contacts; track contact.label) {
-                        <li class="profile-contact-item">
-                            <span class="profile-contact-item__icon">
-                                <i class="{{ contact.icon }}"></i>
-                            </span>
-                            <span class="profile-contact-item__text">{{ contact.value }}</span>
-                        </li>
+                    <li class="profile-contact-item">
+                        <span class="profile-contact-item__icon">
+                            <i class="{{ contact.icon }}"></i>
+                        </span>
+                        <span class="profile-contact-item__text">{{ contact.value }}</span>
+                    </li>
                     }
                 </ul>
             </article>
@@ -26,17 +26,13 @@
 
                 <div class="stats-grid">
                     @for (stat of quickStats; track stat.label) {
-                        <div class="stat-tile">
-                            <div class="stat-tile__value">{{ stat.value }}</div>
-                            <div class="stat-tile__label">{{ stat.label }}</div>
-                        </div>
+                    <div class="stat-tile">
+                        <div class="stat-tile__value">{{ stat.value }}</div>
+                        <div class="stat-tile__label">{{ stat.label }}</div>
+                    </div>
                     }
                 </div>
 
-                <button type="button" class="profile-edit-button" (click)="toggleEditMode()">
-                    <i class="{{ editButtonIcon }}"></i>
-                    <span>{{ editButtonLabel }}</span>
-                </button>
             </article>
         </aside>
 
@@ -46,16 +42,10 @@
 
                 <div class="profile-fields">
                     @for (field of profileFields; track field.label) {
-                        <div class="profile-field">
-                            <label>{{ field.label }}</label>
-                            <input
-                                type="text"
-                                [(ngModel)]="field.value"
-                                [readonly]="!isEditMode"
-                                [class.profile-field__input--editable]="isEditMode"
-                                [ngModelOptions]="{ standalone: true }"
-                            />
-                        </div>
+                    <div class="profile-field">
+                        <label>{{ field.label }}</label>
+                        <input type="text" [value]="field.value" readonly />
+                    </div>
                     }
                 </div>
             </section>
@@ -65,14 +55,14 @@
 
                 <div class="activity-list">
                     @for (activity of activities; track activity.title) {
-                        <div class="activity-row">
-                            <span class="activity-row__icon activity-row__icon--{{ activity.tone }}">
-                                <i class="{{ activity.icon }}"></i>
-                            </span>
+                    <div class="activity-row">
+                        <span class="activity-row__icon activity-row__icon--{{ activity.tone }}">
+                            <i class="{{ activity.icon }}"></i>
+                        </span>
 
-                            <div class="activity-row__title">{{ activity.title }}</div>
-                            <div class="activity-row__time">{{ activity.time }}</div>
-                        </div>
+                        <div class="activity-row__title">{{ activity.title }}</div>
+                        <div class="activity-row__time">{{ activity.time }}</div>
+                    </div>
                     }
                 </div>
             </section>

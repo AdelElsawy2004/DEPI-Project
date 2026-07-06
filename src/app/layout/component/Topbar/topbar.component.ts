@@ -5,6 +5,7 @@ import { LayoutService } from '@/layout/service/layout.service';
 import { filter } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { PharmacyStateService } from '@/state/pharmacy-state.service';
+import { CurrentUserProfileService } from '@/core/services/current-user-profile.service';
 
 @Component({
     selector: 'app-topbar',
@@ -24,11 +25,20 @@ export class AppTopbar implements OnInit {
         public layoutService: LayoutService,
         public appState: PharmacyStateService,
         private router: Router,
+        private currentUserProfileService: CurrentUserProfileService,
         private elementRef: ElementRef<HTMLElement>
     ) { }
 
     ngOnInit() {
         this.setDate();
+
+        this.currentUserProfileService
+            .loadPharmacyAdminProfile()
+            .subscribe({
+                error: (error) => {
+                    console.error('Failed to load pharmacy admin profile', error);
+                }
+            });
 
         this.router.events
             .pipe(filter(event => event instanceof NavigationEnd))
@@ -92,19 +102,37 @@ export class AppTopbar implements OnInit {
     }
 
     get profileInitials(): string {
-        return this.appState.profile().initials;
+        const fullName = this.currentUserProfileService
+            .pharmacyAdminProfile()
+            ?.fullName;
+
+        if (!fullName) {
+            return 'PH';
+        }
+
+        return fullName
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0]?.toUpperCase() ?? '')
+            .join('');
     }
 
     get profileName(): string {
-        return this.appState.profile().fullName;
+        return this.currentUserProfileService
+            .pharmacyAdminProfile()
+            ?.fullName ?? 'Pharmacist';
     }
 
     get profileRole(): string {
-        return this.appState.profile().role;
+        return 'Pharmacy Manager';
     }
 
     get profileEmail(): string {
-        return this.appState.profile().email;
+        return this.currentUserProfileService
+            .pharmacyAdminProfile()
+            ?.email ?? '';
     }
 
     toggleTheme(): void {

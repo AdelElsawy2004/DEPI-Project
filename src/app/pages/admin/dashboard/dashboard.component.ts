@@ -4,9 +4,8 @@ import { ReservationsComponent } from '../Reservations/reservations.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
-import { ReservationsService } from '../Reservations/reservations.service';
+import { ReservationService, ReservationStatus } from '@/core/services/reservation.service';
 import { InventoryService } from '../Inventory/inventory.service';
-import { ReservationStatus } from '../Reservations/reservations.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -17,7 +16,7 @@ import { ReservationStatus } from '../Reservations/reservations.service';
 })
 export class DashboardComponent {
     constructor(
-        private readonly reservationsService: ReservationsService,
+        private readonly reservationsService: ReservationService,
         private readonly inventoryService: InventoryService
     ) {}
 
