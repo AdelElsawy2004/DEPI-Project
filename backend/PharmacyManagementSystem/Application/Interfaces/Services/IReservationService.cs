@@ -7,6 +7,8 @@ namespace PharmacyManagementSystem.Application.Interfaces.Services
     {
         // PHARMACY ADMIN
         Task<List<PharmacistReservationResponseDto>> GetPharmacyReservationsAsync(int pharmacyId);
+        Task<bool> ConfirmReservationAsync(int reservationId, int pharmacyId);
+        Task<bool> RejectReservationAsync(int reservationId, int pharmacyId);
 
         // PATIENT
         Task<PatientReservationResponseDto> CreateReservationAsync(string patientId,CreateReservationRequestDto request);

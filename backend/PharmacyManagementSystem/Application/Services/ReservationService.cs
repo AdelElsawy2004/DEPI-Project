@@ -40,6 +40,44 @@ namespace PharmacyManagementSystem.Application.Services
 
             return dtos;
         }
+
+        public async Task<bool> ConfirmReservationAsync(int reservationId, int pharmacyId)
+        {
+            var reservation = await _reservationRepo.GetReservationByIdWithDetailsAsync(reservationId);
+            if (reservation == null)
+                throw new KeyNotFoundException("Reservation not found");
+
+            if (reservation.PharmacyId != pharmacyId)
+                throw new UnauthorizedAccessException("You do not have permission to update this reservation");
+
+            if (reservation.Status != ReservationStatus.Pending)
+                throw new InvalidOperationException("Only pending reservations can be confirmed");
+
+            reservation.Status = ReservationStatus.Confirmed;
+            _reservationRepo.Update(reservation);
+            await _reservationRepo.SaveAsync();
+
+            return true;
+        }
+
+        public async Task<bool> RejectReservationAsync(int reservationId, int pharmacyId)
+        {
+            var reservation = await _reservationRepo.GetReservationByIdWithDetailsAsync(reservationId);
+            if (reservation == null)
+                throw new KeyNotFoundException("Reservation not found");
+
+            if (reservation.PharmacyId != pharmacyId)
+                throw new UnauthorizedAccessException("You do not have permission to update this reservation");
+
+            if (reservation.Status != ReservationStatus.Pending)
+                throw new InvalidOperationException("Only pending reservations can be rejected");
+
+            reservation.Status = ReservationStatus.Rejected;
+            _reservationRepo.Update(reservation);
+            await _reservationRepo.SaveAsync();
+
+            return true;
+        }
         #endregion
 
         #region PATIENT

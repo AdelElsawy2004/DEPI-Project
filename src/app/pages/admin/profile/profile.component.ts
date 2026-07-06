@@ -21,7 +21,7 @@ interface ProfileField {
     value: string;
 }
 
-type ProfileFieldKey = 'fullName' | 'email' | 'phone' | 'pharmacyName' | 'licenseNumber' | 'address';
+type ProfileFieldKey = 'fullName' | 'email' | 'address' | 'pharmacyName';
 
 interface ActivityItem {
     icon: string;
@@ -141,10 +141,8 @@ export class ProfileComponent {
         this.appState.updateProfile({
             fullName: profilePatch.fullName,
             email: profilePatch.email,
-            phone: profilePatch.phone,
+            address: profilePatch.address,
             pharmacyName: profilePatch.pharmacyName,
-            licenseNumber: profilePatch.licenseNumber,
-            address: profilePatch.address
         });
 
         this.profileFields = this.buildProfileFields(this.appState.profile());
@@ -154,10 +152,8 @@ export class ProfileComponent {
         return [
             { key: 'fullName', label: 'Full Name', value: profile.fullName },
             { key: 'email', label: 'Email Address', value: profile.email },
-            { key: 'phone', label: 'Phone Number', value: profile.phone },
+            { key: 'address', label: 'Address', value: profile.address },
             { key: 'pharmacyName', label: 'Pharmacy Name', value: profile.pharmacyName },
-            { key: 'licenseNumber', label: 'License Number', value: profile.licenseNumber },
-            { key: 'address', label: 'Address', value: profile.address }
         ];
     }
 }

@@ -49,6 +49,68 @@ namespace PharmacyManagementSystem.Controllers
             var reservations = await _reservationService.GetPharmacyReservationsAsync(user.PharmacyId.Value);
             return Ok(reservations);
         }
+
+        [HttpPatch("{id}/confirm")]
+        [Authorize(Roles = "PHARMACYADMIN")]
+        public async Task<ActionResult> ConfirmReservation(int id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "User not authenticated" });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null || user.PharmacyId == null)
+                return BadRequest(new { Message = "No pharmacy associated with the current user" });
+
+            try
+            {
+                await _reservationService.ConfirmReservationAsync(id, user.PharmacyId.Value);
+                return Ok(new { Message = "Reservation confirmed successfully" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}/reject")]
+        [Authorize(Roles = "PHARMACYADMIN")]
+        public async Task<ActionResult> RejectReservation(int id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "User not authenticated" });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null || user.PharmacyId == null)
+                return BadRequest(new { Message = "No pharmacy associated with the current user" });
+
+            try
+            {
+                await _reservationService.RejectReservationAsync(id, user.PharmacyId.Value);
+                return Ok(new { Message = "Reservation rejected successfully" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
         #endregion
 
 

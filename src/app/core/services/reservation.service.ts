@@ -5,7 +5,7 @@ import { ReservationResponseDto } from '@/core/DTO/Reservations/reservation-resp
 import { CreateReservationRequestDto } from '@/core/DTO/Reservations/create-reservation-request.interface';
 import { MyReservationsResponseDto, PatientReservationResponseDto } from '@/core/DTO/Reservations/patient-my-reservations.interface';
 
-export type ReservationStatus = 'Pending' | 'Confirmed' | 'Rejected';
+export type ReservationStatus = 'Pending' | 'Confirmed' | 'Rejected' | 'Cancelled' | 'PickedUp';
 
 export interface ReservationItem {
     id: string;
@@ -35,6 +35,10 @@ function normalizeReservationStatus(status: string): ReservationStatus {
             return 'Confirmed';
         case 'Rejected':
             return 'Rejected';
+        case 'Cancelled':
+            return 'Cancelled';
+        case 'PickedUp':
+            return 'PickedUp';
         case 'Pending':
         default:
             return 'Pending';
@@ -113,5 +117,13 @@ export class ReservationService extends ApiService {
 
     cancelReservation(reservationId: number): Observable<any> {
         return this.http.delete<any>(`${this.apiUrl}/Reservations/${reservationId}`);
+    }
+
+    confirmReservation(reservationId: number): Observable<any> {
+        return this.http.patch<any>(`${this.apiUrl}/Reservations/${reservationId}/confirm`, {});
+    }
+
+    rejectReservation(reservationId: number): Observable<any> {
+        return this.http.patch<any>(`${this.apiUrl}/Reservations/${reservationId}/reject`, {});
     }
 }
