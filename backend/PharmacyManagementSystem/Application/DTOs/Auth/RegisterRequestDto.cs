@@ -24,5 +24,7 @@ namespace PharmacyManagementSystem.Application.DTOs.Auth
         [RegularExpression("^(PATIENT|PHARMACYADMIN|SUPERADMIN)$",
             ErrorMessage = "Role must be PATIENT, PHARMACYADMIN, or SUPERADMIN")]
         public string Role { get; set; } = string.Empty;
+
+        public string? PharmacyName { get; set; }
     }
 }

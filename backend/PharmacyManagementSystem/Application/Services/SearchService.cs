@@ -33,13 +33,13 @@ namespace PharmacyManagementSystem.Application.Services
             {
                 double? distance = null;
 
-                if(request.Latitude.HasValue && request.Longitude.HasValue && stock.Pharmacy != null)
+                if(request.Latitude.HasValue && request.Longitude.HasValue && stock.Pharmacy != null && stock.Pharmacy.latitude.HasValue && stock.Pharmacy.Longitude.HasValue)
                 {
                     distance = CalculateDistance(
                         request.Latitude.Value,
                         request.Longitude.Value,
-                        stock.Pharmacy.latitude,
-                        stock.Pharmacy.Longitude
+                        stock.Pharmacy.latitude.Value,
+                        stock.Pharmacy.Longitude.Value
                     );
                 }
 

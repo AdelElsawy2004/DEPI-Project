@@ -10,7 +10,7 @@ import { AppFloatingConfigurator } from '../../../layout/component/app.floatingc
 import { ToastModule } from 'primeng/toast';
 import { NotificationService } from '@/core/services/notification.service';
 import { AuthSessionService } from '@/core/services/auth-session.service';
-import { AuthService, type RegisterPatientRequest } from '@/core/services/auth.service';
+import { AuthService } from '@/core/services/auth.service';
 import type { LoginRequestDto } from '@/core/DTO/Auth/login-request.interface';
 import type { AuthResponseDto } from '@/core/DTO/Auth/auth-response.interface';
 

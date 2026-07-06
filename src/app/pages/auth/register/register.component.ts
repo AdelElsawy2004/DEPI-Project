@@ -10,7 +10,7 @@ import { AuthSessionService } from '@/core/services/auth-session.service';
 import { type AuthResponseDto } from '@/core/DTO/Auth/auth-response.interface';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { NotificationService } from '@/core/services/notification.service';
-import { AuthService, type RegisterPatientRequest } from '@/core/services/auth.service';
+import { AuthService, type RegisterRequest } from '@/core/services/auth.service';
 import { AbstractControl } from '@angular/forms';
 
 @Component({
@@ -47,6 +47,7 @@ export class RegisterComponent {
     fullName: ['', [Validators.required, Validators.maxLength(100)]],
     email: ['', [Validators.required, Validators.email]],
     city: ['', [Validators.required, Validators.maxLength(50)]],
+    pharmacyName: [''],
     password: ['', [
       Validators.required,
       Validators.minLength(6),
@@ -131,21 +132,17 @@ export class RegisterComponent {
 
     const type = this.route.snapshot.queryParamMap.get('type');
 
-    if (type === 'pharmacy') {
-      // Backend Pharmacy registration is not ready yet.
-      this.notificationService.info(
-        'Pharmacy registration',
-        'Pharmacy registration is being prepared. Please sign in if you already have an account.'
-      );
-      return;
-    }
-
-    if (type !== 'patient') {
+    if (type !== 'patient' && type !== 'pharmacy') {
       this.notificationService.error('Registration failed', 'Unsupported account type.');
       return;
     }
 
     this.form.markAllAsTouched();
+    if (type === 'pharmacy' && !this.form.controls.pharmacyName.value?.trim()) {
+      this.notificationService.error('Registration Error', 'Pharmacy Name is required.');
+      return;
+    }
+
     if (this.form.invalid) {
       const msg = this.getFirstInvalidReason();
       this.notificationService.error('Registration Error', msg);
@@ -155,12 +152,13 @@ export class RegisterComponent {
 
     this.submitting.set(true);
     try {
-      const payload: RegisterPatientRequest = {
+      const payload: RegisterRequest = {
         fullName: this.form.value.fullName ?? '',
         email: this.form.value.email ?? '',
         password: this.form.value.password ?? '',
         city: this.form.value.city ?? '',
-        role: 'PATIENT'
+        role: type === 'pharmacy' ? 'PHARMACYADMIN' : 'PATIENT',
+        ...(type === 'pharmacy' ? { pharmacyName: this.form.value.pharmacyName?.trim() ?? '' } : {})
       };
 
       const response = (await this.authService.register(payload).toPromise()) as AuthResponseDto;
@@ -168,7 +166,13 @@ export class RegisterComponent {
       this.authSession.saveSession(response);
 
       const roles = response.roles ?? [];
-      if (roles.includes('PATIENT')) {
+      if (type === 'pharmacy') {
+        if (roles.includes('PHARMACYADMIN')) {
+          await this.router.navigate(['/dashboard']);
+          this.notificationService.success('Account created successfully');
+          return;
+        }
+      } else if (roles.includes('PATIENT')) {
         await this.router.navigate(['/patient/search']);
         this.notificationService.success('Account created successfully');
         return;
@@ -177,7 +181,7 @@ export class RegisterComponent {
       this.authSession.clearSession();
       this.notificationService.error(
         'Registration failed',
-        'Account created successfully, but role is not supported for patient navigation.'
+        'Account created successfully, but the returned role is not supported for the selected flow.'
       );
     } catch (err: any) {
       const backendMsg = this.getBackendErrorMessage(err);

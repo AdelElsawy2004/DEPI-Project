@@ -18,86 +18,68 @@
                     <span class="register-subtitle text-muted-color">Start managing your pharmacy today.</span>
                 </div>
 
-                <ng-container *ngIf="accountType() === 'patient'; else pharmacyStateTpl">
-                    <form class="register-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-                        <div class="register-grid">
-                            <div class="register-field" style="grid-column: 1 / -1;">
-                                <label for="fullName" class="register-label">Full Name</label>
-                                <input pInputText id="fullName" type="text" placeholder="Your full name"
-                                    class="register-input" formControlName="fullName" />
-                            </div>
-
-                            <div class="register-field" style="grid-column: 1 / -1;">
-                                <label for="email" class="register-label">Email</label>
-                                <input pInputText id="email" type="email" placeholder="your@email.com"
-                                    class="register-input" formControlName="email" />
-                            </div>
-
-                            <div class="register-field" style="grid-column: 1 / -1;">
-                                <label for="city" class="register-label">City</label>
-                                <input pInputText id="city" type="text" placeholder="Your city" class="register-input"
-                                    formControlName="city" />
-                            </div>
-
-                            <div class="register-field">
-                                <label for="password" class="register-label">Password</label>
-                                <p-password inputId="password" placeholder="Min 6 characters" [toggleMask]="true"
-                                    [feedback]="false" [fluid]="true" styleClass="register-password"
-                                    inputStyleClass="register-input" formControlName="password" />
-                            </div>
-
-                            <div class="register-field">
-                                <label for="confirmPassword" class="register-label">Confirm Password</label>
-                                <input pInputText id="confirmPassword" type="password" placeholder="Confirm password"
-                                    class="register-input" formControlName="confirmPassword" />
-                            </div>
-
-                            <div class="register-actions">
-                                <div class="register-submit-wrapper">
-                                    <p-button type="submit" [disabled]="isSubmitting()" styleClass="register-submit">
-                                        <ng-container *ngIf="!isSubmitting(); else loadingTpl">
-                                            Create Account
-                                        </ng-container>
-
-                                        <ng-template #loadingTpl>
-                                            <span class="pi pi-spin pi-spinner" aria-hidden="true"
-                                                style="margin-right: .5rem"></span>
-                                            Loading...
-                                        </ng-template>
-                                    </p-button>
-                                </div>
-
-                                <div class="register-footer">
-                                    Already have an account?
-                                    <a class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
-                                        routerLink="/auth/login">Sign-in</a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </ng-container>
-
-                <ng-template #pharmacyStateTpl>
+                <form class="register-form" [formGroup]="form" (ngSubmit)="onSubmit()">
                     <div class="register-grid">
                         <div class="register-field" style="grid-column: 1 / -1;">
-                            <div class="register-title text-surface-900 dark:text-surface-0">Pharmacy registration</div>
+                            <label for="fullName" class="register-label">Full Name</label>
+                            <input pInputText id="fullName" type="text" placeholder="Your full name"
+                                class="register-input" formControlName="fullName" />
                         </div>
 
                         <div class="register-field" style="grid-column: 1 / -1;">
-                            <div class="register-subtitle text-muted-color">
-                                Pharmacy registration is being prepared. Please sign in if you already have an account.
-                            </div>
+                            <label for="email" class="register-label">Email</label>
+                            <input pInputText id="email" type="email" placeholder="your@email.com"
+                                class="register-input" formControlName="email" />
                         </div>
 
-                        <div class="register-actions" style="grid-column: 1 / -1;">
+                        <div class="register-field" style="grid-column: 1 / -1;">
+                            <label for="city" class="register-label">City</label>
+                            <input pInputText id="city" type="text" placeholder="Your city" class="register-input"
+                                formControlName="city" />
+                        </div>
+
+                        <div class="register-field" *ngIf="accountType() === 'pharmacy'" style="grid-column: 1 / -1;">
+                            <label for="pharmacyName" class="register-label">Pharmacy Name</label>
+                            <input pInputText id="pharmacyName" type="text" placeholder="Your pharmacy name"
+                                class="register-input" formControlName="pharmacyName" />
+                        </div>
+
+                        <div class="register-field">
+                            <label for="password" class="register-label">Password</label>
+                            <p-password inputId="password" placeholder="Min 6 characters" [toggleMask]="true"
+                                [feedback]="false" [fluid]="true" styleClass="register-password"
+                                inputStyleClass="register-input" formControlName="password" />
+                        </div>
+
+                        <div class="register-field">
+                            <label for="confirmPassword" class="register-label">Confirm Password</label>
+                            <input pInputText id="confirmPassword" type="password" placeholder="Confirm password"
+                                class="register-input" formControlName="confirmPassword" />
+                        </div>
+
+                        <div class="register-actions">
                             <div class="register-submit-wrapper">
-                                <a routerLink="/auth/login" class="p-button p-component register-submit" role="button">
-                                    <span class="p-button-label">Sign In</span>
-                                </a>
+                                <p-button type="submit" [disabled]="isSubmitting()" styleClass="register-submit">
+                                    <ng-container *ngIf="!isSubmitting(); else loadingTpl">
+                                        Create Account
+                                    </ng-container>
+
+                                    <ng-template #loadingTpl>
+                                        <span class="pi pi-spin pi-spinner" aria-hidden="true"
+                                            style="margin-right: .5rem"></span>
+                                        Loading...
+                                    </ng-template>
+                                </p-button>
+                            </div>
+
+                            <div class="register-footer">
+                                Already have an account?
+                                <a class="font-medium no-underline ml-2 text-right cursor-pointer text-primary"
+                                    routerLink="/auth/login">Sign-in</a>
                             </div>
                         </div>
                     </div>
-                </ng-template>
+                </form>
             </div>
         </div>
     </div>

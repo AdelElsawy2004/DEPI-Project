@@ -15,7 +15,6 @@ namespace PharmacyManagementSystem.Domain.Configurations
                 .HasMaxLength(50) ;
 
             builder.Property(ph => ph.Address)
-                .IsRequired(true)
                 .HasMaxLength(100) ;
 
             builder.Property(ph => ph.City)

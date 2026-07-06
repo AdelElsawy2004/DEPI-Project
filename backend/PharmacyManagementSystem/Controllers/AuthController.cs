@@ -1,3 +1,4 @@
+using LibrarySystemAPIs.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,18 @@ namespace PharmacyManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtService _jwtService;
+        private readonly AppDbContext _context;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IJwtService jwtService)
+            IJwtService jwtService,
+            AppDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtService = jwtService;
+            _context = context;
         }
 
         // POST: api/Auth/register
@@ -36,45 +40,91 @@ namespace PharmacyManagementSystem.Controllers
             if(existingUser != null)
                 return BadRequest(new { Message = "Email is already registered" });
 
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                FullName = model.FullName,
-                City = model.City,
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true,
-                EmailConfirmed = true
-            };
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
-            var result = await _userManager.CreateAsync(user,model.Password);
-            if(!result.Succeeded)
+            try
             {
-                var errors = string.Join(", ",result.Errors.Select(e => e.Description));
-                return BadRequest(new { Message = $"Registration failed: {errors}" });
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FullName = model.FullName,
+                    City = model.City,
+                    CreatedAt = DateTime.UtcNow,
+                    IsActive = true,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(user,model.Password);
+                if(!result.Succeeded)
+                {
+                    var errors = string.Join(", ",result.Errors.Select(e => e.Description));
+                    return BadRequest(new { Message = $"Registration failed: {errors}" });
+                }
+
+                var role = model.Role.ToUpper();
+                if(!await _roleManager.RoleExistsAsync(role))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(role));
+                }
+
+                var roleResult = await _userManager.AddToRoleAsync(user,role);
+                if(!roleResult.Succeeded)
+                {
+                    var errors = string.Join(", ",roleResult.Errors.Select(e => e.Description));
+                    return BadRequest(new { Message = $"Registration failed: {errors}" });
+                }
+
+                if(role == "PHARMACYADMIN")
+                {
+                    if(string.IsNullOrWhiteSpace(model.PharmacyName))
+                    {
+                        return BadRequest(new { Message = "Pharmacy name is required for pharmacy admin registration." });
+                    }
+
+                    var pharmacy = new Pharmacy
+                    {
+                        Name = model.PharmacyName.Trim(),
+                        City = model.City,
+                        Address = null,
+                        latitude = null,
+                        Longitude = null,
+                        IsVerified = false
+                    };
+
+                    _context.Pharmacies.Add(pharmacy);
+                    await _context.SaveChangesAsync();
+
+                    user.PharmacyId = pharmacy.Id;
+                    var userUpdateResult = await _userManager.UpdateAsync(user);
+                    if(!userUpdateResult.Succeeded)
+                    {
+                        var errors = string.Join(", ",userUpdateResult.Errors.Select(e => e.Description));
+                        return BadRequest(new { Message = $"Registration failed: {errors}" });
+                    }
+                }
+
+                await transaction.CommitAsync();
+
+                var token = _jwtService.GenerateJwtToken(user);
+                var refreshToken = _jwtService.GenerateRefreshToken();
+
+                return Ok(new AuthResponseDto
+                {
+                    Token = token,
+                    RefreshToken = refreshToken,
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    Roles = (await _userManager.GetRolesAsync(user)).ToList(),
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(60),
+                    IsAuthenticated = true
+                });
             }
-
-            var role = model.Role.ToUpper();
-            if(!await _roleManager.RoleExistsAsync(role))
+            catch
             {
-                await _roleManager.CreateAsync(new IdentityRole(role));
+                await transaction.RollbackAsync();
+                throw;
             }
-
-            await _userManager.AddToRoleAsync(user,role);
-
-            var token = _jwtService.GenerateJwtToken(user);
-            var refreshToken = _jwtService.GenerateRefreshToken();
-
-            return Ok(new AuthResponseDto
-            {
-                Token = token,
-                RefreshToken = refreshToken,
-                Email = user.Email,
-                FullName = user.FullName,
-                Roles = (await _userManager.GetRolesAsync(user)).ToList(),
-                ExpiresAt = DateTime.UtcNow.AddMinutes(60),
-                IsAuthenticated = true
-            });
         }
 
         // POST: api/Auth/login
