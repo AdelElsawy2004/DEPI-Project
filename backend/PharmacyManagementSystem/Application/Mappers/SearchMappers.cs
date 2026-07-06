@@ -13,7 +13,8 @@ namespace PharmacyManagementSystem.Application.Mappers
                 PharmacyName = stock.Pharmacy?.Name ?? "Unknown Pharmacy",
                 PharmacyAddress = stock.Pharmacy?.Address ?? "Unknown Address",
                 PharmacyPhone = stock.Pharmacy?.Phone,
-
+                MedicineId = stock.MedicineId,
+                PharmacyId = stock.PharmacyId,
                 // Distance
                 DistanceInKm = distanceInKm,
 

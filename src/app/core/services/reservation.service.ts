@@ -2,6 +2,8 @@ import { computed, Injectable, signal } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { ReservationResponseDto } from '@/core/DTO/Reservations/reservation-response.interface';
+import { CreateReservationRequestDto } from '@/core/DTO/Reservations/create-reservation-request.interface';
+import { MyReservationsResponseDto, PatientReservationResponseDto } from '@/core/DTO/Reservations/patient-my-reservations.interface';
 
 export type ReservationStatus = 'Pending' | 'Confirmed' | 'Rejected';
 
@@ -79,5 +81,37 @@ export class ReservationService extends ApiService {
                     this.reservationsState.set([]);
                 }
             });
+    }
+
+    getMyPharmacyReservations(): Observable<ReservationItem[]> {
+        return this.http
+            .get<ReservationResponseDto[]>(`${this.apiUrl}/Reservations/pharmacy/me`)
+            .pipe(map((reservations = []) => reservations.map(toReservationItem)));
+    }
+
+    loadMyReservations(): void {
+        this.getMyPharmacyReservations()
+            .pipe(
+                tap((reservations) => {
+                    this.reservationsState.set(reservations);
+                })
+            )
+            .subscribe({
+                error: () => {
+                    this.reservationsState.set([]);
+                }
+            });
+    }
+
+    createReservation(dto: CreateReservationRequestDto): Observable<ReservationResponseDto> {
+        return this.http.post<ReservationResponseDto>(`${this.apiUrl}/Reservations`, dto);
+    }
+
+    getMyReservations(): Observable<MyReservationsResponseDto> {
+        return this.http.get<MyReservationsResponseDto>(`${this.apiUrl}/Reservations/my-reservations`);
+    }
+
+    cancelReservation(reservationId: number): Observable<any> {
+        return this.http.delete<any>(`${this.apiUrl}/Reservations/${reservationId}`);
     }
 }

@@ -18,6 +18,9 @@
     </section>
 
     <section class="search-results-page__list" aria-label="Pharmacy search results">
+        <div *ngIf="isLoading" class="search-results__status">Loading results...</div>
+        <div *ngIf="hasLoadingError" class="search-results__status">An error occurred while loading results.</div>
+        <div *ngIf="!isLoading && !hasLoadingError && pharmacies.length === 0" class="search-results__status">No pharmacies found.</div>
         <article class="pharmacy-card" *ngFor="let pharmacy of pharmacies">
             <div class="pharmacy-card__content">
                 <div class="pharmacy-card__top">
@@ -66,6 +69,8 @@
                 <p-button
                     label="Reserve"
                     styleClass="search-results-page__reserve-button"
+                    (onClick)="reserve(pharmacy)"
+                    [disabled]="isReserving(pharmacy)"
                 />
             </div>
         </article>

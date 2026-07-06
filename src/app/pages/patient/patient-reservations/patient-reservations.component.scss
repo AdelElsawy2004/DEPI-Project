@@ -10,10 +10,6 @@
     padding: 0 16px;
 }
 
-/* ==========================
-        Header
-========================== */
-
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -34,10 +30,6 @@
     font-size: 13px;
     color: #94a3b8;
 }
-
-/* ==========================
-        Tabs
-========================== */
 
 .filter-tabs {
     display: flex;
@@ -70,10 +62,6 @@
     box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
 }
 
-/* ==========================
-      Cards
-========================== */
-
 .reservations-list {
     display: flex;
     flex-direction: column;
@@ -96,10 +84,6 @@
 .card:hover {
     box-shadow: 0 6px 18px rgba(15, 23, 42, .06);
 }
-
-/* ==========================
-        Left Side
-========================== */
 
 .card-info {
     flex: 1;
@@ -132,10 +116,6 @@
     font-size: 14px;
 }
 
-/* ==========================
-      Right Side
-========================== */
-
 .card-actions {
     display: flex;
     flex-direction: column;
@@ -143,10 +123,6 @@
     gap: 10px;
     margin-left: 24px;
 }
-
-/* ==========================
-      Status Badge
-========================== */
 
 .badge {
     display: inline-flex;
@@ -167,15 +143,11 @@
     font-size: 12px;
 }
 
-/* Confirmed */
-
 .confirmed {
     color: #16a34a;
     background: #ecfdf3;
     border-color: #bbf7d0;
 }
-
-/* Pending */
 
 .pending {
     color: #d97706;
@@ -183,17 +155,11 @@
     border-color: #fde68a;
 }
 
-/* Rejected */
-
 .rejected {
     color: #dc2626;
     background: #fef2f2;
     border-color: #fecaca;
 }
-
-/* ==========================
-      Cancel
-========================== */
 
 .cancel-btn {
     border: none;
@@ -213,10 +179,6 @@
     opacity: .7;
 }
 
-/* ==========================
-      Empty State
-========================== */
-
 .empty-state {
     background: white;
 
@@ -232,10 +194,6 @@
 
     border: 1px solid #edf1f5;
 }
-
-/* ==========================
-      Responsive
-========================== */
 
 @media (max-width:768px) {
 

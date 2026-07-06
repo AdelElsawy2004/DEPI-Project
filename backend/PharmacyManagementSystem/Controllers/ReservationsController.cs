@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using PharmacyManagementSystem.Application.DTOs.Reservation.Patient;
 using PharmacyManagementSystem.Application.DTOs.Reservation.Pharmacist;
 using PharmacyManagementSystem.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Identity;
+using PharmacyManagementSystem.Domain.Entities;
 
 namespace PharmacyManagementSystem.Controllers
 {
@@ -13,11 +15,13 @@ namespace PharmacyManagementSystem.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IReservationService _reservationService ;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ReservationsController(IReservationService reservationService)
-        {
-            _reservationService = reservationService ;
-        }
+            public ReservationsController(IReservationService reservationService, UserManager<ApplicationUser> userManager)
+            {
+                _reservationService = reservationService ;
+                _userManager = userManager;
+            }
 
         #region PHARMACY ADMIN
         // GET: api/reservations/pharmacy/5
@@ -26,6 +30,23 @@ namespace PharmacyManagementSystem.Controllers
         public async Task<ActionResult<List<PharmacistReservationResponseDto>>> GetPharmacyReservations(int pharmacyId)
         {
             var reservations = await _reservationService.GetPharmacyReservationsAsync(pharmacyId);
+            return Ok(reservations);
+        }
+
+        // GET: api/reservations/pharmacy/me
+        [HttpGet("pharmacy/me")]
+        [Authorize(Roles = "PHARMACYADMIN,SUPERADMIN")]
+        public async Task<ActionResult<List<PharmacistReservationResponseDto>>> GetMyPharmacyReservations()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { Message = "User not authenticated" });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null || user.PharmacyId == null)
+                return BadRequest(new { Message = "No pharmacy associated with the current user" });
+
+            var reservations = await _reservationService.GetPharmacyReservationsAsync(user.PharmacyId.Value);
             return Ok(reservations);
         }
         #endregion

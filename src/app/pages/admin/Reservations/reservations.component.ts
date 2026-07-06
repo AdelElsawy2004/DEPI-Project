@@ -27,7 +27,7 @@ export class ReservationsComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.reservationsService.loadReservations(1);
+        this.reservationsService.loadMyReservations();
     }
 
     get isReservationsPage(): boolean {
