@@ -11,7 +11,6 @@
         public string? Phone { get ; set ;}
         public bool IsVerified { get ; set ;}
 
-        // Navigation
         public List<MedicineStock> MedicineStocks { get; set; } = new List<MedicineStock>() ;
         public List<Reservation> Reservations { get ; set ;} = new List<Reservation>() ;
         public List<StockWatcher> StockWatchers { get; set; } = new List<StockWatcher>() ;

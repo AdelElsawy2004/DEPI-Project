@@ -9,12 +9,10 @@ namespace PharmacyManagementSystem.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
 
-        // ========== NEW PHARMACYADMIN PROPERTIES ==========
         public string? PharmacyName { get; set; }
         public string? LicenseNumber { get; set; }
         public string? Address { get; set; }
 
-        // ========== NAVIGATION ==========
         public int? PharmacyId { get; set; }
         public Pharmacy? Pharmacy { get; set; }
     }

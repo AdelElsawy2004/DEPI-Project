@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { NotificationService } from '@/core/services/notification.service';
 import { AuthSessionService } from '@/core/services/auth-session.service';
 import { AuthService } from '@/core/services/auth.service';
+import { LocationPermissionService } from '@/core/services/location-permission.service';
 import type { LoginRequestDto } from '@/core/DTO/Auth/login-request.interface';
 import type { AuthResponseDto } from '@/core/DTO/Auth/auth-response.interface';
 
@@ -36,6 +37,7 @@ export class Login {
     private readonly notificationService = inject(NotificationService);
     private readonly authSession = inject(AuthSessionService);
     private readonly authService = inject(AuthService);
+    private readonly locationPermissionService = inject(LocationPermissionService);
 
     readonly submitting = signal(false);
     readonly isSubmitting = computed(() => this.submitting());
@@ -75,11 +77,13 @@ export class Login {
 
             if (roles.includes('PATIENT')) {
                 await this.router.navigate(['/patient/search']);
+                this.locationPermissionService.showForRole('PATIENT');
                 return;
             }
 
             if (roles.includes('PHARMACYADMIN')) {
                 await this.router.navigate(['/dashboard']);
+                this.locationPermissionService.showForRole('PHARMACYADMIN');
                 return;
             }
 

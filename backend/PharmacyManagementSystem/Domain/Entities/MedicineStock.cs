@@ -10,10 +10,8 @@
         public DateTime? ExpiryDate { get ; set ;}
         public DateTime LastUpdated { get ; set ;} = DateTime.UtcNow ;
 
-        // Computed
         public bool IsAvailable => QuantityAvailable > 0 ;
 
-        // Navigation
         public Pharmacy Pharmacy { get ; set ;} = null! ;
         public Medicine Medicine { get ; set ;} = null! ;
     }

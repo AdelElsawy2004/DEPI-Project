@@ -11,6 +11,7 @@ import { type AuthResponseDto } from '@/core/DTO/Auth/auth-response.interface';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { NotificationService } from '@/core/services/notification.service';
 import { AuthService, type RegisterRequest } from '@/core/services/auth.service';
+import { LocationPermissionService } from '@/core/services/location-permission.service';
 import { AbstractControl } from '@angular/forms';
 
 @Component({
@@ -36,6 +37,7 @@ export class RegisterComponent {
   private readonly notificationService = inject(NotificationService);
   private readonly authService = inject(AuthService);
   private readonly authSession = inject(AuthSessionService);
+  private readonly locationPermissionService = inject(LocationPermissionService);
 
   readonly submitting = signal(false);
   readonly accountType = computed(() => {
@@ -169,11 +171,13 @@ export class RegisterComponent {
       if (type === 'pharmacy') {
         if (roles.includes('PHARMACYADMIN')) {
           await this.router.navigate(['/dashboard']);
+          this.locationPermissionService.showForRole('PHARMACYADMIN');
           this.notificationService.success('Account created successfully');
           return;
         }
       } else if (roles.includes('PATIENT')) {
         await this.router.navigate(['/patient/search']);
+        this.locationPermissionService.showForRole('PATIENT');
         this.notificationService.success('Account created successfully');
         return;
       }

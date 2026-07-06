@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { LayoutService } from '@/layout/service/layout.service';
+import { CurrentUserProfileService } from '@/core/services/current-user-profile.service';
 
 @Component({
     selector: 'app-patient-layout',
@@ -15,25 +16,46 @@ import { LayoutService } from '@/layout/service/layout.service';
     templateUrl: './patient-layout.component.html',
     styleUrl: './patient-layout.component.scss'
 })
-export class PatientLayoutComponent {
+export class PatientLayoutComponent implements OnInit {
+    private readonly profileService = inject(CurrentUserProfileService);
 
     isProfileMenuOpen = false;
-
-    profileName = 'Pharmacist';
-    profileRole = 'Pharmacist';
-    profileEmail = 'pharmacist@example.com';
-
-    get profileAvatar(): string {
-        return this.profileName
-            .split(' ')
-            .map(name => name[0])
-            .join('')
-            .toUpperCase();
-    }
 
     constructor(
         public layoutService: LayoutService
     ) { }
+
+    ngOnInit(): void {
+        if (!this.profileService.patientProfile()) {
+            this.profileService.loadPatientProfile().subscribe({
+                error: (error) => {
+                    console.error('Failed to load patient profile', error);
+                }
+            });
+        }
+    }
+
+    get profileName(): string {
+        return this.profileService.patientProfile()?.fullName ?? 'Patient';
+    }
+
+    get profileRole(): string {
+        return 'Patient';
+    }
+
+    get profileEmail(): string {
+        return this.profileService.patientProfile()?.email ?? '';
+    }
+
+    get profileAvatar(): string {
+        return this.profileName
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map((part) => part[0]?.toUpperCase() ?? '')
+            .join('') || 'P';
+    }
 
     toggleProfileMenu(event: Event): void {
         event.stopPropagation();
@@ -45,7 +67,11 @@ export class PatientLayoutComponent {
     }
 
     toggleTheme(): void {
-        this.layoutService.toggleDarkMode();
+        this.layoutService.layoutConfig.update((state) => ({
+            ...state,
+            darkTheme: !state.darkTheme
+        }));
+
         this.closeProfileMenu();
     }
 

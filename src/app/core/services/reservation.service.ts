@@ -14,6 +14,7 @@ export interface ReservationItem {
     medicine: string;
     qty: number;
     status: ReservationStatus;
+    createdAt: string;
 }
 
 function resolveInitials(name: string): string {
@@ -55,7 +56,8 @@ function toReservationItem(dto: ReservationResponseDto): ReservationItem {
         patientName,
         medicine,
         qty: dto.medicineQuantity,
-        status: normalizeReservationStatus(dto.status)
+        status: normalizeReservationStatus(dto.status),
+        createdAt: dto.createdAt
     };
 }
 

@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AuthResponseDto } from '@/core/DTO/Auth/auth-response.interface';
+import { LocationPermissionService } from './location-permission.service';
 
 const AUTH_STORAGE_KEYS = {
   token: 'medfinder_auth_token',
@@ -15,6 +16,8 @@ const AUTH_STORAGE_KEYS = {
   providedIn: 'root',
 })
 export class AuthSessionService {
+  private readonly locationPermissionService = inject(LocationPermissionService);
+
   private isExpired(expiresAtIso?: string | null): boolean {
     if (!expiresAtIso) return true;
     const expiry = new Date(expiresAtIso).getTime();
@@ -23,6 +26,8 @@ export class AuthSessionService {
   }
 
   saveSession(response: AuthResponseDto): void {
+    this.locationPermissionService.clearSessionState();
+
     localStorage.setItem(AUTH_STORAGE_KEYS.token, response.token);
     localStorage.setItem(AUTH_STORAGE_KEYS.refreshToken, response.refreshToken);
     localStorage.setItem(AUTH_STORAGE_KEYS.roles, JSON.stringify(response.roles ?? []));
@@ -87,6 +92,7 @@ export class AuthSessionService {
     localStorage.removeItem(AUTH_STORAGE_KEYS.isAuthenticated);
     localStorage.removeItem(AUTH_STORAGE_KEYS.email);
     localStorage.removeItem(AUTH_STORAGE_KEYS.fullName);
+    this.locationPermissionService.clearSessionState();
   }
 }
 

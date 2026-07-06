@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { PharmacyStateService } from '@/state/pharmacy-state.service';
 import { LayoutService } from '@/layout/service/layout.service';
 import { inject } from '@angular/core';
 import { MedicineService } from '@/core/services/medicine.service';
 import { MedicineStockService } from '@/core/services/medicine-stock.service';
+import { CurrentUserProfileService } from '@/core/services/current-user-profile.service';
+
 @Component({
     selector: 'app-patient-home',
     standalone: true,
@@ -16,24 +17,30 @@ import { MedicineStockService } from '@/core/services/medicine-stock.service';
 export class HomeComponent implements OnInit {
     searchTerm = '';
     isProfileMenuOpen = false;
-
+    readonly profileService = inject(CurrentUserProfileService);
     private readonly medicineService = inject(MedicineService);
     private readonly medicineStockService = inject(MedicineStockService);
     private readonly router = inject(Router);
     popularMedicines: string[] = [];
 
-    readonly defaultProfileName = 'Dr. Pharmacist';
 
     isLoading = false;
     hasLoadingError = false;
 
     constructor(
-        public readonly appState: PharmacyStateService,
         public readonly layoutService: LayoutService,
         private readonly elementRef: ElementRef<HTMLElement>
     ) { }
 
     ngOnInit(): void {
+        if (!this.profileService.patientProfile()) {
+            this.profileService.loadPatientProfile().subscribe({
+                error: (error) => {
+                    console.error('Failed to load patient profile', error);
+                }
+            });
+        }
+
         this.loadPopularMedicines();
         this.testMedicineStock();
     }
@@ -75,35 +82,21 @@ export class HomeComponent implements OnInit {
         });
 
     }
-    
+
     get profileAvatar(): string {
         return this.buildInitials(this.profileName);
     }
 
     get profileName(): string {
-        const fullName = this.appState.profile().fullName.trim();
-
-        if (!fullName || fullName === this.defaultProfileName) {
-            return 'Patient';
-        }
-
-        return fullName;
+        return this.profileService.patientProfile()?.fullName ?? 'Patient';
     }
 
     get profileRole(): string {
-        if (this.isPlaceholderProfile()) {
-            return 'Patient';
-        }
-
-        return this.appState.profile().role.trim() || 'Patient';
+        return 'Patient';
     }
 
     get profileEmail(): string {
-        if (this.isPlaceholderProfile()) {
-            return 'patient@medfinder.com';
-        }
-
-        return this.appState.profile().email.trim() || 'patient@medfinder.com';
+        return this.profileService.patientProfile()?.email ?? '';
     }
 
     toggleTheme(): void {
@@ -150,10 +143,6 @@ export class HomeComponent implements OnInit {
     @HostListener('document:keydown.escape')
     onEscapeKey(): void {
         this.closeProfileMenu();
-    }
-
-    private isPlaceholderProfile(): boolean {
-        return this.appState.profile().fullName.trim() === this.defaultProfileName;
     }
 
     private buildInitials(name: string): string {

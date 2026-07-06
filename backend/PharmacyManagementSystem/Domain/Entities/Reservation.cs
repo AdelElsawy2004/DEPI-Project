@@ -12,7 +12,6 @@ namespace PharmacyManagementSystem.Domain.Entities
         public DateTime ExpiresAt { get ; set ;}
         public string Notes { get ; set ;} = string.Empty ;
 
-        // Navigation
         public ApplicationUser? Patient { get; set; }
         public Medicine Medicine { get ; set ;}
         public Pharmacy Pharmacy { get ; set ;}

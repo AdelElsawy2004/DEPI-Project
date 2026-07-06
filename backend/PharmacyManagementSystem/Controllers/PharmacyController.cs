@@ -3,6 +3,8 @@ using LibrarySystemAPIs.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PharmacyManagementSystem.Application.DTOs.Auth;
 using PharmacyManagementSystem.Application.DTOs;
 using PharmacyManagementSystem.Application.Interfaces.Services;
 using PharmacyManagementSystem.Domain.Entities;
@@ -24,7 +26,6 @@ namespace PharmacyManagementSystem.Controllers
             _userManager = userManager;
         }
 
-        // GET: api/Pharmacies
         [HttpGet]
         public async Task<ActionResult<List<PharmacyResponseDto>>> GetAll()
         {
@@ -32,7 +33,6 @@ namespace PharmacyManagementSystem.Controllers
             return Ok(pharmacies);
         }
 
-        // GET: api/Pharmacies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PharmacyResponseDto>> GetById(int id)
         {
@@ -42,7 +42,6 @@ namespace PharmacyManagementSystem.Controllers
             return Ok(pharmacy);
         }
 
-        // POST: api/Pharmacies
         [HttpPost]
         public async Task<ActionResult<PharmacyResponseDto>> Create(PharmacyRequestDto dto)
         {
@@ -50,7 +49,6 @@ namespace PharmacyManagementSystem.Controllers
             return CreatedAtAction(nameof(GetById),new { id = createdPharmacy.Id },createdPharmacy);
         }
 
-        // PUT: api/Pharmacies/5
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id,PharmacyRequestDto dto)
         {
@@ -60,7 +58,6 @@ namespace PharmacyManagementSystem.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Pharmacies/5
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -70,7 +67,6 @@ namespace PharmacyManagementSystem.Controllers
             return NoContent();
         }
 
-        // PUT: api/Pharmacies/me/location
         [Authorize(Roles = "PHARMACYADMIN")]
         [HttpPut("me/location")]
         public async Task<ActionResult> UpdateMyLocation([FromBody] PharmacyLocationRequestDto dto)
@@ -102,5 +98,40 @@ namespace PharmacyManagementSystem.Controllers
 
             return Ok(new { Message = "Pharmacy location updated successfully." });
         }
+
+        [HttpGet("me/profile")]
+[Authorize(Roles = "PHARMACYADMIN")]
+public async Task<ActionResult<PharmacyAdminProfileDto>> GetMyProfile()
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    if (string.IsNullOrWhiteSpace(userId))
+        return Unauthorized();
+
+    var user = await _userManager.FindByIdAsync(userId);
+
+    if (user == null)
+        return Unauthorized();
+
+    Pharmacy? pharmacy = null;
+
+    if (user.PharmacyId.HasValue)
+    {
+        pharmacy = await _context.Pharmacies
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == user.PharmacyId.Value);
+    }
+
+    return Ok(new PharmacyAdminProfileDto
+    {
+        FullName = user.FullName,
+        Email = user.Email ?? string.Empty,
+        PharmacyName = pharmacy?.Name ?? string.Empty,
+        City = pharmacy?.City ?? user.City,        Address = pharmacy?.Address,
+        Phone = pharmacy?.Phone,
+        PharmacyId = user.PharmacyId,
+        CreatedAt = user.CreatedAt
+    });
+}
     }
 }

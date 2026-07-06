@@ -2,6 +2,8 @@ using LibrarySystemAPIs.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 using PharmacyManagementSystem.Application.DTOs.Auth;
 using PharmacyManagementSystem.Application.Interfaces.Services;
 using PharmacyManagementSystem.Domain.Entities;
@@ -29,7 +31,6 @@ namespace PharmacyManagementSystem.Controllers
             _context = context;
         }
 
-        // POST: api/Auth/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto model)
         {
@@ -127,7 +128,6 @@ namespace PharmacyManagementSystem.Controllers
             }
         }
 
-        // POST: api/Auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
@@ -155,6 +155,29 @@ namespace PharmacyManagementSystem.Controllers
                 IsAuthenticated = true
             });
         }
+
+        [HttpGet("me/profile")]
+[Authorize(Roles = "PATIENT")]
+public async Task<ActionResult<PatientProfileDto>> GetMyProfile()
+{
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    if (string.IsNullOrWhiteSpace(userId))
+        return Unauthorized();
+
+    var user = await _userManager.FindByIdAsync(userId);
+
+    if (user == null)
+        return Unauthorized();
+
+    return Ok(new PatientProfileDto
+    {
+        FullName = user.FullName,
+        Email = user.Email ?? string.Empty,
+        City = user.City,
+        CreatedAt = user.CreatedAt
+    });
+}
 
     }
 }

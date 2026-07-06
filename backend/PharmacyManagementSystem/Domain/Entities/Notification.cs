@@ -9,9 +9,7 @@
         public NotificationType Type { get ; set ;} // Enum
         public bool IsRead { get ; set ;} = false ;
         public DateTime CreateAt { get ; set ;}
-        
-        // Navigation
-        // User
+
     }
 
     public enum NotificationType

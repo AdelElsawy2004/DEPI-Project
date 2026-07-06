@@ -19,7 +19,7 @@
                     class="inline-flex h-10 items-center gap-2 rounded-xl px-4 text-sm font-medium transition">
                     <i class="pi pi-search text-sm"></i>
                     <span>Search</span>
-                
+
                 </a>
 
                 <a routerLink="/patient/patient-reservations" routerLinkActive="active-nav"
@@ -59,18 +59,23 @@
                     </div>
 
                     <div>
-                        <button type="button"
+                        <a routerLink="/patient/profile"
                             class="flex w-full items-center gap-3 px-6 py-4 text-left text-sm font-medium text-surface-700 transition hover:bg-surface-100 dark:text-surface-200 dark:hover:bg-surface-800/80"
                             (click)="closeProfileMenu()" role="menuitem">
+
                             <i class="pi pi-user text-base"></i>
                             <span>Profile</span>
-                        </button>
+                        </a>
 
                         <button type="button"
                             class="flex w-full items-center gap-3 border-t border-surface-200 px-6 py-4 text-left text-sm font-medium text-surface-700 transition hover:bg-surface-100 dark:border-surface-700 dark:text-surface-200 dark:hover:bg-surface-800/80"
                             (click)="toggleTheme()" role="menuitem">
-                            <i class="pi text-base" [ngClass]="layoutService.isDarkTheme() ? 'pi-sun' : 'pi-moon'"></i>
-                            <span>{{ layoutService.isDarkTheme() ? 'Light Mode' : 'Dark Mode' }}</span>
+                            <i class="pi text-base"
+                                [ngClass]="layoutService.layoutConfig().darkTheme ? 'pi-sun' : 'pi-moon'"></i>
+
+                            <span>
+                                {{ layoutService.layoutConfig().darkTheme ? 'Light Mode' : 'Dark Mode' }}
+                            </span>
                         </button>
 
                         <a class="flex items-center gap-3 border-t border-surface-200 px-6 py-4 text-sm font-medium text-red-500 transition hover:bg-red-50 dark:border-surface-700 dark:hover:bg-red-500/10"

@@ -8,6 +8,7 @@ import { SearchResultDto } from '@/core/DTO/Search/search-response.interface';
 import { ReservationService } from '@/core/services/reservation.service';
 import { NotificationService } from '@/core/services/notification.service';
 import { CreateReservationRequestDto } from '@/core/DTO/Reservations/create-reservation-request.interface';
+import { LocationPermissionService } from '@/core/services/location-permission.service';
 
 interface DisplaySearchResult {
     pharmacyId: number;
@@ -36,6 +37,7 @@ export class SearchResultsComponent implements OnInit {
     private readonly searchService = inject(SearchService);
     private readonly reservationService = inject(ReservationService);
     private readonly notificationService = inject(NotificationService);
+    private readonly locationPermissionService = inject(LocationPermissionService);
 
     
 
@@ -76,7 +78,11 @@ export class SearchResultsComponent implements OnInit {
         this.hasLoadingError = false;
         this.pharmacies = [];
 
-        this.searchService.searchMedicine(medicineName).subscribe({
+        const coordinates = this.locationPermissionService.getPatientCoordinates();
+        const latitude = coordinates?.latitude;
+        const longitude = coordinates?.longitude;
+
+        this.searchService.searchMedicine(medicineName, latitude, longitude).subscribe({
             next: (response) => {
                 const results = response.searchResults || [];
                 this.pharmacies = results.map((r: SearchResultDto) => this.mapToDisplay(r));

@@ -1,71 +1,150 @@
 <div class="profile-page">
     <section class="profile-layout">
+
         <aside class="profile-sidebar">
+
             <article class="profile-card profile-card--identity">
+
                 <div class="profile-avatar">
                     <span>{{ initials }}</span>
                 </div>
 
-                <h1 class="profile-name">{{ fullName }}</h1>
-                <p class="profile-role">{{ role }}</p>
+                <h1 class="profile-name">
+                    {{ fullName }}
+                </h1>
+
+                <p class="profile-role">
+                    {{ role }}
+                </p>
 
                 <ul class="profile-contact-list">
                     @for (contact of contacts; track contact.label) {
                     <li class="profile-contact-item">
+
                         <span class="profile-contact-item__icon">
                             <i class="{{ contact.icon }}"></i>
                         </span>
-                        <span class="profile-contact-item__text">{{ contact.value }}</span>
+
+                        <span class="profile-contact-item__text">
+                            {{ contact.value }}
+                        </span>
+
                     </li>
                     }
                 </ul>
+
             </article>
+
 
             <article class="profile-card profile-card--stats">
-                <h2 class="card-title">Quick Stats</h2>
+
+                <h2 class="card-title">
+                    Quick Stats
+                </h2>
 
                 <div class="stats-grid">
+
                     @for (stat of quickStats; track stat.label) {
                     <div class="stat-tile">
-                        <div class="stat-tile__value">{{ stat.value }}</div>
-                        <div class="stat-tile__label">{{ stat.label }}</div>
+
+                        <div class="stat-tile__value">
+                            {{ stat.value }}
+                        </div>
+
+                        <div class="stat-tile__label">
+                            {{ stat.label }}
+                        </div>
+
                     </div>
                     }
+
                 </div>
 
             </article>
+
         </aside>
 
+
         <article class="profile-card profile-card--main">
+
             <section class="section-block">
-                <h2 class="section-title">Profile Information</h2>
+
+                <h2 class="section-title">
+                    Profile Information
+                </h2>
 
                 <div class="profile-fields">
+
                     @for (field of profileFields; track field.label) {
                     <div class="profile-field">
-                        <label>{{ field.label }}</label>
+
+                        <label>
+                            {{ field.label }}
+                        </label>
+
                         <input type="text" [value]="field.value" readonly />
+
                     </div>
                     }
+
                 </div>
+
             </section>
 
+
             <section class="section-block section-block--activity">
-                <h2 class="section-title">Recent Activity</h2>
+
+                <h2 class="section-title">
+                    Recent Activity
+                </h2>
+
+                @if (activities.length > 0) {
 
                 <div class="activity-list">
-                    @for (activity of activities; track activity.title) {
+
+                    @for (activity of activities; track $index) {
+
                     <div class="activity-row">
+
                         <span class="activity-row__icon activity-row__icon--{{ activity.tone }}">
                             <i class="{{ activity.icon }}"></i>
                         </span>
 
-                        <div class="activity-row__title">{{ activity.title }}</div>
-                        <div class="activity-row__time">{{ activity.time }}</div>
+                        <div class="activity-row__title">
+                            {{ activity.title }}
+                        </div>
+
+                        <div class="activity-row__time">
+                            {{ activity.time }}
+                        </div>
+
                     </div>
+
                     }
+
                 </div>
+
+                } @else {
+
+                <div class="activity-list">
+                    <div class="activity-row">
+
+                        <span class="activity-row__icon activity-row__icon--gray">
+                            <i class="pi pi-history"></i>
+                        </span>
+
+                        <div class="activity-row__title">
+                            No recent activity yet
+                        </div>
+
+                    </div>
+                </div>
+
+                }
+
             </section>
+
         </article>
+
     </section>
 </div>

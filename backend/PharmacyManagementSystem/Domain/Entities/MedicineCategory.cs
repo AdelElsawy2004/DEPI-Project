@@ -6,7 +6,6 @@ namespace PharmacyManagementSystem.Domain.Entities
         public string Name { get ; set ;} = null! ;
         public string? Description { get ; set ;}
 
-        // Navigation
         public List<Medicine> Medicines { get ; set ;} = new List<Medicine>() ;
     }
 }
