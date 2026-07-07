@@ -103,6 +103,7 @@ app.UseAuthorization();
 app.UseCors("Angular");
 app.MapControllers() ;
 
+/*
 // ========== SEED ROLES ON STARTUP ==========
 using(var scope = app.Services.CreateScope())
 {
@@ -117,5 +118,5 @@ using(var scope = app.Services.CreateScope())
         logger.LogError(ex,"An error occurred while seeding the database with default roles.");
     }
 }
-
+*/
 app.Run();
